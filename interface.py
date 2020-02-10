@@ -1,19 +1,12 @@
 def draw_header():
-    header = """\033[36m
-*#############################################*
-*_________                        __          *
-*\_   ___ \_______ ___ __ _______/  |_  ____  *
-*/    \  \/\_  __ <   |  |\____ \   __\/  _ \ *
-*\     \____|  | \/\___  ||  |_> >  | (  <_> )*
-* \______  /|__|   / ____||   __/|__|  \____/ *
-*        \/        \/     |__|                *
-*#############################################*
-* Welcome to crypto.                          *
-* Created by Dmytro Kushchevskyi              *
-* Enter 'help' if you need some               *
-*#############################################*\033[0m
-"""
-    print(header, end='')
+    try:
+        with open("crypto.head") as head_im:
+            header = head_im.read()
+            header = "\033[36m" + header + "\033[0m"
+    except FileNotFoundError:
+        header = "\033[36mYou may add custom header in crypto.head file\033[0m"
+    print(header)
+
 
 def print_help():
     help_text = """\033[34mCrypto helper:

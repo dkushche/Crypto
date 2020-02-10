@@ -1,5 +1,5 @@
-
 dictionary = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ _.0123456789"
+
 
 def caesar(data, key, encrypt):
     if encrypt == "decrypt":

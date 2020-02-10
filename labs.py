@@ -2,6 +2,7 @@ from json import load as get_json
 from interface import *
 import algo
 
+
 def get_data():
     data = input('?>> Enter cyphered data or $filename.crypt: ')
     if ".crypt" in data:
@@ -13,6 +14,7 @@ def get_data():
             return None
     return data
 
+
 def save_data(algo_result):
     filename = input("Save to file?($filename/no): ")
     if filename == "no":
@@ -21,6 +23,7 @@ def save_data(algo_result):
         with open(filename + ".crypt", 'w') as f:
             f.write(algo_result)
         print("!>> Saved in " + filename + ".crypt")
+
 
 def run_algo(algo_name):
     try:
@@ -34,6 +37,7 @@ def run_algo(algo_name):
         save_data(algo_result)
     except ValueError:
         print("\033[31mError: incorrect parameter type\033[0m")
+
 
 def hack_smth():
     data = get_data()
@@ -50,9 +54,11 @@ def hack_smth():
     except AttributeError:
         print("\033[31mError: incorrect algo\033[0m")
 
+
 def get_actions():
     with open("actions.json") as jfile:
         return get_json(jfile)
+
 
 def main_loop(commands_list):
     while(True):
@@ -61,6 +67,7 @@ def main_loop(commands_list):
             exec(commands_list[command])
         except KeyError:
             print("\033[31mError: incorrect command\033[0m")
+
 
 if __name__ == "__main__":
     commands_list = get_actions()
