@@ -1,5 +1,5 @@
 
-def xor(data, key, encrypt):
+def xor(data, key):
     return "Nothing xor"
 
 def hack_xor(data):
