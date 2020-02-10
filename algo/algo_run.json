@@ -1,0 +1,4 @@
+{
+	"caesar": "algo_result = algo.caesar(data, int(input('?>> Enter key(int): ')), input('?>> You want encrypt or decrypt: '))",
+	"xor": "algo_result = algo.xor(data, int(input('?>> Enter key(int): ')), input('?>> You want encrypt or decrypt: '))" 
+}

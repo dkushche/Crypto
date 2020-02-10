@@ -1,7 +1,7 @@
 {
     "hack": "hack_smth()",
-    "caesar": "print('Not ready')",
-    "xor" : "print('Not ready')",
+    "caesar": "run_algo('caesar')",
+    "xor" : "run_algo('xor')",
     "help" : "print_help()",
     "exit" : "exit()"
 }
