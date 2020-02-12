@@ -1,5 +1,6 @@
 from itertools import cycle
 
+
 def xor(data, key, encrypt):
     if encrypt != "encrypt" and encrypt != "decrypt":
         print("Incorrect type")
@@ -18,6 +19,7 @@ def xor(data, key, encrypt):
     else:
         result_str = result_bytes.decode("utf-8")
     return result_str
+
 
 def hack_xor(data):
     print("Error: You can't hack this algo")
