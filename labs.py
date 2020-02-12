@@ -35,6 +35,7 @@ def run_algo(algo_name):
         data = get_data()
         _locals = locals()
         if not data:
+            print("\033[31mError: incorrect parameter\033[0m")
             return
         exec(algo.algo_run[algo_name], globals(), _locals)
         algo_result = _locals['algo_result']
@@ -69,6 +70,8 @@ def get_actions():
 def main_loop(commands_list):
     while(True):
         command = input('#>> ')
+        if command == "":
+            continue
         try:
             exec(commands_list[command])
         except KeyError:
