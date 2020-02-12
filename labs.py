@@ -26,18 +26,18 @@ def save_data(algo_result):
 
 
 def run_algo(algo_name):
-#try:
-    data = get_data()
-    _locals = locals()
-    if not data:
-        return
-    exec(algo.algo_run[algo_name], globals(), _locals)
-    algo_result = _locals['algo_result']
-    print("Result: " + algo_result)
-    save_data(algo_result)
-#except ValueError as err:
-#    print(err)
-#    print("\033[31mError: incorrect parameter type\033[0m")
+    try:
+        data = get_data()
+        _locals = locals()
+        if not data:
+            return
+        exec(algo.algo_run[algo_name], globals(), _locals)
+        algo_result = _locals['algo_result']
+        print("Result: " + algo_result)
+        save_data(algo_result)
+    except ValueError as err:
+        print(err)
+        print("\033[31mError: incorrect parameter type\033[0m")
 
 
 def hack_smth():
