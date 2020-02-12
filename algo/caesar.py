@@ -13,7 +13,7 @@ def caesar(data, key, encrypt):
             index = dictionary.index(char)
         except ValueError:
             print("There is no " + char + " character in dictionary")
-            raise ValueError
+            raise
         index = (index + key) % len(dictionary)
         result = result + dictionary[index]
     return result
