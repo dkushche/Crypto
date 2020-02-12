@@ -50,16 +50,19 @@ def hack_smth():
     data = get_data()
     _locals = locals()
     if not data:
+        print("\033[31mError: incorrect parameter\033[0m")
         return
     method = input('?>> Enter algo: ')
-    command_str = "algo_result = algo.hack_" + method + '("""' + data + '""")'
+    command_str = "algo_result = algo.hack_" + method + '(data)'
     try:
         exec(command_str, globals(), _locals)
         algo_result = _locals['algo_result']
-        print("Result: " + algo_result)
+        print("Result: " + str(algo_result))
         save_data(algo_result)
     except AttributeError:
         print("\033[31mError: incorrect algo\033[0m")
+    except FileNotFoundError:
+        print("\033[31mError: Failed!!!\033[0m")
 
 
 def get_actions():

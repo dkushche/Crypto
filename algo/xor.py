@@ -21,4 +21,4 @@ def xor(data, key, encrypt):
 
 def hack_xor(data):
     print("Error: You can't hack this algo")
-    return None
+    raise FileNotFoundError
