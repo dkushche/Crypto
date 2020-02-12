@@ -87,18 +87,18 @@ def frequency_characteristic(data):
     for later in laters:
         laters[later] = laters[later] / len(data) * 100
     create_subplot(laters, "ciphered data", 1)
-    create_sub-plot(normal_text, "russian text", 2)
+    create_subplot(normal_text, "russian text", 2)
     #Here we need to sort reverse our arrays and check characters
     plt.show()
 
 def hack_caesar(data):
     try:
-        one_time = time.clock()
+        one_time = time.process_time()
         brute_result = brute_force(data)
-        two_time = time.clock()
+        two_time = time.process_time()
         print("Brute force needs " + str(two_time - one_time) + " seconds to solve")
         freq_char_result = frequency_characteristic(data)
-        one_time = time.clock()
+        one_time = time.process_time()
         print("freq_char needs " + str(abs(one_time - two_time)) + " seconds to solve")
         return brute_result
     except ValueError:

@@ -59,7 +59,8 @@ def hack_smth():
         algo_result = _locals['algo_result']
         print("Result: " + str(algo_result))
         save_data(algo_result)
-    except AttributeError:
+    except AttributeError as a:
+        print(a)
         print("\033[31mError: incorrect algo\033[0m")
     except FileNotFoundError:
         print("\033[31mError: Failed!!!\033[0m")
