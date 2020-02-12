@@ -1,13 +1,14 @@
 from json import load as get_json
 from interface import *
 import algo
+import os
 
 
 def get_data():
     data = input('?>> Enter cyphered data or $filename.crypt: ')
     if ".crypt" in data:
         try:
-            with open(data) as crypt_file:
+            with open("storage/" + data, "rb") as crypt_file:
                 data = crypt_file.read()
         except FileNotFoundError:
             print("\033[31mError: incorrect filename\033[0m")
@@ -20,9 +21,13 @@ def save_data(algo_result):
     if filename == "no":
         print("OK, without saving")
     else:
-        with open(filename + ".crypt", 'w') as f:
+        if not os.path.exists("storage/"):
+            os.mkdir("storage/")
+        with open("storage/" + filename + ".crypt", 'wb') as f:
+            if algo_result.__class__ == str:
+                algo_result = bytearray(algo_result, "utf-8")
             f.write(algo_result)
-        print("!>> Saved in " + filename + ".crypt")
+        print("!>> Saved in storage/" + filename + ".crypt")
 
 
 def run_algo(algo_name):
@@ -33,7 +38,7 @@ def run_algo(algo_name):
             return
         exec(algo.algo_run[algo_name], globals(), _locals)
         algo_result = _locals['algo_result']
-        print("Result: " + algo_result)
+        print("Result: " + str(algo_result))
         save_data(algo_result)
     except ValueError as err:
         print(err)

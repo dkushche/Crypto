@@ -8,6 +8,8 @@ def caesar(data, key, encrypt):
         print("Incorrect type")
         raise ValueError
     result = ""
+    if data.__class__ == bytes or data.__class__ == bytearray:
+        data = data.decode("utf-8")
     for char in data:
         try:
             index = dictionary.index(char)
