@@ -114,30 +114,32 @@ def guess_try(lang, later, templates, data):
         return result, key
     return None, None
 
-@check_time
-def frequency_characteristic(data, verbose):
-    normal_text = read_frequency_characteristic()
-    templates = read_caesar_table()
-    laters = form_frequency_dict(data)
+
+def freq_comp(laters, normal_text, templates, data):
     tries = 1
     dispersion = 15
-    found = False
-
     for later in laters:
         for lang in normal_text:
             if abs(laters[later] - normal_text[lang]) < dispersion:
                 result, key = guess_try(lang, later, templates, data)
                 if result:
-                    found = True
-                    break
-                tries +=1
+                    return result, key, tries
+                tries += 1
             elif laters[later] < normal_text[lang]:
                 continue
             else:
                 break
-        if found:
-            break
-    if not found:
+    return None, None, None
+
+
+@check_time
+def frequency_characteristic(data, verbose):
+    normal_text = read_frequency_characteristic()
+    templates = read_caesar_table()
+    laters = form_frequency_dict(data)
+    result, key, tries = freq_comp(laters, normal_text, templates, data)
+
+    if not result:
         return "None"
     if verbose:
         save_plot(laters, normal_text)
