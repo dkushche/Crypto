@@ -1,7 +1,8 @@
 from json import load as get_json
 from .caesar import *
+from .caesar_hacking import *
 from .xor import *
-import os
+
 
 algo_run = None
 try:

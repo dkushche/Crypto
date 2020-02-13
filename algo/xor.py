@@ -3,11 +3,9 @@ from itertools import cycle
 
 def xor(data, key, encrypt):
     if encrypt != "encrypt" and encrypt != "decrypt":
-        print("Incorrect type")
-        raise ValueError
+        raise ValueError("Incorrect action")
     if len(key) == 0:
-        print("Empty key")
-        raise ValueError
+        raise ValueError("Empty action")
     key_bytes = cycle(bytearray(key, "utf-8"))
     if encrypt == "encrypt":
         data_in_bytes = bytearray(data, "utf-8")
@@ -22,5 +20,4 @@ def xor(data, key, encrypt):
 
 
 def hack_xor(data):
-    print("Error: You can't hack this algo")
-    raise FileNotFoundError
+    raise ValueError("You can't hack this algo")

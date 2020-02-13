@@ -63,6 +63,9 @@ def hack_smth():
         print(a)
         print("\033[31mError: incorrect algo\033[0m")
     except FileNotFoundError:
+        print("\033[31mError: File not found\033[0m")
+    except ValueError as err:
+        print(err)
         print("\033[31mError: Failed!!!\033[0m")
 
 
