@@ -81,7 +81,8 @@ def main_loop(commands_list):
             continue
         try:
             exec(commands_list[command])
-        except KeyError:
+        except KeyError as err:
+            print(err)
             print("\033[31mError: incorrect command\033[0m")
 
 

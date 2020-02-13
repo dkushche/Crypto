@@ -1,7 +1,8 @@
 import time
+import functools
 import matplotlib.pyplot as plt
 from json import load as get_json
-from algo import caesar, caesar_dictionary
+from algo import caesar, caesar_dictionary, utf_decoder
 
 
 def read_caesar_table():
@@ -13,7 +14,7 @@ def read_caesar_table():
                 templates.append(line[:-1])
         return templates
     except FileNotFoundError:
-        print("Can't findb caesar solving table")
+        print("Can't find caesar solving table")
         raise
 
 
@@ -29,34 +30,11 @@ def read_frequency_characteristic():
         raise
 
 
-def is_solved(templates, result):
-    for template in templates:
-        if template in result:
-            return True
-    return False
-
-
-def brute_force(data):
-    key = 0
-    found = False
-    result = ""
-    if data.__class__ == bytes or data.__class__ == bytearray:
-        data = data.decode("utf-8")
-    templates = read_caesar_table()
-    while(not found and key < len(caesar_dictionary)):
-        key += 1
-        result = caesar(data, key, "decrypt")
-        if (is_solved(templates, result)):
-            break
-    if key == len(caesar_dictionary):
-        return "No answer"
-    return '{ "Result string": "' + result + '", "Key":' + str(key) + ' }'
-
-
 def create_subplot(start_data, name, id):
     lists = start_data.items()
     x, y = list(zip(*lists))
     plt.subplot(2, 1, id)
+    plt.grid(True)
     plt.title(name)
     x = list(x)
     spec_sym = {' ': 'S', '.': 'P', '_': 'U'}
@@ -66,12 +44,35 @@ def create_subplot(start_data, name, id):
     plt.plot(x, y)
 
 
-def frequency_characteristic(data):
-    if data.__class__ == bytes or data.__class__ == bytearray:
-        data = data.decode("utf-8")
-    normal_text = read_frequency_characteristic()
-    templates = read_caesar_table()
+def save_plot(laters, normal_text):
+    create_subplot(laters, "ciphered data", 1)
+    create_subplot(normal_text, "russian text", 2)
+    plt.subplots_adjust(hspace=0.5)
+    plt.savefig("last_frequency_char.png")
+
+
+def check_time(function):
+    @functools.wraps(function)
+    def wrapper_check_time(*args, **kwargs):
+        start_time = time.process_time()
+        result = function(*args, **kwargs)
+        end_time = time.process_time()
+        dtime = str(end_time - start_time)
+        print(function.__name__ + " spent " + dtime + " seconds")
+        return result
+    return wrapper_check_time
+
+
+def is_solved(templates, result):
+    for template in templates:
+        if template in result:
+            return True
+    return False
+
+
+def form_frequency_dict(data):
     laters = {}
+
     for char in data:
         if char in laters:
             laters[char] += 1
@@ -79,8 +80,36 @@ def frequency_characteristic(data):
             laters.update({char: 1})
     for later in laters:
         laters[later] = laters[later] / len(data) * 100
-    laters = {k: v for k, v in sorted(laters.items(), key=lambda item: item[1], reverse=True)}
-    tries = 0
+    items = laters.items()
+    laters = {
+        k: v for k, v in sorted(items, key=lambda item: item[1], reverse=True)
+    }
+    return laters
+
+
+@check_time
+def brute_force(data):
+    key = 1
+    result = ""
+    templates = read_caesar_table()
+
+    while(key < len(caesar_dictionary)):
+        result = caesar(data, key, "decrypt")
+        if (is_solved(templates, result)):
+            break
+        key += 1
+    if key == len(caesar_dictionary):
+        return "None"
+    return '{{ "Result string": "{0}", "Key":{1} }}'.format(result, key)
+
+
+@check_time
+def frequency_characteristic(data):
+    normal_text = read_frequency_characteristic()
+    templates = read_caesar_table()
+    laters = form_frequency_dict(data)
+    tries = 1
+
     for later, lang in zip(laters, normal_text):
         lang_index = caesar_dictionary.index(lang)
         later_index = caesar_dictionary.index(later)
@@ -88,35 +117,32 @@ def frequency_characteristic(data):
         if key < 0:
             key = len(caesar_dictionary) + key
         result = caesar(data, key, "decrypt")
-        tries += 1
         if (is_solved(templates, result)):
             break
-    print("Key = " + str(key) + "; tries = " + str(tries))
-    create_subplot(laters, "ciphered data", 1)
-    create_subplot(normal_text, "russian text", 2)
-    plt.subplots_adjust(hspace=0.5)
-    plt.savefig("last_frequency_char.png")
+        tries += 1
+    if tries >= len(laters):
+        return "None"
+    return ('{{ "Result string":"{0}", '
+            '"Key":{1}, "Tries":{2} }}').format(result, key, tries)
+    save_plot(laters, normal_text)
 
 
 def hack_caesar(data):
     try:
-        one_time = time.process_time()
+        data = utf_decoder(data)
         brute_result = brute_force(data)
-        two_time = time.process_time()
-        print("Brute force needs " + str(two_time - one_time) + " seconds to solve")
         freq_char_result = frequency_characteristic(data)
-        one_time = time.process_time()
-        print("freq_char needs " + str(abs(one_time - two_time)) + " seconds to solve")
-        return brute_result
-    except ValueError as err:
-        print(err)
-        raise FileNotFoundError
+        return """
+{{
+    "Brute" : {0},
+    "FreqChar": {1}
+}}""".format(brute_result, freq_char_result)
+    except ValueError:
+        raise
 
 
 """
     Todo:
         Optimization frequency_characteristic
-        Refactoring
-        Do something with exceptions
         add verbose for plots
 """
