@@ -1,7 +1,6 @@
 import time
 import matplotlib.pyplot as plt
 from json import load as get_json
-from json import dump as set_json
 
 
 dictionary = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ _.0123456789"
@@ -85,8 +84,6 @@ def frequency_characteristic(data):
     templates = read_caesar_table()
     laters = {}
     for char in data:
-        if char == ' ':
-            char = 'S'
         if char in laters:
             laters[char] += 1
         else:
@@ -96,8 +93,6 @@ def frequency_characteristic(data):
     laters = {k: v for k, v in sorted(laters.items(), key=lambda item: item[1], reverse=True)}
     tries = 0
     for later, lang in zip(laters, normal_text):
-        if lang == "S":
-            lang = ' '
         lang_index = dictionary.index(lang)
         later_index = dictionary.index(later)
         key = later_index - lang_index
@@ -108,10 +103,10 @@ def frequency_characteristic(data):
         if (is_solved(templates, result)):
             break
     print("Key = " + str(key) + "; tries = " + str(tries))
-    #create_subplot(laters, "ciphered data", 1)
-    #create_subplot(normal_text, "russian text", 2)
-    #plt.subplots_adjust(hspace=0.5)
-    #plt.savefig("last_frequency_char.png")
+    create_subplot(laters, "ciphered data", 1)
+    create_subplot(normal_text, "russian text", 2)
+    plt.subplots_adjust(hspace=0.5)
+    plt.savefig("last_frequency_char.png")
 
 
 def hack_caesar(data):
@@ -127,3 +122,12 @@ def hack_caesar(data):
     except ValueError as err:
         print(err)
         raise FileNotFoundError
+
+
+"""
+    Todo:
+        Optimization frequency_characteristic
+        Refactoring
+        Do something with exceptions
+        add verbose for plots
+"""
