@@ -63,7 +63,7 @@ def check_time(function):
     return wrapper_check_time
 
 
-def is_solved(templates, result):
+def is_string_reproduced(templates, result):
     for template in templates:
         if template in result:
             return True
@@ -93,9 +93,9 @@ def brute_force(data):
     result = ""
     templates = read_caesar_table()
 
-    while(key < len(caesar_dictionary)):
+    while(key != len(caesar_dictionary)):
         result = caesar(data, key, "decrypt")
-        if (is_solved(templates, result)):
+        if (is_string_reproduced(templates, result)):
             break
         key += 1
     if key == len(caesar_dictionary):
@@ -103,35 +103,55 @@ def brute_force(data):
     return '{{ "Result string": "{0}", "Key":{1} }}'.format(result, key)
 
 
+def guess_try(lang, later, templates, data):
+    lang_index = caesar_dictionary.index(lang)
+    later_index = caesar_dictionary.index(later)
+    key = later_index - lang_index
+    if key < 0:
+        key = len(caesar_dictionary) + key
+    result = caesar(data, key, "decrypt")
+    if (is_string_reproduced(templates, result)):
+        return result, key
+    return None, None
+
 @check_time
-def frequency_characteristic(data):
+def frequency_characteristic(data, verbose):
     normal_text = read_frequency_characteristic()
     templates = read_caesar_table()
     laters = form_frequency_dict(data)
     tries = 1
+    dispersion = 15
+    found = False
 
-    for later, lang in zip(laters, normal_text):
-        lang_index = caesar_dictionary.index(lang)
-        later_index = caesar_dictionary.index(later)
-        key = later_index - lang_index
-        if key < 0:
-            key = len(caesar_dictionary) + key
-        result = caesar(data, key, "decrypt")
-        if (is_solved(templates, result)):
+    for later in laters:
+        for lang in normal_text:
+            if abs(laters[later] - normal_text[lang]) < dispersion:
+                result, key = guess_try(lang, later, templates, data)
+                if result:
+                    found = True
+                    break
+                tries +=1
+            elif laters[later] < normal_text[lang]:
+                continue
+            else:
+                break
+        if found:
             break
-        tries += 1
-    if tries >= len(laters):
+    if not found:
         return "None"
+    if verbose:
+        save_plot(laters, normal_text)
     return ('{{ "Result string":"{0}", '
             '"Key":{1}, "Tries":{2} }}').format(result, key, tries)
-    save_plot(laters, normal_text)
 
 
 def hack_caesar(data):
+    verbose = input("verbose(true/*): ")
+    verbose = True if verbose == "true" else False
     try:
         data = utf_decoder(data)
         brute_result = brute_force(data)
-        freq_char_result = frequency_characteristic(data)
+        freq_char_result = frequency_characteristic(data, verbose)
         return """
 {{
     "Brute" : {0},
