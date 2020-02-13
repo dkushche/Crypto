@@ -1,6 +1,7 @@
 import time
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
 from json import load as get_json
+from json import dump as set_json
 
 
 dictionary = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ _.0123456789"
@@ -48,6 +49,12 @@ def read_frequency_characteristic():
         print("There is no frequncy characteristic")
         raise
 
+def is_solved(templates, result):
+    for template in templates:
+        if template in result:
+            return True
+    return False
+
 def brute_force(data):
     key = 0
     found = False
@@ -58,9 +65,8 @@ def brute_force(data):
     while(not found and key < 10000):
         key += 1
         result = caesar(data, key, "decrypt")
-        for template in templates:
-            if template in result:
-                found = True
+        if (is_solved(templates, result)):
+            break
     if key == 10000:
         return "No answer"
     return '{ "Result string": "' + result + '", "Key":' + str(key) + ' }'
@@ -69,13 +75,14 @@ def create_subplot(start_data, name, id):
     lists = start_data.items()
     x, y = zip(*lists)
     plt.subplot(2, 1, id)
-    plt.xlabel(name)
+    plt.title(name)
     plt.plot(x, y)
 
 def frequency_characteristic(data):
     if data.__class__ == bytes or data.__class__ == bytearray:
         data = data.decode("utf-8")
     normal_text = read_frequency_characteristic()
+    templates = read_caesar_table()
     laters = {}
     for char in data:
         if char == ' ':
@@ -86,10 +93,26 @@ def frequency_characteristic(data):
             laters.update({char: 1})
     for later in laters:
         laters[later] = laters[later] / len(data) * 100
-    create_subplot(laters, "ciphered data", 1)
-    create_subplot(normal_text, "russian text", 2)
-    #Here we need to sort reverse our arrays and check characters
-    plt.show()
+    laters = {k: v for k, v in sorted(laters.items(), key=lambda item: item[1], reverse=True)}
+    tries = 0
+    for later, lang in zip(laters, normal_text):
+        if lang == "S":
+            lang = ' '
+        lang_index = dictionary.index(lang)
+        later_index = dictionary.index(later)
+        key = later_index - lang_index
+        if key < 0:
+            key = len(dictionary) + key
+        result = caesar(data, key, "decrypt")
+        tries += 1
+        if (is_solved(templates, result)):
+            break
+    print("Key = " + str(key) + "; tries = " + str(tries))
+    #create_subplot(laters, "ciphered data", 1)
+    #create_subplot(normal_text, "russian text", 2)
+    #plt.subplots_adjust(hspace=0.5)
+    #plt.savefig("last_frequency_char.png")
+
 
 def hack_caesar(data):
     try:
@@ -101,5 +124,6 @@ def hack_caesar(data):
         one_time = time.process_time()
         print("freq_char needs " + str(abs(one_time - two_time)) + " seconds to solve")
         return brute_result
-    except ValueError:
+    except ValueError as err:
+        print(err)
         raise FileNotFoundError
