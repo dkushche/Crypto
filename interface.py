@@ -14,6 +14,7 @@ def print_help():
 hack        -> hack some algorithm
 caesar      -> encrypt/decrypt using caesar algo
 xor         -> encrypt/decrypt using xor algo
+playfair    -> encrypt/decrypt using playfair algo
 exit        -> turn off crypto\033[0m
 """
     print(help_text, end='')
