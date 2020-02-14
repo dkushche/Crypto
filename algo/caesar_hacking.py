@@ -9,7 +9,7 @@ def read_caesar_table():
     templates = []
 
     try:
-        with open("hack_storage/caesar.table", 'r') as table:
+        with open("hack_storage/russian_words.table", 'r') as table:
             for line in table:
                 templates.append(line[:-1])
         return templates
@@ -22,7 +22,7 @@ def read_frequency_characteristic():
     normal_text = {}
 
     try:
-        with open("hack_storage/caesar_freqchar.json", "r") as jsn:
+        with open("hack_storage/russian_freqchar.json", "r") as jsn:
             normal_text = get_json(jsn)
         return normal_text
     except FileNotFoundError:
