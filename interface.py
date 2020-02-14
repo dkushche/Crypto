@@ -10,11 +10,24 @@ def draw_header():
 
 def print_help():
     help_text = """\033[34mCrypto helper:
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-hack        -> hack some algorithm
-caesar      -> encrypt/decrypt using caesar algo
-xor         -> encrypt/decrypt using xor algo
-playfair    -> encrypt/decrypt using playfair algo
-exit        -> turn off crypto\033[0m
+Cryptography:
+caesar      ->      encrypt/decrypt using caesar algo
+xor         ->      encrypt/decrypt using xor algo
+playfair    ->      encrypt/decrypt using playfair algo
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+Cryptanalysis:
+brute_force ->      hack using brute force
+freq_analys ->      hack using frequency analysis
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+help        ->      show this message
+exit        ->      turn off crypto\033[0m
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 """
     print(help_text, end='')
