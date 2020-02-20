@@ -1,33 +1,6 @@
-import time
-import functools
 import matplotlib.pyplot as plt
 from json import load as get_json
 from algo import caesar, caesar_dictionary, utf_decoder
-
-
-def read_caesar_table():
-    templates = []
-
-    try:
-        with open("hack_storage/russian_words.table", 'r') as table:
-            for line in table:
-                templates.append(line[:-1])
-        return templates
-    except FileNotFoundError:
-        print("Can't find caesar solving table")
-        raise
-
-
-def read_frequency_characteristic():
-    normal_text = {}
-
-    try:
-        with open("hack_storage/russian_freqchar.json", "r") as jsn:
-            normal_text = get_json(jsn)
-        return normal_text
-    except FileNotFoundError:
-        print("There is no frequncy characteristic")
-        raise
 
 
 def create_subplot(start_data, name, id):
@@ -49,42 +22,6 @@ def save_plot(laters, normal_text):
     create_subplot(normal_text, "russian text", 2)
     plt.subplots_adjust(hspace=0.5)
     plt.savefig("last_frequency_char.png")
-
-
-def check_time(function):
-    @functools.wraps(function)
-    def wrapper_check_time(*args, **kwargs):
-        start_time = time.process_time()
-        result = function(*args, **kwargs)
-        end_time = time.process_time()
-        dtime = str(end_time - start_time)
-        print(function.__name__ + " spent " + dtime + " seconds")
-        return result
-    return wrapper_check_time
-
-
-def is_string_reproduced(templates, result):
-    for template in templates:
-        if template in result:
-            return True
-    return False
-
-
-def form_frequency_dict(data):
-    laters = {}
-
-    for char in data:
-        if char in laters:
-            laters[char] += 1
-        else:
-            laters.update({char: 1})
-    for later in laters:
-        laters[later] = laters[later] / len(data) * 100
-    items = laters.items()
-    laters = {
-        k: v for k, v in sorted(items, key=lambda item: item[1], reverse=True)
-    }
-    return laters
 
 
 @check_time
