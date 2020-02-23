@@ -1,6 +1,7 @@
 {
     "caesar": "run_algo('caesar')",
     "xor" : "run_algo('xor')",
+    "hill": "run_algo('hill')",
     "brute_force": "run_algo('brute_force')",
     "freq_analys": "run_algo('freq_analys')",
     "help" : "print_help()",
