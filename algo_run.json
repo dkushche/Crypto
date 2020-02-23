@@ -1,5 +1,5 @@
 {
-	"caesar": "algo_result = algo.caesar(data, input('?>> Data language($lang/no): '), int(input('?>> Enter key(int): ')), input('?>> You want encrypt or decrypt: '))",
+	"caesar": "algo_result = algo.caesar(data, input('?>> Data language: '), int(input('?>> Enter key(int): ')), input('?>> You want encrypt or decrypt: '))",
 	"xor": "algo_result = algo.xor(data, input('?>> Enter key(str): '), input('?>> You want encrypt or decrypt: '))",
 	"hill": "algo_result = algo.hill(data)",
 	"brute_force": "algo_result = hack.brute_force(data, input('?>> What algo was used: '))",

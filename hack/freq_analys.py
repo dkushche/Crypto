@@ -1,5 +1,5 @@
 import algo
-from .lang_tools import *
+import crypto_tools
 from .create_plot import *
 
 
@@ -32,7 +32,7 @@ def check_char(chars, lang_chars, lang):
 def freq_analys(data, lang):
     data = algo.utf_decoder(data)
     laters = form_frequency_dict(data)
-    langs = read_algo_json("freqchars.json")
+    langs = crypto_tools.read_algo_json("freqchars.json")
 
     if lang == "no":
         for lang in langs:

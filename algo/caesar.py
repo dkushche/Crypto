@@ -1,4 +1,4 @@
-from lang_tools import *
+import crypto_tools
 
 
 def utf_decoder(data):
@@ -12,7 +12,7 @@ def caesar(data, lang, key, encrypt):
         key = key * -1
     elif encrypt != "encrypt":
         raise ValueError("Incorrect type")
-    caesar_dictionary = get_param_json_data("alphabets.json", lang)
+    caesar_dictionary = crypto_tools.get_param_json_data("alphabets.json", lang)
 
     result = ""
     data = utf_decoder(data)

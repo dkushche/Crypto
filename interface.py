@@ -15,7 +15,6 @@ def print_help():
 Cryptography:
 caesar      ->      encrypt/decrypt using caesar algo
 xor         ->      encrypt/decrypt using xor algo
-playfair    ->      encrypt/decrypt using playfair algo
 hill        ->      encrypt/decrypt using hill algo
 
 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
