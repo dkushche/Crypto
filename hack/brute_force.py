@@ -1,12 +1,14 @@
 import algo
+from lang_tools import *
 
-def crush_caesar(data):
+def crush_caesar(data, lang):
     key = 1
     result = ""
-    templates = read_caesar_table()
+    templates = get_param_json_data("words.json", lang)
+    caesar_dictionary = get_param_json_data("alphabets.json", lang)
 
     while(key != len(caesar_dictionary)):
-        result = caesar(data, key, "decrypt")
+        result = algo.caesar(data, lang, key, "decrypt")
         if (is_string_reproduced(templates, result)):
             break
         key += 1
@@ -15,8 +17,16 @@ def crush_caesar(data):
     return '{{ "Result string": "{0}", "Key":{1} }}'.format(result, key)
 
 
-def brute_force(algo, data, lang):
-    raise ValueError("Brute Force")
+def brute_force(data, algo, lang):
+    algoes = { "caesar": crush_caesar }
 
-if __name__ == "__main__":
-    print("Just check")
+    if algo not in algoes:
+        raise ValueError("Incorrect algo")
+    if lang == "no":
+        langs = read_algo_json("alphabets.json")
+        for lang in langs:
+            result = algoes[algo](data, lang)
+            if not result == "None":
+                return "Language: {0}\n{1}".format(lang, result)
+    else:
+        return algoes[algo](data, lang)

@@ -26,8 +26,8 @@ freq_analys ->      hack using frequency analysis
 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 help        ->      show this message
-exit        ->      turn off crypto\033[0m
+exit        ->      turn off crypto
 
-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-\033[0m
 """
     print(help_text, end='')

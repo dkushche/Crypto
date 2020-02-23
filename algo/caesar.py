@@ -1,4 +1,4 @@
-from lang_tools import read_algo_json
+from lang_tools import *
 
 
 def utf_decoder(data):
@@ -12,10 +12,8 @@ def caesar(data, lang, key, encrypt):
         key = key * -1
     elif encrypt != "encrypt":
         raise ValueError("Incorrect type")
-    caesar_dictionary = read_algo_json("alphabets.json")
-    if lang not in caesar_dictionary:
-        raise ValueError("Incorrect lang")
-    caesar_dictionary = caesar_dictionary[lang]
+    caesar_dictionary = get_param_json_data("alphabets.json", lang)
+
     result = ""
     data = utf_decoder(data)
     for char in data:

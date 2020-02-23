@@ -18,6 +18,14 @@ def read_algo_json(fname):
         raise
 
 
+def get_param_json_data(fname, param):
+    result = read_algo_json(fname)
+    if param not in result:
+        raise ValueError("Incorrect param {0}".format(param))
+    result = result[param]
+    return result
+
+
 def is_string_reproduced(templates, result):
     """
         Check does any word from dictionary
