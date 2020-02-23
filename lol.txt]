@@ -1,0 +1,32 @@
+from algo import caesar, caesar_dictionary, utf_decoder
+
+
+@check_time
+def frequency_characteristic(data, verbose):
+    normal_text = read_frequency_characteristic()
+    templates = read_caesar_table()
+    laters = form_frequency_dict(data)
+    result, key, tries = freq_comp(laters, normal_text, templates, data)
+
+    if not result:
+        return "None"
+    if verbose:
+        save_plot(laters, normal_text)
+    return ('{{ "Result string":"{0}", '
+            '"Key":{1}, "Tries":{2} }}').format(result, key, tries)
+
+
+def hack_caesar(data):
+    verbose = input("verbose(true/*): ")
+    verbose = True if verbose == "true" else False
+    try:
+        data = utf_decoder(data)
+        brute_result = brute_force(data)
+        freq_char_result = frequency_characteristic(data, verbose)
+        return """
+{{
+    "Brute" : {0},
+    "FreqChar": {1}
+}}""".format(brute_result, freq_char_result)
+    except ValueError:
+        raise

@@ -1,7 +1,6 @@
 {
-	"caesar": "algo_result = algo.caesar(data, int(input('?>> Enter key(int): ')), input('?>> You want encrypt or decrypt: '))",
+	"caesar": "algo_result = algo.caesar(data, input('?>> Data language: '), int(input('?>> Enter key(int): ')), input('?>> You want encrypt or decrypt: '))",
 	"xor": "algo_result = algo.xor(data, input('?>> Enter key(str): '), input('?>> You want encrypt or decrypt: '))",
-	"playfair" : "algo_result = algo.playfair()",
 	"brute_force": "algo_result = hack.brute_force()",
 	"freq_analys": "algo_result = hack.freq_analys()"
 }

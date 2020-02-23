@@ -1,6 +1,4 @@
-
-
-caesar_dictionary = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ _.0123456789"
+from lang_tools import read_algo_json
 
 
 def utf_decoder(data):
@@ -9,11 +7,15 @@ def utf_decoder(data):
     return data
 
 
-def caesar(data, key, encrypt):
+def caesar(data, lang, key, encrypt):
     if encrypt == "decrypt":
         key = key * -1
     elif encrypt != "encrypt":
         raise ValueError("Incorrect type")
+    caesar_dictionary = read_algo_json("alphabets.json")
+    if lang not in caesar_dictionary:
+        raise ValueError("Incorrect lang")
+    caesar_dictionary = caesar_dictionary[lang]
     result = ""
     data = utf_decoder(data)
     for char in data:

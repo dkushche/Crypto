@@ -17,7 +17,3 @@ def xor(data, key, encrypt):
     else:
         result_str = result_bytes.decode("utf-8")
     return result_str
-
-
-def hack_xor(data):
-    raise ValueError("You can't hack this algo")
