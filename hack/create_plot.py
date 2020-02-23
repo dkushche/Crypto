@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
+import os
 
 
 def create_subplots(**kwargs):
     n_of_plots = len(kwargs)
-    index = 0
+    index = 1
     for key in kwargs:
         lists = kwargs[key].items()
         x, y = list(zip(*lists))
@@ -17,16 +18,6 @@ def create_subplots(**kwargs):
                 x[i] = spec_sym[x[i]]
         plt.plot(x, y)
         index += 1
-
-
-def show_plot():
-    while True:
-        quest = input("Show plot(yes/no)")
-        if quest == "yes":
-            plt.show()
-        elif quest == "no":
-            print("Ok, Don't show")
-            break
 
 
 def save_plot():
@@ -47,5 +38,4 @@ def save_plot():
 def create_plot(**kwargs):
     create_subplots(**kwargs)
     plt.subplots_adjust(hspace=0.5)
-    show_plot()
     save_plot()

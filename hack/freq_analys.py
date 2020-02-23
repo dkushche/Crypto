@@ -1,5 +1,11 @@
+import algo
+from .lang_tools import *
+from .create_plot import *
+
+
 def form_frequency_dict(data):
     """
+        Profile
         Forms sorted dictionary with
         probabilities values for every character
     """
@@ -19,34 +25,18 @@ def form_frequency_dict(data):
     return laters
 
 
-def freq_comp(laters, normal_text, templates, data):
-    tries = 1
-    dispersion = 15
-    for later in laters:
-        for lang in normal_text:
-            if abs(laters[later] - normal_text[lang]) < dispersion:
-                result, key = guess_try(lang, later, templates, data)
-                if result:
-                    return result, key, tries
-                tries += 1
-            elif laters[later] < normal_text[lang]:
-                continue
-            else:
-                break
-    return None, None, None
+def check_char(chars, lang_chars, lang):
+    exec('create_plot(encrypted_text=chars, {0}=lang_chars)'.format(lang))
 
 
-def guess_try(lang, later, templates, data):
-    lang_index = caesar_dictionary.index(lang)
-    later_index = caesar_dictionary.index(later)
-    key = later_index - lang_index
-    if key < 0:
-        key = len(caesar_dictionary) + key
-    result = caesar(data, key, "decrypt")
-    if (is_string_reproduced(templates, result)):
-        return result, key
-    return None, None
+def freq_analys(data, lang):
+    data = algo.utf_decoder(data)
+    laters = form_frequency_dict(data)
+    langs = read_algo_json("freqchars.json")
 
-
-def freq_analys(data, lang, algo, verbose):
-    raise ValueError("Freq analysis")
+    if lang == "no":
+        for lang in langs:
+            check_char(laters, langs[lang], lang)
+    else:
+        check_char(laters, langs[lang], lang)
+    return laters

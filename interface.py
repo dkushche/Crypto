@@ -20,8 +20,8 @@ playfair    ->      encrypt/decrypt using playfair algo
 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 Cryptanalysis:
-brute_force ->      hack using brute force
-freq_analys ->      hack using frequency analysis
+brute_force ->      hack using brute force(finds address)
+freq_analys ->      hack using frequency analysis(gives freq_char of text)
 
 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
