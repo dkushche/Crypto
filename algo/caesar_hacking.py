@@ -1,27 +1,5 @@
-import matplotlib.pyplot as plt
 from json import load as get_json
 from algo import caesar, caesar_dictionary, utf_decoder
-
-
-def create_subplot(start_data, name, id):
-    lists = start_data.items()
-    x, y = list(zip(*lists))
-    plt.subplot(2, 1, id)
-    plt.grid(True)
-    plt.title(name)
-    x = list(x)
-    spec_sym = {' ': 'S', '.': 'P', '_': 'U'}
-    for i in range(len(x)):
-        if x[i] in spec_sym:
-            x[i] = spec_sym[x[i]]
-    plt.plot(x, y)
-
-
-def save_plot(laters, normal_text):
-    create_subplot(laters, "ciphered data", 1)
-    create_subplot(normal_text, "russian text", 2)
-    plt.subplots_adjust(hspace=0.5)
-    plt.savefig("last_frequency_char.png")
 
 
 @check_time
@@ -38,18 +16,6 @@ def brute_force(data):
     if key == len(caesar_dictionary):
         return "None"
     return '{{ "Result string": "{0}", "Key":{1} }}'.format(result, key)
-
-
-def guess_try(lang, later, templates, data):
-    lang_index = caesar_dictionary.index(lang)
-    later_index = caesar_dictionary.index(later)
-    key = later_index - lang_index
-    if key < 0:
-        key = len(caesar_dictionary) + key
-    result = caesar(data, key, "decrypt")
-    if (is_string_reproduced(templates, result)):
-        return result, key
-    return None, None
 
 
 def freq_comp(laters, normal_text, templates, data):

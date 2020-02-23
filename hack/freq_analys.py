@@ -19,5 +19,17 @@ def form_frequency_dict(data):
     return laters
 
 
+def guess_try(lang, later, templates, data):
+    lang_index = caesar_dictionary.index(lang)
+    later_index = caesar_dictionary.index(later)
+    key = later_index - lang_index
+    if key < 0:
+        key = len(caesar_dictionary) + key
+    result = caesar(data, key, "decrypt")
+    if (is_string_reproduced(templates, result)):
+        return result, key
+    return None, None
+
+
 def freq_analys(data, lang, algo, verbose):
     raise ValueError("Freq analysis")
