@@ -1,8 +1,7 @@
-
-"""
-    Check is matrix square
-"""
 def is_square(mtx):
+    """
+        Check is matrix square
+    """
     for line in mtx:
         if len(line) != len(mtx):
             return False
@@ -10,7 +9,7 @@ def is_square(mtx):
 
 
 def mtx_mult(fmtx, smtx):
-    res = [[ 0 for i in range(len(smtx[0])) ] for j in range(len(fmtx))]
+    res = [[0 for i in range(len(smtx[0]))] for j in range(len(fmtx))]
 
     for i in range(len(fmtx)):
         for j in range(len(smtx[0])):
@@ -24,7 +23,7 @@ def transpose(mtx):
 
 
 def get_minor_mtx(mtx, line, raw):
-    res = [[ 0 for i in range(len(mtx) - 1) ] for j in range(len(mtx) - 1)]
+    res = [[0 for i in range(len(mtx) - 1)] for j in range(len(mtx) - 1)]
     next_inx = 0
 
     for j in range(0, len(mtx)):
@@ -44,18 +43,18 @@ def inverse_mtx(mtx):
     determ = det(mtx)
     if determ == 0:
         raise ValueError("Determinant == 0")
-    num_mtx = [[ 0 if i != j else 1 / determ for i in range(len(mtx)) ] for j in range(len(mtx))]
-    augmented = [[ (-1) ** (i + j) * det(get_minor_mtx(mtx, i, j)) for j in range(len(mtx[0])) ] for i in range(len(mtx)) ]
+    num_mtx = [[0 if i != j else 1 / determ for i in range(len(mtx))] for j in range(len(mtx))]
+    augmented = [[(-1) ** (i + j) * det(get_minor_mtx(mtx, i, j)) for j in range(len(mtx[0]))] for i in range(len(mtx))]
     augmented = transpose(augmented)
     res = mtx_mult(num_mtx, augmented)
     return res
 
 
-"""
-    Determinant for matrixes NxN
-"""
 def det(mtx):
-    if is_square(mtx) == False:
+    """
+        Determinant for matrixes NxN
+    """
+    if not is_square(mtx):
         raise ValueError("Matrix should be square")
     if len(mtx) == 2:
         return mtx[0][0] * mtx[1][1] - mtx[0][1] * mtx[1][0]
