@@ -39,9 +39,9 @@ def crush_caesar(data):
 
 @check_time
 def brute_force(data, algo):
-    algoes = { 
+    algoes = {
         "caesar": crush_caesar,
-        "xor" : crush_xor
+        "xor": crush_xor
     }
 
     if algo not in algoes:

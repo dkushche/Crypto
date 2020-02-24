@@ -1,6 +1,7 @@
 import time
 import functools
 
+
 def check_time(function):
     @functools.wraps(function)
     def wrapper_check_time(*args, **kwargs):

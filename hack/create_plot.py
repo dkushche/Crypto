@@ -35,6 +35,8 @@ def save_plot():
     create plot gets parameters like
     name_plot=dict_with_data, other_name_plot=...
 """
+
+
 def create_plot(**kwargs):
     create_subplots(**kwargs)
     plt.subplots_adjust(hspace=0.5)
