@@ -8,6 +8,12 @@ from json import load as get_json
 """
 
 
+def utf_decoder(data):
+    if data.__class__ == bytes or data.__class__ == bytearray:
+        data = data.decode("utf-8")
+    return data
+
+
 def read_algo_json(fname):
     try:
         path = "algo_storage/" + fname

@@ -30,7 +30,7 @@ def check_char(chars, lang_chars, lang):
 
 
 def freq_analys(data, lang):
-    data = algo.utf_decoder(data)
+    data = crypto_tools.utf_decoder(data)
     laters = form_frequency_dict(data)
     langs = crypto_tools.read_algo_json("freqchars.json")
 

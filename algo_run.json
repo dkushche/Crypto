@@ -1,7 +1,7 @@
 {
 	"caesar": "algo_result = algo.caesar(data, input('?>> Data language: '), int(input('?>> Enter key(int): ')), input('?>> You want encrypt or decrypt: '))",
 	"xor": "algo_result = algo.xor(data, input('?>> Enter key(str): '), input('?>> You want encrypt or decrypt: '))",
-	"hill": "algo_result = algo.hill(data)",
+	"hill": "algo_result = algo.hill(data, input('?>> Data language: '), input('?>> Enter key: '), input('?>> You want encrypt or decrypt: '))",
 	"brute_force": "algo_result = hack.brute_force(data, input('?>> What algo was used: '))",
 	"freq_analys": "algo_result = hack.freq_analys(data, input('?>> Data language($lang/no): '))"
 }

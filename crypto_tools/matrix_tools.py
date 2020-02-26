@@ -32,7 +32,7 @@ def get_minor_mtx(mtx, line, raw):
         for i in range(0, len(mtx)):
             if i == raw:
                 continue
-            y = int(next_inx / (len(mtx) - 1))
+            y = next_inx // (len(mtx) - 1)
             x = next_inx % (len(mtx) - 1)
             res[y][x] = mtx[j][i]
             next_inx += 1
@@ -44,7 +44,12 @@ def inverse_mtx(mtx):
     if determ == 0:
         raise ValueError("Determinant == 0")
     num_mtx = [[0 if i != j else 1 / determ for i in range(len(mtx))] for j in range(len(mtx))]
-    augmented = [[(-1) ** (i + j) * det(get_minor_mtx(mtx, i, j)) for j in range(len(mtx[0]))] for i in range(len(mtx))]
+    if len(mtx) > 2:
+        augmented = [[(-1) ** (i + j) * det(get_minor_mtx(mtx, i, j)) for j in range(len(mtx[0]))] for i in range(len(mtx))]
+    elif len(mtx) == 2:
+        augmented = [[mtx[1][1], -1 * mtx[1][0]], [-1 * mtx[0][1], mtx[0][0]]]
+    else:
+        raise ValueError("To smole matrix for inversion")
     augmented = transpose(augmented)
     res = mtx_mult(num_mtx, augmented)
     return res
