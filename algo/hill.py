@@ -54,13 +54,9 @@ def hill(data, lang, key, encrypt):
     data = crypto_tools.utf_decoder(data)
     mtx_side_size = ceil(sqrt(len(key)))
     key_mtx = gen_key_mtx(key, hill_dict, mtx_side_size)
-    print("Start Key: " + str(key_mtx))
     if encrypt == "decrypt":
-        key_mtx = crypto_tools.inverse_mtx(key_mtx)
+        key_mtx = crypto_tools.inverse_mtx(key_mtx, True, len(hill_dict))
     data_mtx = gen_data_mtx(data, hill_dict, mtx_side_size)
-    print("DATA: " + str(data_mtx))
-    print("Key: " + str(key_mtx))
     res_mtx = crypto_tools.mtx_mult(key_mtx, data_mtx)
-    print("RES : " + str(res_mtx))
     result = mtx_to_str(res_mtx, hill_dict)
     return result
