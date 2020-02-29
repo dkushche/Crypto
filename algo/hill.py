@@ -3,8 +3,8 @@ from math import sqrt, ceil
 
 
 def hill_process_input(lang, key, encrypt):
-    if len(key) == 0:
-        raise ValueError("Empty key")
+    if len(key) < 2:
+        raise ValueError("Key must be bigger then 1 char")
     if encrypt != "encrypt" and encrypt != "decrypt":
         raise ValueError("Incorrect action")
     hill_dict = crypto_tools.get_param_json_data("alphabets.json", lang)
@@ -21,8 +21,9 @@ def gen_key_mtx(key, hill_dict, size):
             except ValueError:
                 raise ValueError("There is no {0} in alphabet".format(key[inx]))
         else:
-            # add matrix completition
-            pass
+            p_inx = inx - 1
+            prev = res_mtx[p_inx // size][p_inx % size]
+            res_mtx[inx // size][inx % size] = (prev + 1) % len(hill_dict)
         inx += 1
     return res_mtx
 

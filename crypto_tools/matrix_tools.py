@@ -62,7 +62,8 @@ def inverse_mtx(mtx, by_modulo, modulo = 0):
     if determ == 0:
         raise ValueError("Determinant == 0")
     if by_modulo == True:
-        inverse_det = inverse_modulo_numb(determ, modulo)
+        inverse_det = determ % modulo
+        inverse_det = inverse_modulo_numb(inverse_det, modulo)
     else:
         inverse_det = 1 / determ
     num_mtx = [[0 if i != j else inverse_det for i in range(len(mtx))] for j in range(len(mtx))]
@@ -74,6 +75,7 @@ def inverse_mtx(mtx, by_modulo, modulo = 0):
         raise ValueError("To smole matrix for inversion")
     augmented = transpose(augmented)
     res = mtx_mult(num_mtx, augmented)
+    res = [[ val % modulo for val in line] for line in res]
     return res
 
 
