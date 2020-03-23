@@ -1,5 +1,5 @@
-from file_manager import get_data, save_data, download_conf
-from interface import render_static
+from file_manager import get_data, save_data
+from file_manager import download_conf, download_text, render_static
 import algo
 import hack
 

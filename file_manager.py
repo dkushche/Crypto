@@ -1,17 +1,13 @@
 from json import load as get_json
+from crypto_tools import utf_decoder
 import os
 
 
 def get_data():
     data = input('?>> Enter cyphered data or $filename.crypt: ')
     if ".crypt" in data:
-        try:
-            with open("storage/" + data, "rb") as crypt_file:
-                data = crypt_file.read()
-        except FileNotFoundError:
-            print("\033[31mError: incorrect filename\033[0m")
-            return None
-    return data
+        return download_text("storage/" + data)
+    return None
 
 
 def save_data(algo_result):
@@ -35,3 +31,21 @@ def download_conf(name):
     except FileNotFoundError:
         print("\033[31mError: no {0} in algo package\033[0m".format(name))
         exit()
+
+
+def download_text(name):
+    try:
+        with open(name, "rb") as text_file:
+            return text_file.read()
+    except FileNotFoundError:
+        print("\033[31mError: {" + name + "} No such file\033[0m")
+        return None
+
+
+def render_static(file):
+    header = download_text("iface_storage/crypto." + file)
+    if header:
+        header = "\033[36m" + utf_decoder(header) + "\033[0m"
+    else:
+        header = "\033[36mYou may add custom in crypto" + file + " file\033[0m"
+    print(header)
