@@ -1,5 +1,5 @@
 from file_manager import get_data, save_data, download_conf
-from interface import draw_header, print_help
+from interface import render_static
 import algo
 import hack
 
@@ -35,5 +35,5 @@ def main_loop():
 if __name__ == "__main__":
     commands_list = download_conf("actions.json")
     algos = download_conf("algo_run.json")
-    draw_header()
+    render_static('header')
     main_loop()

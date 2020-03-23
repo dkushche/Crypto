@@ -1,0 +1,20 @@
+Crypto helper:
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+Cryptography:
+caesar      ->      encrypt/decrypt using caesar algo
+xor         ->      encrypt/decrypt using xor algo
+hill        ->      encrypt/decrypt using hill algo
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+Cryptanalysis:
+brute_force ->      hack using brute force(finds address)
+freq_analys ->      hack using frequency analysis(gives freq_char of text)
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+help        ->      show this message
+exit        ->      turn off crypto
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
