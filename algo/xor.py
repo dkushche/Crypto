@@ -7,7 +7,7 @@ def xor(data, key, encrypt):
     if len(key) == 0:
         raise ValueError("Empty key")
     key_bytes = cycle(bytearray(key, "utf-8"))
-    if encrypt == "encrypt":
+    if encrypt == "encrypt" and data.__class__ == str:
         data_in_bytes = bytearray(data, "utf-8")
     else:
         data_in_bytes = data

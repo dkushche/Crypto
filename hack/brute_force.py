@@ -26,15 +26,15 @@ def crush_caesar_try(data, lang, caesar_dictionary):
 def crush_caesar(data):
     lang = input('?>> Do you know language($lang/no): ')
 
+    langs = crypto_tools.download_json("algo_storage/alphabets.json")
     if lang == "no":
-        langs = crypto_tools.read_algo_json("alphabets.json")
         for lang in langs:
             result = crush_caesar_try(data, lang, langs[lang])
             if not result == "None":
                 return "Language: {0}\n{1}".format(lang, result)
         return "None"
     else:
-        return crush_caesar_try(data, lang)
+        return crush_caesar_try(data, lang, langs[lang])
 
 
 @check_time

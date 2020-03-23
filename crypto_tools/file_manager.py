@@ -1,5 +1,5 @@
 from json import load as get_json
-from crypto_tools import utf_decoder
+from .lang_tools import utf_decoder
 import os
 
 
@@ -7,7 +7,7 @@ def get_data():
     data = input('?>> Enter cyphered data or $filename.crypt: ')
     if ".crypt" in data:
         return download_text("storage/" + data)
-    return None
+    return data
 
 
 def save_data(algo_result):
@@ -24,13 +24,21 @@ def save_data(algo_result):
         print("!>> Saved in storage/" + filename + ".crypt")
 
 
-def download_conf(name):
+def get_param_json_data(fname, param):
+    result = download_json("algo_storage/" + fname)
+    if param not in result:
+        raise ValueError("Incorrect param {0}".format(param))
+    result = result[param]
+    return result
+
+
+def download_json(name):
     try:
         with open(name) as algo:
             return get_json(algo)
     except FileNotFoundError:
-        print("\033[31mError: no {0} in algo package\033[0m".format(name))
-        exit()
+        print("\033[31mError: {0} No such file\033[0m".format(name))
+        raise
 
 
 def download_text(name):
