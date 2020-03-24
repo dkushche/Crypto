@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from crypto_tools import crypto_term
 import os
 
 
@@ -21,14 +22,14 @@ def create_subplots(**kwargs):
 
 
 def save_plot():
-    filename = input("Save plot to file?($filename/no): ")
+    filename = crypto_term("input", "Save plot to file?($filename/no): ", "ans")
     if filename == "no":
-        print("OK, without saving")
+        crypto_term("output", "OK, without saving", "inf")
     else:
         if not os.path.exists("storage/"):
             os.mkdir("storage/")
         plt.savefig("storage/" + filename + ".png")
-        print("!>> Saved in storage/" + filename + ".crypt")
+        crypto_term("output", "Saved in storage/" + filename + ".crypt", "inf")
 
 
 """

@@ -1,22 +1,41 @@
 import crypto_tools
 import algo
 import hack
+import os
+
+
+def get_data():
+    data = crypto_tools.crypto_term("input", "Enter cyphered data or $filename.crypt: ", "ans")
+    if ".crypt" in data:
+        return crypto_tools.download_text("storage/" + data)
+    return data
+
+
+def save_data(algo_result):
+    filename = crypto_tools.crypto_term("input", "Save to file?($filename/no): ", "ans")
+    if filename == "no":
+        crypto_tools.crypto_term("output", "OK, without saving", "inf")
+    else:
+        if not os.path.exists("storage/"):
+            os.mkdir("storage/")
+        crypto_tools.save_text("storage/" + filename + ".crypt", algo_result)
+        crypto_tools.crypto_term("output", "Saved in storage/" + filename + ".crypt", "inf")
 
 
 def run_algo(algo_name):
     try:
-        data = crypto_tools.get_data()
+        data = get_data()
         _locals = locals()
         if not data:
-            print("\033[31mError: incorrect parameter\033[0m")
+            crypto_tools.crypto_term("output", "Error: incorrect parameter", "err")
             return
         exec(algos[algo_name], globals(), _locals)
         algo_result = _locals['algo_result']
-        print("Result: " + str(algo_result))
-        crypto_tools.save_data(algo_result)
+        crypto_tools.crypto_term("output", "Result: " + str(algo_result), "inf")
+        save_data(algo_result)
     except ValueError as err:
-        print(err)
-        print("\033[31mError: incorrect parameter type\033[0m")
+        crypto_tools.crypto_term("output", err, "err")
+        crypto_tools.crypto_term("output", "Error: incorrect parameter type", "err")
 
 
 def main_loop():
@@ -27,8 +46,8 @@ def main_loop():
         try:
             exec(commands_list[command])
         except KeyError as err:
-            print(err)
-            print("\033[31mError: incorrect command\033[0m")
+            crypto_tools.crypto_term("output", err, "err")
+            crypto_tools.crypto_term("output", "Error: incorrect command", "err")
 
 
 if __name__ == "__main__":
