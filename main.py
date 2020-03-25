@@ -52,8 +52,8 @@ def main_loop():
 
 if __name__ == "__main__":
     try:
-        commands_list = crypto_tools.download_json("actions.json")
-        algos = crypto_tools.download_json("algo_run.json")
+        commands_list = crypto_tools.download_json("crypto_commands/actions.json")
+        algos = crypto_tools.download_json("crypto_commands/algo_run.json")
     except FileNotFoundError:
         exit()
     crypto_tools.render_static('header')
