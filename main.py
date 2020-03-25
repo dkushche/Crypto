@@ -1,7 +1,16 @@
 import crypto_tools
+import readline
 import algo
 import hack
 import os
+
+
+def completer(text, state):
+    if completer.in_menu:
+        options = [i for i in commands_list.keys() if i.startswith(text)]
+        return options[state]
+    return None
+completer.in_menu = True
 
 
 def get_data():
@@ -44,11 +53,12 @@ def main_loop():
         if command == "":
             continue
         try:
+            completer.in_menu = False
             exec(commands_list[command])
         except KeyError as err:
             crypto_tools.crypto_term("output", err, "err")
             crypto_tools.crypto_term("output", "Error: incorrect command", "err")
-
+        completer.in_menu = True
 
 if __name__ == "__main__":
     try:
@@ -57,4 +67,6 @@ if __name__ == "__main__":
     except FileNotFoundError:
         exit()
     crypto_tools.render_static('header')
+    readline.parse_and_bind("tab: complete")
+    readline.set_completer(completer)
     main_loop()
