@@ -40,7 +40,7 @@ def run_algo(algo_name):
 
 def main_loop():
     while(True):
-        command = input('#>> ')
+        command = crypto_tools.crypto_term("input", "", "def")
         if command == "":
             continue
         try:

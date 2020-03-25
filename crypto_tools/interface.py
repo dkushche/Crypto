@@ -17,13 +17,12 @@ def crypto_term(com_type, message, message_type):
         message_type - type from iface.json
     """
     begin = crypto_term.iface["colors"][crypto_term.iface["pallete"][message_type]]
-    end = crypto_term.iface["colors"]["none"]
     marker = crypto_term.iface["markers"][message_type]
-    res_line = "{0}{1}{2}{3}".format(begin, marker, message, end)
+    res_line = "{0}{1}{2}".format(begin, marker, message)
     if com_type == "input":
+        res_line += crypto_term.iface["colors"][crypto_term.iface["pallete"]["def"]]
         return input(res_line)
-    else:
-        print(res_line)
+    print(res_line)
 try:
     crypto_term.iface = download_json("iface_storage/iface.json")
 except FileNotFoundError:

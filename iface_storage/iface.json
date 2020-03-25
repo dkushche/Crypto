@@ -19,7 +19,7 @@
     "pallete": {
         "def": "white",
         "err": "red",
-        "ans": "cyan",
-        "inf": "magenta"
+        "ans": "blue",
+        "inf": "cyan"
     }
 }
