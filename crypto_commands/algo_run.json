@@ -2,7 +2,7 @@
 	"caesar": "algo_result = algo.caesar(data, crypto_tools.crypto_term('input', 'Data language: ', 'ans'), int(crypto_tools.crypto_term('input', 'Enter key(int): ', 'ans')), crypto_tools.crypto_term('input', 'You want encrypt or decrypt: ', 'ans'))",
 	"xor": "algo_result = algo.xor(data, crypto_tools.crypto_term('input', 'Enter key(str): ', 'ans'), crypto_tools.crypto_term('input', 'You want encrypt or decrypt: ', 'ans'))",
 	"hill": "algo_result = algo.hill(data, crypto_tools.crypto_term('input', 'Data language: ', 'ans'), crypto_tools.crypto_term('input', 'Enter key: ', 'ans'), crypto_tools.crypto_term('input', 'You want encrypt or decrypt: ', 'ans'))",
-	"random": "algo_result = algo.random(data)",
+	"random": "algo_result = algo.random(data, crypto_tools.crypto_term('input', 'You want (calc,generate) sequence(s): ', 'ans'))",
 	"brute_force": "algo_result = hack.brute_force(data, crypto_tools.crypto_term('input', 'What algo was used: ', 'ans'))",
 	"freq_analys": "algo_result = hack.freq_analys(data, crypto_tools.crypto_term('input', 'Data language($lang/no): ', 'ans'))"
 }

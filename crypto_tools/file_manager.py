@@ -6,11 +6,11 @@ def get_param_json_data(fname, param):
     result = download_json("algo_storage/" + fname)
     if param not in result:
         raise ValueError("Incorrect param {0}".format(param))
-    result = result[param]
+    result = result[param] #Don;t check json
     return result
 
 
-def download_json(name):
+def download_json(name): # Here may be mistake
     try:
         with open(name) as algo:
             return get_json(algo)

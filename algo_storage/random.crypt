@@ -1,0 +1,6 @@
+What put in storage/$filename.crypt or enter in stdio.
+if you want to calc sequences
+[ {"a": 21, "c": 1, "f": 0, "m": 100} ]
+The great thing that you may enter any amount of dictioanries with parameters
+if you want to generate this values write
+{ "amount": $number_of_parameters_for_sequences, "size": $size_of_sequence(m) }
