@@ -5,12 +5,14 @@ Cryptography:
 caesar      ->      encrypt/decrypt using caesar algo
 xor         ->      encrypt/decrypt using xor algo
 hill        ->      encrypt/decrypt using hill algo
+random      ->      find arguments for creating random sequences
+                    (example of input in algo_storage/random.crypt)
 
 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 Cryptanalysis:
-brute_force ->      hack using brute force(finds address)
-freq_analys ->      hack using frequency analysis(gives freq_char of text)
+brute_force ->      hack using algorithm brute force
+freq_analys ->      find frequency characteristic of text
 
 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 

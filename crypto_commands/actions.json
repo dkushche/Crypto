@@ -4,6 +4,7 @@
     "hill": "run_algo('hill')",
     "brute_force": "run_algo('brute_force')",
     "freq_analys": "run_algo('freq_analys')",
+    "random": "run_algo('random')",
     "help" : "crypto_tools.render_static('help')",
     "exit" : "exit()"
 }
