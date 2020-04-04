@@ -10,25 +10,30 @@ def completer(text, state):
         options = [i for i in commands_list.keys() if i.startswith(text)]
         return options[state]
     return None
+
+
 completer.in_menu = True
 
 
 def get_data():
-    data = crypto_tools.crypto_term("input", "Enter cyphered data or $filename.crypt: ", "ans")
+    sentence = "Enter cyphered data or $filename.crypt: "
+    data = crypto_tools.cterm("input", sentence, "ans")
     if ".crypt" in data:
         return crypto_tools.download_text("storage/" + data)
     return data
 
 
 def save_data(algo_result):
-    filename = crypto_tools.crypto_term("input", "Save to file?($filename/no): ", "ans")
+    sentence = "Save to file?($filename/no): "
+    filename = crypto_tools.cterm("input", sentence, "ans")
     if filename == "no":
-        crypto_tools.crypto_term("output", "OK, without saving", "inf")
+        crypto_tools.cterm("output", "OK, without saving", "inf")
     else:
         if not os.path.exists("storage/"):
             os.mkdir("storage/")
         crypto_tools.save_text("storage/" + filename + ".crypt", algo_result)
-        crypto_tools.crypto_term("output", "Saved in storage/" + filename + ".crypt", "inf")
+        sentence = "Saved in storage/" + filename + ".crypt"
+        crypto_tools.cterm("output", sentence, "inf")
 
 
 def run_algo(algo_name):
@@ -36,33 +41,35 @@ def run_algo(algo_name):
         data = get_data()
         _locals = locals()
         if not data:
-            crypto_tools.crypto_term("output", "Error: incorrect parameter", "err")
+            crypto_tools.cterm("output", "Error: incorrect parameter", "err")
             return
         exec(algos[algo_name], globals(), _locals)
         algo_result = _locals['algo_result']
-        crypto_tools.crypto_term("output", "Result: " + str(algo_result), "inf")
+        crypto_tools.cterm("output", "Result: " + str(algo_result), "inf")
         save_data(algo_result)
     except ValueError as err:
-        crypto_tools.crypto_term("output", err, "err")
-        crypto_tools.crypto_term("output", "Error: incorrect parameter type", "err")
+        crypto_tools.cterm("output", err, "err")
+        crypto_tools.cterm("output", "Error: incorrect parameter type", "err")
 
 
 def main_loop():
     while(True):
-        command = crypto_tools.crypto_term("input", "", "def")
+        command = crypto_tools.cterm("input", "", "def")
         if command == "":
             continue
         try:
             completer.in_menu = False
             exec(commands_list[command])
         except KeyError as err:
-            crypto_tools.crypto_term("output", err, "err")
-            crypto_tools.crypto_term("output", "Error: incorrect command", "err")
+            crypto_tools.cterm("output", err, "err")
+            crypto_tools.cterm("output", "Error: incorrect command", "err")
         completer.in_menu = True
+
 
 if __name__ == "__main__":
     try:
-        commands_list = crypto_tools.download_json("crypto_commands/actions.json")
+        commands_file = "crypto_commands/actions.json"
+        commands_list = crypto_tools.download_json(commands_file)
         algos = crypto_tools.download_json("crypto_commands/algo_run.json")
     except FileNotFoundError:
         exit()

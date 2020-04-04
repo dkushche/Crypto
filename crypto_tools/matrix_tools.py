@@ -39,7 +39,6 @@ def get_minor_mtx(mtx, line, raw):
     return res
 
 
-
 def EGCD(a, b):
     if a == 0:
         return (b, 0, 1)
@@ -49,7 +48,6 @@ def EGCD(a, b):
         return (g, y - b_div_a * x, x)
 
 
-
 def inverse_modulo_numb(determ, modulo):
     gcd, alpha, beta = EGCD(determ, modulo)
     if abs(gcd) != 1:
@@ -57,25 +55,27 @@ def inverse_modulo_numb(determ, modulo):
     return alpha
 
 
-def inverse_mtx(mtx, by_modulo, modulo = 0):
+def inverse_mtx(mtx, by_modulo, modulo=0):
     determ = det(mtx)
     if determ == 0:
         raise ValueError("Determinant == 0")
-    if by_modulo == True:
+    if by_modulo:
         inverse_det = determ % modulo
         inverse_det = inverse_modulo_numb(inverse_det, modulo)
     else:
         inverse_det = 1 / determ
-    num_mtx = [[0 if i != j else inverse_det for i in range(len(mtx))] for j in range(len(mtx))]
+    num_mtx = [[0 if i != j else inverse_det
+                for i in range(len(mtx))] for j in range(len(mtx))]
     if len(mtx) > 2:
-        augmented = [[(-1) ** (i + j) * det(get_minor_mtx(mtx, i, j)) for j in range(len(mtx[0]))] for i in range(len(mtx))]
+        augmented = [[(-1) ** (i + j) * det(get_minor_mtx(mtx, i, j))
+                      for j in range(len(mtx[0]))] for i in range(len(mtx))]
     elif len(mtx) == 2:
         augmented = [[mtx[1][1], -1 * mtx[1][0]], [-1 * mtx[0][1], mtx[0][0]]]
     else:
         raise ValueError("To smole matrix for inversion")
     augmented = transpose(augmented)
     res = mtx_mult(num_mtx, augmented)
-    res = [[ val % modulo for val in line] for line in res]
+    res = [[val % modulo for val in line] for line in res]
     return res
 
 

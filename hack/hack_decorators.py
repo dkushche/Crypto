@@ -1,6 +1,7 @@
 import time
 import functools
-from crypto_tools import crypto_term
+from crypto_tools import cterm
+
 
 def check_time(function):
     @functools.wraps(function)
@@ -9,6 +10,7 @@ def check_time(function):
         result = function(*args, **kwargs)
         end_time = time.process_time()
         dtime = str(end_time - start_time)
-        crypto_term("output", function.__name__ + " spent " + dtime + " seconds", "inf")
+        cterm("output", function.__name__ +
+              " spent " + dtime + " seconds", "inf")
         return result
     return wrapper_check_time

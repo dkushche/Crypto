@@ -4,7 +4,7 @@ from .hack_decorators import check_time
 
 
 def crush_xor(data):
-    crypto_tools.crypto_term("output", "I hope to done it later", "inf")
+    crypto_tools.cterm("output", "I hope to done it later", "inf")
     pass
 
 
@@ -24,7 +24,8 @@ def crush_caesar_try(data, lang, caesar_dictionary):
 
 
 def crush_caesar(data):
-    lang = crypto_tools.crypto_term("input", "Do you know language($lang/no): ", "ans")
+    sentence = "Do you know language($lang/no): "
+    lang = crypto_tools.cterm("input", sentence, "ans")
 
     langs = crypto_tools.download_json("algo_storage/alphabets.json")
     if lang == "no":

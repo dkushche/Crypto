@@ -19,7 +19,8 @@ def gen_key_mtx(key, hill_dict, size):
             try:
                 res_mtx[inx // size][inx % size] = hill_dict.index(key[inx])
             except ValueError:
-                raise ValueError("There is no {0} in alphabet".format(key[inx]))
+                err_msg = "There is no {0} in alphabet".format(key[inx])
+                raise ValueError(err_msg)
         else:
             p_inx = inx - 1
             prev = res_mtx[p_inx // size][p_inx % size]
