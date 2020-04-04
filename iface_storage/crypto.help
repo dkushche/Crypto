@@ -5,6 +5,7 @@ Cryptography:
 caesar      ->      encrypt/decrypt using caesar algo
 xor         ->      encrypt/decrypt using xor algo
 hill        ->      encrypt/decrypt using hill algo
+hash        ->      generate hash from data
 random      ->      find arguments for creating random sequences
                     (example of input in algo_storage/random.crypt)
 
