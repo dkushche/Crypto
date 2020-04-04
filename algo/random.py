@@ -19,8 +19,8 @@ def check_bits(sequence):
     zeroes = 0
     ones = 0
     for val in sequence:
-        zeroes += bin(val).count("0")
-        ones += bin(val).count("1")
+        zeroes += "{0:b}".format(val).count("0")
+        ones += "{0:b}".format(val).count("1")
     whole = zeroes + ones
     perc = ones / whole
     if (perc > 0.4 and perc < 0.6):
@@ -44,7 +44,8 @@ def generate(data):
                     record = {"m": data['size'], "c": constant,
                               "a": coeff, "f": start_value}
                     parameters.append(record)
-                    if len(parameters) > data['amount']:
+                    if len(parameters) == data['amount']:
+                        print("")
                         return parameters
                 frame = (frame + 1) % len(animation)
                 print("\rLoading [" + animation[frame] + "] ", end="")
@@ -77,7 +78,7 @@ def random(data, action):
                                            data[i]['a'], data[i]['f'])
                 data[i]["bin_sequence"] = []
                 for num in data[i]["sequence"]:
-                    data[i]["bin_sequence"].append(str(bin(num)))
+                    data[i]["bin_sequence"].append("{0:b}".format(num))
         elif action == "generate":
             data = generate(data)
         else:
