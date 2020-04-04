@@ -23,7 +23,7 @@ def check_bits(sequence):
         ones += bin(val).count("1")
     whole = zeroes + ones
     perc = ones / whole
-    if (perc < 0.6 and perc > 0.4):
+    if (perc > 0.4 and perc < 0.6):
         return True
     return False
 
@@ -47,7 +47,8 @@ def generate(data):
                     if len(parameters) > data['amount']:
                         return parameters
                 frame = (frame + 1) % len(animation)
-                print("\rLoading [" + animation[frame] + "]", end="")
+                print("\rLoading [" + animation[frame] + "] ", end="")
+                print("{0}/{1}".format(len(parameters), data['amount']), end="")
                 start_value += 1
             constant += 1
         coeff += 1
@@ -74,6 +75,9 @@ def random(data, action):
             for i in range(len(data)):
                 data[i]["sequence"] = calc(data[i]['m'], data[i]['c'],
                                            data[i]['a'], data[i]['f'])
+                data[i]["bin_sequence"] = []
+                for num in data[i]["sequence"]:
+                    data[i]["bin_sequence"].append(str(bin(num)))
         elif action == "generate":
             data = generate(data)
         else:
@@ -82,4 +86,4 @@ def random(data, action):
         raise ValueError("Incorrect input")
     except TypeError:
         raise ValueError("Incorrect input")
-    return dumps(data)
+    return dumps(data, sort_keys=True, indent=4)
