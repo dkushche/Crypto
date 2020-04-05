@@ -7,8 +7,8 @@ def smart_shift(value):
     if bits_amount == 8:
         check_value = 1 << (bits_amount - 1)
         adder = (value & check_value) >> (bits_amount - 1)
-    value = value << 1 + adder
-    return value
+    value = value << 1
+    return value, adder
 
 
 def hash(data):
@@ -22,10 +22,16 @@ def hash(data):
     while dib_iter < len(data_in_bytes):
         for res_iter in range(len(result)):
             result[res_iter] ^= data_in_bytes[dib_iter]
-            integer = smart_shift(result[res_iter])
+            dib_iter += 1
+
+        last_excess = 0
+        for res_iter in range(len(result) - 1, -1, -1):
+            integer, new_excess = smart_shift(result[res_iter])
+            integer += last_excess
+            last_excess = new_excess
             byte_arr = integer.to_bytes(2, byteorder="big")
             byte_arr = byte_arr[-1]
             result[res_iter] = byte_arr
-            dib_iter += 1
-    print(bytes(result))
+            if res_iter == 0:
+                result[len(result) - 1] += last_excess
     return result
