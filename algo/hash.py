@@ -13,15 +13,15 @@ def smart_shift(value):
 
 def hash(data):
     if data.__class__ == str:
-        data_in_bytes = bytearray(data, "utf-8")
+        data = bytearray(data, "utf-8")
     result = bytearray(2)
-    if len(data_in_bytes) % len(result):
-        for i in range(len(data_in_bytes) % len(result)):
-            data_in_bytes.append(0x00)
+    if len(data) % len(result):
+        for i in range(len(data) % len(result)):
+            data.append(0x00)
     dib_iter = 0
-    while dib_iter < len(data_in_bytes):
+    while dib_iter < len(data):
         for res_iter in range(len(result)):
-            result[res_iter] ^= data_in_bytes[dib_iter]
+            result[res_iter] ^= data[dib_iter]
             dib_iter += 1
 
         last_excess = 0
