@@ -26,7 +26,7 @@ def get_data():
 def save_data(algo_result):
     sentence = "Save to file?($filename/no): "
     filename = crypto_tools.cterm("input", sentence, "ans")
-    if filename == "no":
+    if not filename or filename == "no":
         crypto_tools.cterm("output", "OK, without saving", "inf")
     else:
         if not os.path.exists("storage/"):
