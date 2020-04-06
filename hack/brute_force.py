@@ -3,11 +3,6 @@ import crypto_tools
 from .hack_decorators import check_time
 
 
-def crush_xor(data):
-    crypto_tools.cterm("output", "I hope to done it later", "inf")
-    pass
-
-
 def crush_caesar_try(data, lang, caesar_dictionary):
     key = 1
     result = ""
@@ -41,8 +36,7 @@ def crush_caesar(data):
 @check_time
 def brute_force(data, algo):
     algoes = {
-        "caesar": crush_caesar,
-        "xor": crush_xor
+        "caesar": crush_caesar
     }
 
     if algo not in algoes:

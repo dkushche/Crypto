@@ -48,8 +48,9 @@ def generate(data):
                         print("")
                         return parameters
                 frame = (frame + 1) % len(animation)
-                print("\rLoading [" + animation[frame] + "] ", end="")
-                print("{0}/{1}".format(len(parameters), data['amount']), end="")
+                print("\rLoading [" + animation[frame] + "]\
+                      {0}/{1}".format(len(parameters),
+                      data['amount']), end="")
                 start_value += 1
             constant += 1
         coeff += 1
