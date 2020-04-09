@@ -70,9 +70,6 @@ def random(data, action):
     try:
         data = crypto_tools.utf_decoder(data)
         data = loads(data)
-    except JSONDecodeError:
-        raise ValueError("Incorrect input")
-    try:
         if action == "calc":
             for i in range(len(data)):
                 data[i]["sequence"] = calc(data[i]['m'], data[i]['c'],
@@ -84,8 +81,6 @@ def random(data, action):
             data = generate(data)
         else:
             raise ValueError("Incorrect action")
-    except KeyError:
-        raise ValueError("Incorrect input")
-    except TypeError:
+    except (KeyError, TypeError, JSONDecodeError):
         raise ValueError("Incorrect input")
     return dumps(data, sort_keys=True, indent=4)
