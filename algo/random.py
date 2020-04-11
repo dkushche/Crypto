@@ -1,6 +1,7 @@
 import crypto_tools
 from json import loads
 from json import dumps
+from time import sleep
 from json.decoder import JSONDecodeError
 
 
@@ -13,6 +14,16 @@ from json.decoder import JSONDecodeError
     main_formula
         x[i] = (a * x[i - 1] + c) % m
 """
+
+
+def form_anim_pack(have, need):
+    control_package = {
+        "msg": "Loading [{0}]  {1}/" + str(need),
+        "objs_for_anim": [[['|', '/', '-', '\\'], 0]],
+        "dynamic_values": [[have, 1]],
+        "fps": 1
+    }
+    return control_package
 
 
 def check_bits(sequence):
@@ -29,9 +40,9 @@ def check_bits(sequence):
 
 
 def generate(data):
-    animation = "|/-\\"
-    frame = 0
     parameters = []
+    anim_ctrl_pack = form_anim_pack(len(parameters), data['amount'])
+    anim_id = crypto_tools.create_animation(anim_ctrl_pack)
     coeff = 2
     while True:
         constant = 0
@@ -44,13 +55,11 @@ def generate(data):
                     record = {"m": data['size'], "c": constant,
                               "a": coeff, "f": start_value}
                     parameters.append(record)
+                    anim_ctrl_pack["dynamic_values"][0][0] = len(parameters)
                     if len(parameters) == data['amount']:
-                        print("")
+                        sleep(1)
+                        crypto_tools.destroy_animation(anim_id, anim_ctrl_pack)
                         return parameters
-                frame = (frame + 1) % len(animation)
-                print("\rLoading [" + animation[frame] + "]\
-                      {0}/{1}".format(len(parameters),
-                      data['amount']), end="")
                 start_value += 1
             constant += 1
         coeff += 1
