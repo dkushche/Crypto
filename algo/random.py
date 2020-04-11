@@ -16,6 +16,13 @@ from json.decoder import JSONDecodeError
 """
 
 
+def bitlen(sequence):
+    bitlen = 0
+    for val in sequence:
+        bitlen += len("{0:b}".format(val))
+    return bitlen
+
+
 def form_anim_pack(have, need):
     control_package = {
         "msg": "Loading [{0}]  {1}/" + str(need),
@@ -27,14 +34,14 @@ def form_anim_pack(have, need):
 
 
 def check_bits(sequence):
+    if bitlen(sequence) != 20000:
+        raise ValueError("Incorrect sequence bitlen")
     zeroes = 0
     ones = 0
     for val in sequence:
         zeroes += "{0:b}".format(val).count("0")
         ones += "{0:b}".format(val).count("1")
-    whole = zeroes + ones
-    perc = ones / whole
-    if (perc > 0.4 and perc < 0.6):
+    if (zeroes >= 9654 and ones =< 10346):
         return True
     return False
 
@@ -83,9 +90,9 @@ def random(data, action):
             for i in range(len(data)):
                 data[i]["sequence"] = calc(data[i]['m'], data[i]['c'],
                                            data[i]['a'], data[i]['f'])
-                data[i]["bin_sequence"] = []
+                data[i]["bin_sequence"] = ""
                 for num in data[i]["sequence"]:
-                    data[i]["bin_sequence"].append("{0:b}".format(num))
+                    data[i]["bin_sequence"] += "{0:b}".format(num)
         elif action == "generate":
             data = generate(data)
         else:
