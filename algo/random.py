@@ -17,10 +17,10 @@ from json.decoder import JSONDecodeError
 
 
 def bitlen(sequence):
-    bitlen = 0
+    res = 0
     for val in sequence:
-        bitlen += len("{0:b}".format(val))
-    return bitlen
+        res += len("{0:b}".format(val))
+    return res
 
 
 def form_anim_pack(have, need):
@@ -41,7 +41,14 @@ def check_bits(sequence):
     for val in sequence:
         zeroes += "{0:b}".format(val).count("0")
         ones += "{0:b}".format(val).count("1")
-    if (zeroes >= 9654 and ones =< 10346):
+    if ones > 9000 and ones < 11000:
+        return True
+    return False
+
+
+def check_len(sequence, dsize):
+    needed_len = 0.7 * dsize
+    if (len(sequence) > needed_len):
         return True
     return False
 
@@ -56,9 +63,8 @@ def generate(data):
         while(constant < 1000):
             start_value = 0
             while(start_value < 1000):
-                sequence = calc(data['size'], constant, coeff, start_value)
-                needed_len = 0.7 * data['size']
-                if (len(sequence) > needed_len and check_bits(sequence)):
+                nrp_seq, bit_seq = calc(data['size'], constant, coeff, start_value, 20000)
+                if (check_len(nrp_seq, data['size']) and check_bits(bit_seq)):
                     record = {"m": data['size'], "c": constant,
                               "a": coeff, "f": start_value}
                     parameters.append(record)
@@ -72,14 +78,35 @@ def generate(data):
         coeff += 1
 
 
-def calc(size, constant, coefficient, start_value):
-    sequence = [start_value]
-    while True:
-        new_value = (coefficient * sequence[-1] + constant) % size
-        if new_value in sequence:
-            break
-        sequence.append(new_value)
-    return sequence
+def replay_check(sequence, new_value):
+    for i in range(len(sequence)):
+        if new_value == sequence[i] and sequence[-1] == sequence[i - 1]:
+            return False
+    return True
+
+
+def calc(modul, constant, coefficient, start_value, bit_len):
+    no_replay = True
+    no_bits = True
+    no_replay_sequence = [start_value]
+    by_bits_sequence = [start_value]
+    bits = len("{0:b}".format(start_value))
+
+    while no_replay or no_bits:
+        if no_replay:
+            new_value = (coefficient * no_replay_sequence[-1] + constant) % modul
+            no_replay = replay_check(no_replay_sequence, new_value)
+        else:
+            new_value = (coefficient * by_bits_sequence[-1] + constant) % modul
+        if no_replay:
+            no_replay_sequence.append(new_value)
+        if no_bits:
+            by_bits_sequence.append(new_value)
+        bits += len("{0:b}".format(new_value))
+        if bits >= bit_len:
+            no_bits = False
+            by_bits_sequence[-1] >>= bits - bit_len
+    return no_replay_sequence, by_bits_sequence
 
 
 def random(data, action):
@@ -88,10 +115,12 @@ def random(data, action):
         data = loads(data)
         if action == "calc":
             for i in range(len(data)):
-                data[i]["sequence"] = calc(data[i]['m'], data[i]['c'],
-                                           data[i]['a'], data[i]['f'])
+                nrp_seq, bit_seq = calc(data[i]['m'], data[i]['c'],
+                                        data[i]['a'], data[i]['f'],
+                                        20000)
+                data[i]["sequence"] = nrp_seq
                 data[i]["bin_sequence"] = ""
-                for num in data[i]["sequence"]:
+                for num in bit_seq:
                     data[i]["bin_sequence"] += "{0:b}".format(num)
         elif action == "generate":
             data = generate(data)
