@@ -63,7 +63,8 @@ def generate(data):
         while(constant < 1000):
             start_value = 0
             while(start_value < 1000):
-                nrp_seq, bit_seq = calc(data['size'], constant, coeff, start_value, 20000)
+                nrp_seq, bit_seq = calc(data['size'], constant,
+                                        coeff, start_value, 20000)
                 if (check_len(nrp_seq, data['size']) and check_bits(bit_seq)):
                     record = {"m": data['size'], "c": constant,
                               "a": coeff, "f": start_value}
@@ -80,7 +81,8 @@ def generate(data):
 
 def replay_check(sequence, new_value):
     for i in range(len(sequence)):
-        if new_value == sequence[i] and sequence[-1] == sequence[i - 1]:
+        if new_value == sequence[i] and i != 0 \
+           and sequence[-1] == sequence[i - 1]:
             return False
     return True
 
@@ -93,16 +95,18 @@ def calc(modul, constant, coefficient, start_value, bit_len):
     bits = len("{0:b}".format(start_value))
 
     while no_replay or no_bits:
+        start_value = (coefficient * start_value + constant) % modul
+
         if no_replay:
-            new_value = (coefficient * no_replay_sequence[-1] + constant) % modul
-            no_replay = replay_check(no_replay_sequence, new_value)
-        else:
-            new_value = (coefficient * by_bits_sequence[-1] + constant) % modul
-        if no_replay:
-            no_replay_sequence.append(new_value)
+            no_replay = replay_check(no_replay_sequence, start_value)
+            if not no_replay:
+                no_replay_sequence.pop()
+            else:
+                no_replay_sequence.append(start_value)
         if no_bits:
-            by_bits_sequence.append(new_value)
-        bits += len("{0:b}".format(new_value))
+            by_bits_sequence.append(start_value)
+
+        bits += len("{0:b}".format(start_value))
         if bits >= bit_len:
             no_bits = False
             by_bits_sequence[-1] >>= bits - bit_len
