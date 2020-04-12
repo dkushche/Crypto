@@ -76,4 +76,5 @@ if __name__ == "__main__":
     crypto_tools.render_static('header')
     readline.parse_and_bind("tab: complete")
     readline.set_completer(completer)
+    readline.set_auto_history(False)
     main_loop()
