@@ -11,10 +11,10 @@ def smart_shift(value, block_size):
     return value
 
 
-def hash(data):
+def hash(data, res_size):
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
-    result = bytearray(2)
+    result = bytearray(res_size)
     if len(data) % len(result):
         for i in range(len(data) % len(result)):
             data.append(0x00)
