@@ -7,8 +7,8 @@ def smart_shift(value, block_size):
     if bits_amount == block_size:
         check_value = 1 << (bits_amount - 1)
         adder = (value & check_value) >> (bits_amount - 1)
-    value = value << 1 + adder
-    return value
+    value <<= 1
+    return value + adder
 
 
 def hash(data, res_size):
