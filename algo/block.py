@@ -24,7 +24,7 @@ def feistel_network(left, right, key, encrypt, rounds):
     min_lim, max_lim, step = set_rounds_range(encrypt, rounds)
     for now_round in range(min_lim, max_lim, step):
         buf = right ^ secret_crypto_func(left, key, now_round)
-        if (now_round != max_lim - 1):
+        if (now_round != max_lim - step):
             right = left
             left = buf
         else:
@@ -41,14 +41,20 @@ def block(data, key, rounds, func, encrypt):
         raise ValueError("Incorrect type")
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
-    data = bytearray(data) #I'm not sure about it, but let it be
     if (len(data) % 2):
         data.append(0x00)
-    for i in range(0, len(data), 2):
-        data[i], data[i + 1] = feistel_network( data[i], data[i + 1],
-                                                key, encrypt, rounds)
+
+    res_data = bytearray()
+    data_iter = iter(data)
+
+    for val in data_iter:
+        left, right = feistel_network(val, next(data_iter),
+                                      key, encrypt, rounds)
+        res_data.append(left)
+        res_data.append(right)
+
     if encrypt == "encrypt":
-        result_str = data
+        result_str = res_data
     else:
-        result_str = data.decode("utf-8")
+        result_str = res_data.decode("utf-8")
     return result_str
