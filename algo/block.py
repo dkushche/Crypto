@@ -1,12 +1,14 @@
 import crypto_tools
 
 
-"""
-    data: user input
-    key: data in bits
-    rounds: amount of rounds
-    func: secret crypto function
-"""
+def block_proccess_input(data, encrypt):
+    if encrypt != "decrypt" and encrypt != "encrypt":
+        raise ValueError("Incorrect type")
+    if data.__class__ == str:
+        data = bytearray(data, "utf-8")
+    if (len(data) % 2):
+        data.append(0x00)
+    return data
 
 
 def secret_crypto_func(val, key, now_round):
@@ -34,25 +36,20 @@ def feistel_network(left, right, key, encrypt, rounds):
 
 def block(data, key, rounds, func, encrypt):
     """
-        For now we use something very easy
-        like 16 bit block and modulo func
+        data: user input
+        key: data in bits
+        rounds: amount of rounds
+        func: secret crypto function
     """
-    if encrypt != "decrypt" and encrypt != "encrypt":
-        raise ValueError("Incorrect type")
-    if data.__class__ == str:
-        data = bytearray(data, "utf-8")
-    if (len(data) % 2):
-        data.append(0x00)
 
+    data = block_proccess_input(data, encrypt)
     res_data = bytearray()
     data_iter = iter(data)
-
     for val in data_iter:
         left, right = feistel_network(val, next(data_iter),
                                       key, encrypt, rounds)
         res_data.append(left)
         res_data.append(right)
-
     if encrypt == "encrypt":
         result_str = res_data
     else:
