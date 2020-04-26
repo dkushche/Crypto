@@ -4,6 +4,7 @@
 	"hill": "algo_result = algo.hill(data, crypto_tools.cterm('input', 'Data language: ', 'ans'), crypto_tools.cterm('input', 'Enter key: ', 'ans'), crypto_tools.cterm('input', 'You want encrypt or decrypt: ', 'ans'))",
 	"random": "algo_result = algo.random(data, crypto_tools.cterm('input', 'You want (calc,generate) sequence(s): ', 'ans'))",
 	"hash": "algo_result = algo.hash(data, 2)",
+	"rc4": "algo_result = algo.rc4(data)",
 	"block": "algo_result = algo.block(data, int(crypto_tools.cterm('input', 'Enter key(int): ', 'ans')), int(crypto_tools.cterm('input', 'Enter round amount(int): ', 'ans')), algo.secret_crypto_func, crypto_tools.cterm('input', 'You want encrypt or decrypt: ', 'ans'))",
 	"brute_force": "algo_result = hack.brute_force(data, crypto_tools.cterm('input', 'What algo was used: ', 'ans'))",
 	"freq_analys": "algo_result = hack.freq_analys(data, crypto_tools.cterm('input', 'Data language($lang/no): ', 'ans'))"

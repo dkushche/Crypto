@@ -7,6 +7,7 @@
     "random": "run_algo('random')",
     "block": "run_algo('block')",
     "hash": "run_algo('hash')",
+    "rc4": "run_algo('rc4')",
     "help" : "crypto_tools.render_static('help')",
     "exit" : "exit()"
 }
