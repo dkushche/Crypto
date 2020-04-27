@@ -13,14 +13,14 @@ def rc4_proccess_input(data, key, encrypt):
 
 
 def rc4_prga(scheduled_key):
-    x = 0
-    y = 0
+    rc4_prga.x = (rc4_prga.x + 1) % 256
+    rc4_prga.y = (rc4_prga.y + scheduled_key[rc4_prga.x]) % 256
 
-    x = (x + 1) % 256
-    y = (y + scheduled_key[x]) % 256
-
-    scheduled_key[x], scheduled_key[y] = scheduled_key[y], scheduled_key[x]
-    return scheduled_key[(scheduled_key[x] + scheduled_key[y]) % 256]
+    scheduled_buffer = scheduled_key[rc4_prga.x]
+    scheduled_key[rc4_prga.x] = scheduled_key[rc4_prga.y]
+    scheduled_key[rc4_prga.y] = scheduled_buffer
+    r_index = (scheduled_key[rc4_prga.x] + scheduled_key[rc4_prga.y]) % 256
+    return scheduled_key[r_index]
 
 
 def rc4_ksa(byte_key):
@@ -34,8 +34,10 @@ def rc4_ksa(byte_key):
 
 def rc4(data, key, encrypt):
     data, byte_key = rc4_proccess_input(data, key, encrypt)
-    scheduled_key = rc4_ksa(byte_key)
     cyphered_bytes = bytearray()
+    scheduled_key = rc4_ksa(byte_key)
+    rc4_prga.x = 0
+    rc4_prga.y = 0
 
     for byte in data:
         cyphered_bytes.append(byte ^ rc4_prga(scheduled_key))
