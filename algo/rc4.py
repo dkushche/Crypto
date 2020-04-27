@@ -1,12 +1,15 @@
 import crypto_tools
 
 
-def rc4_proccess_input(data, encrypt):
+def rc4_proccess_input(data, key, encrypt):
     if encrypt != "decrypt" and encrypt != "encrypt":
         raise ValueError("Incorrect type")
+    byte_key = bytearray(key, "utf-8")
+    if len(byte_key) > 256:
+        raise ValueError("Key len must be <= 256")
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
-    return data
+    return data, byte_key
 
 
 def rc4_prga(scheduled_key):
@@ -30,15 +33,12 @@ def rc4_ksa(byte_key):
 
 
 def rc4(data, key, encrypt):
-    data = rc4_proccess_input(data, encrypt)
-    byte_key = bytearray(key, "utf-8")
-    if len(byte_key) > 256:
-        raise ValueError("Key len must be <= 256")
+    data, byte_key = rc4_proccess_input(data, key, encrypt)
     scheduled_key = rc4_ksa(byte_key)
     cyphered_bytes = bytearray()
+
     for byte in data:
-        r_val = rc4_prga(scheduled_key)
-        cyphered_bytes.append(byte ^ r_val)
+        cyphered_bytes.append(byte ^ rc4_prga(scheduled_key))
     if encrypt == "encrypt":
         result_str = cyphered_bytes
     else:
