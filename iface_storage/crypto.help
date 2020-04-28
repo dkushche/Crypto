@@ -5,6 +5,7 @@ Cryptography:
 caesar      ->      encrypt/decrypt using caesar algo
 xor         ->      encrypt/decrypt using xor algo
 hill        ->      encrypt/decrypt using hill algo
+vigenere    ->      encrypt/decrypt using vigenere cypher
 block       ->      encrypt/decrypt using block cypher
 rc4         ->      encrypt/decrypt using RC4 algo
 hash        ->      generate hash from data

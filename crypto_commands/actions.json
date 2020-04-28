@@ -4,6 +4,7 @@
     "hill": "run_algo('hill')",
     "brute_force": "run_algo('brute_force')",
     "freq_analys": "run_algo('freq_analys')",
+    "vigenere" : "run_algo('vigenere')",
     "random": "run_algo('random')",
     "block": "run_algo('block')",
     "hash": "run_algo('hash')",

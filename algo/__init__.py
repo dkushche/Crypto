@@ -1,3 +1,4 @@
+from .vigenere import *
 from .random import *
 from .caesar import *
 from .block import *
