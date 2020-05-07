@@ -15,7 +15,7 @@ def hash(data, res_size):
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
     result = bytearray(res_size)
-    if len(data) % len(result):
+    if len(data) % len(result): # Shit
         for i in range(len(data) % len(result)):
             data.append(0x00)
     dib_iter = 0
