@@ -1,4 +1,5 @@
 from json import load as get_json
+from math import ceil
 
 """
     In this file we have some general tools
@@ -7,12 +8,13 @@ from json import load as get_json
 
 
 def supl_to_mult(first_len, second_len, data):
-    if first_len > second_len:
-        need_to_add = first_len % second_len
-    else:
-        need_to_add = second_len - first_len
-    for i in range(need_to_add):
-        data.append(0x00)
+    if first_len % second_len:
+        if first_len > second_len:
+            buf = second_len - (first_len % second_len)
+        else:
+            buf = second_len - first_len
+        for i in range(buf):
+            data.append(0x00)
 
 
 def bytes_to_str(bytes_arr):

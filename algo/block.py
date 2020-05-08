@@ -1,18 +1,33 @@
 import crypto_tools
+from .xor import xor
 
-
-def block_proccess_input(data, encrypt):
+def block_proccess_input(data, key, block_size, rounds, encrypt):
     if encrypt != "decrypt" and encrypt != "encrypt":
         raise ValueError("Incorrect type")
+
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
-    if (len(data) % 2):
-        data.append(0x00)
-    return data
+    if key.__class__ == str:
+        key = bytearray(key, "utf-8")
+
+    if block_size < 2 or block_size % 2:
+        ValueError("Block size must be bigger then 1 and be pair")
+    if rounds < 1:
+        ValueError("You need enter more then 0 rounds")
+
+    if len(key) > (block_size * rounds):
+        ValueError("Too big key max len of key needs to be block_size * rounds")
+    else:
+        crypto_tools.supl_to_mult(len(key), block_size * rounds, key)
+    crypto_tools.supl_to_mult(len(data), block_size, data)
+    return data, key
 
 
-def secret_crypto_func(val, key, now_round):
-    return (val + key + now_round) % 256
+def secret_crypto_func(val, key, block_size, now_round):
+    key_start = now_round * block_size
+    key_end = key_start + block_size
+    secret_val = xor(val, key[key_start: key_end], "encrypt")
+    return secret_val
 
 
 def set_rounds_range(encrypt, rounds):
@@ -22,10 +37,10 @@ def set_rounds_range(encrypt, rounds):
         return rounds - 1, -1, -1
 
 
-def feistel_network(left, right, key, encrypt, rounds):
+def feistel_network(left, right, block_size, key, encrypt, rounds):
     min_lim, max_lim, step = set_rounds_range(encrypt, rounds)
     for now_round in range(min_lim, max_lim, step):
-        buf = right ^ secret_crypto_func(left, key, now_round)
+        buf = xor(right, secret_crypto_func(left, key, block_size, now_round), "encrypt")
         if (now_round != max_lim - step):
             right = left
             left = buf
@@ -34,22 +49,33 @@ def feistel_network(left, right, key, encrypt, rounds):
     return left, right
 
 
-def block(data, key, rounds, func, encrypt):
+def block(data, key, block_size, rounds, encrypt):
     """
         data: user input
-        key: data in bits
+        block_size: size of block
+        key: data in bits(key size = block_size * rounds)
         rounds: amount of rounds
-        func: secret crypto function
     """
 
-    data = block_proccess_input(data, encrypt)
+    data, key = block_proccess_input(data, key, block_size, rounds, encrypt)
     res_data = bytearray()
-    data_iter = iter(data)
-    for val in data_iter:
-        left, right = feistel_network(val, next(data_iter),
+    for block_id in range(len(data) // block_size):
+        left_start = block_id * block_size
+        left_end = left_start + (block_size // 2)
+        left = data[left_start:left_end:1]
+
+        right_start = left_end
+        right_end = right_start + (block_size // 2)
+        right = data[right_start:right_end:1]
+
+        left, right = feistel_network(left, right, block_size,
                                       key, encrypt, rounds)
-        res_data.append(left)
-        res_data.append(right)
+
+        for byte in left:
+            res_data.append(byte)
+        for byte in right:
+            res_data.append(byte)
+
     if encrypt == "encrypt":
         result_str = res_data
     else:

@@ -6,7 +6,9 @@ def xor(data, key, encrypt):
         raise ValueError("Incorrect action")
     if len(key) == 0:
         raise ValueError("Empty key")
-    key_bytes = cycle(bytearray(key, "utf-8"))
+    if key.__class__ == str:
+        key = bytearray(key, "utf-8")
+    key_bytes = cycle(key)
     if encrypt == "encrypt" and data.__class__ == str:
         data_in_bytes = bytearray(data, "utf-8")
     else:
