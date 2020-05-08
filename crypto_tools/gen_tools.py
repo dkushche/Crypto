@@ -6,6 +6,15 @@ from json import load as get_json
 """
 
 
+def supl_to_mult(first_len, second_len, data):
+    if first_len > second_len:
+        need_to_add = first_len % second_len
+    else:
+        need_to_add = second_len - first_len
+    for i in range(need_to_add):
+        data.append(0x00)
+
+
 def bytes_to_str(bytes_arr):
     """
         This function print all bytes in the same

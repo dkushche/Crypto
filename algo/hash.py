@@ -15,15 +15,14 @@ def hash(data, res_size):
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
     result = bytearray(res_size)
-    if len(data) % len(result): # Shit
-        for i in range(len(data) % len(result)):
-            data.append(0x00)
+    crypto_tools.supl_to_mult(len(data), len(result), data)
     dib_iter = 0
+
     while dib_iter < len(data):
         for res_iter in range(len(result)):
             result[res_iter] ^= data[dib_iter]
             dib_iter += 1
         integer = int.from_bytes(result, byteorder="big")
         integer = smart_shift(integer, len(result) * 8)
-        result = bytearray(integer.to_bytes(3, byteorder="big")[1:3])
+        result = bytearray(integer.to_bytes(res_size + 1, byteorder="big")[1:res_size + 1])
     return result
