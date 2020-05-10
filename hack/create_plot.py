@@ -29,7 +29,7 @@ def save_plot():
         if not os.path.exists("storage/"):
             os.mkdir("storage/")
         plt.savefig("storage/" + filename + ".png")
-        cterm("output", "Saved in storage/" + filename + ".crypt", "inf")
+        cterm("output", "Saved in storage/" + filename + ".png", "inf")
 
 
 """
