@@ -1,5 +1,5 @@
 from .file_manager import download_json, download_text
-from .gen_tools import utf_decoder
+from .general_tools import utf_decoder
 from threading import Thread
 from time import sleep
 

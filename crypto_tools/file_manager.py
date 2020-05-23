@@ -1,5 +1,5 @@
 from json import load as get_json
-from .gen_tools import utf_decoder
+from .general_tools import utf_decoder
 
 
 def get_param_json_data(fname, param):
