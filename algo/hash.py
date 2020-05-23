@@ -24,5 +24,6 @@ def hash(data, res_size):
             dib_iter += 1
         integer = int.from_bytes(result, byteorder="big")
         integer = smart_shift(integer, len(result) * 8)
-        result = bytearray(integer.to_bytes(res_size + 1, byteorder="big")[1:res_size + 1])
+        result = bytearray(integer.to_bytes(res_size + 1,
+                           byteorder="big")[1:res_size + 1])
     return result

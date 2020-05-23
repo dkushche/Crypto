@@ -1,6 +1,7 @@
 import crypto_tools
 from .xor import xor
 
+
 def block_proccess_input(data, key, block_size, rounds, encrypt):
     if encrypt != "decrypt" and encrypt != "encrypt":
         raise ValueError("Incorrect type")
@@ -16,7 +17,7 @@ def block_proccess_input(data, key, block_size, rounds, encrypt):
         ValueError("You need enter more then 0 rounds")
 
     if len(key) > (block_size * rounds):
-        ValueError("Too big key max len of key needs to be block_size * rounds")
+        ValueError("Too big key. Max len required: block_size * rounds")
     else:
         crypto_tools.supl_to_mult(len(key), block_size * rounds, key)
     crypto_tools.supl_to_mult(len(data), block_size, data)
@@ -40,7 +41,8 @@ def set_rounds_range(encrypt, rounds):
 def feistel_network(left, right, block_size, key, encrypt, rounds):
     min_lim, max_lim, step = set_rounds_range(encrypt, rounds)
     for now_round in range(min_lim, max_lim, step):
-        buf = xor(right, secret_crypto_func(left, key, block_size, now_round), "encrypt")
+        secret_val = secret_crypto_func(left, key, block_size, now_round)
+        buf = xor(right, secret_val, "encrypt")
         if (now_round != max_lim - step):
             right = left
             left = buf

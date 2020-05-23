@@ -1,6 +1,7 @@
 import crypto_tools
 from itertools import cycle
 
+
 def vigenere_str_to_list(string, vigenere_dict):
     result = list()
     for char in string:
@@ -23,7 +24,8 @@ def vigenere_process_input(data, lang, key, encrypt):
 
 
 def vigenere(data, lang, key, encrypt):
-    vigenere_dict, num_data, num_key = vigenere_process_input(data, lang, key, encrypt)
+    vigenere_dict, num_data, num_key = \
+        vigenere_process_input(data, lang, key, encrypt)
     dict_size = len(vigenere_dict)
     num_key = cycle(num_key)
     if (encrypt == "encrypt"):
