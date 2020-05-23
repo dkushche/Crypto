@@ -15,7 +15,7 @@ def crush_caesar_try(data, lang, caesar_dictionary):
         key += 1
     if key == len(caesar_dictionary):
         return "None"
-    return '{{ "Result string": "{0}", "Key":{1} }}'.format(result, key)
+    return f'{{ "Result string": "{result}", "Key":{key} }}'
 
 
 def crush_caesar(data):
@@ -27,7 +27,7 @@ def crush_caesar(data):
         for lang in langs:
             result = crush_caesar_try(data, lang, langs[lang])
             if not result == "None":
-                return "Language: {0}\n{1}".format(lang, result)
+                return f"Language: {lang}\n{result}"
         return "None"
     else:
         return crush_caesar_try(data, lang, langs[lang])

@@ -69,7 +69,7 @@ def cterm(com_type, message, message_type):
     """
     begin = cterm.iface["colors"][cterm.iface["pallete"][message_type]]
     marker = cterm.iface["markers"][message_type]
-    res_line = "{0}{1}{2}".format(begin, marker, message)
+    res_line = f"{begin}{marker}{message}"
     if com_type == "input":
         res_line += cterm.iface["colors"][cterm.iface["pallete"]["def"]]
         return input(res_line)

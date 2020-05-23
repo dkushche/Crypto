@@ -7,7 +7,7 @@ def vigenere_str_to_list(string, vigenere_dict):
         try:
             result.append(vigenere_dict.index(char))
         except ValueError:
-            err_msg = "There is no {0} in alphabet".format(key[inx])
+            err_msg = f"There is no {key[inx]} in alphabet"
             raise ValueError(err_msg)
     return result
 

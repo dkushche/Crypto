@@ -26,7 +26,7 @@ def form_frequency_dict(data):
 
 
 def check_char(chars, lang_chars, lang):
-    exec('create_plot(encrypted_text=chars, {0}=lang_chars)'.format(lang))
+    exec(f'create_plot(encrypted_text=chars, {lang}=lang_chars)')
 
 
 def freq_analys(data, lang):

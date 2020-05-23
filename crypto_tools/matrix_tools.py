@@ -51,7 +51,7 @@ def EGCD(a, b):
 def inverse_modulo_numb(determ, modulo):
     gcd, alpha, beta = EGCD(determ, modulo)
     if abs(gcd) != 1:
-        raise ValueError("Values aren't coprime integers gcd {0}".format(gcd))
+        raise ValueError(f"Values aren't coprime integers gcd {gcd}")
     return alpha
 
 
