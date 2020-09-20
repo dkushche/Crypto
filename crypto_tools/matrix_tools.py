@@ -1,3 +1,6 @@
+from .math_tools import inverse_modulo_numb
+
+
 def is_square(mtx):
     """
         Check is matrix square
@@ -37,22 +40,6 @@ def get_minor_mtx(mtx, line, raw):
             res[y][x] = mtx[j][i]
             next_inx += 1
     return res
-
-
-def EGCD(a, b):
-    if a == 0:
-        return (b, 0, 1)
-    else:
-        b_div_a, b_mod_a = divmod(b, a)
-        g, x, y = EGCD(b_mod_a, a)
-        return (g, y - b_div_a * x, x)
-
-
-def inverse_modulo_numb(determ, modulo):
-    gcd, alpha, beta = EGCD(determ, modulo)
-    if abs(gcd) != 1:
-        raise ValueError(f"Values aren't coprime integers gcd {gcd}")
-    return alpha
 
 
 def inverse_mtx(mtx, by_modulo, modulo=0):

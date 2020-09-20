@@ -6,6 +6,7 @@ from .hill import hill
 from .hash import hash
 from .xor import xor
 from .rc4 import rc4
+from .rsa import rsa
 
 
 def __doc__():
