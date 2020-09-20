@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
-from crypto_tools import cterm
+from .interface import cterm
 import os
 
 
-def create_subplots(**kwargs):
-    n_of_plots = len(kwargs)
+def create_subplots(subplot_data):
+    n_of_plots = len(subplot_data)
     index = 1
-    for key in kwargs:
-        lists = kwargs[key].items()
+    for key, value in subplot_data.items():
+        lists = value.items()
         x, y = list(zip(*lists))
         plt.subplot(n_of_plots, 1, index)
         plt.grid(True)
@@ -38,7 +38,7 @@ def save_plot():
 """
 
 
-def create_plot(**kwargs):
-    create_subplots(**kwargs)
+def create_plot(subplot_data):
+    create_subplots(subplot_data)
     plt.subplots_adjust(hspace=0.5)
     save_plot()

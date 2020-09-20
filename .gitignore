@@ -1,6 +1,8 @@
 __pycache__
 algo/__pycache__
 hack/__pycache__
+crypto_commands/__pycache__
 crypto_tools/__pycache__
 crypto_env
+storage
 pycodestyle

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 if [ -z "$1" ]; then
 	echo "Give env dir"
 else
@@ -5,4 +7,3 @@ else
 	pip freeze > requirements.txt
 	echo "Done"
 fi
-

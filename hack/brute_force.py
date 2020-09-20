@@ -1,6 +1,16 @@
 import algo
 import crypto_tools
-from .hack_decorators import check_time
+
+
+def brute_force_little_doc():
+    return "hack using algorithm brute force"
+
+
+def brute_force_full_doc():
+    return """
+    Dear old bruteforce. I wrote only for
+    caesar algorithm
+    """
 
 
 def crush_caesar_try(data, lang, caesar_dictionary):
@@ -9,7 +19,7 @@ def crush_caesar_try(data, lang, caesar_dictionary):
     templates = crypto_tools.get_param_json_data("words.json", lang)
 
     while(key != len(caesar_dictionary)):
-        result = algo.caesar(data, lang, key, "decrypt")
+        result = algo.caesar.processor(data, lang, -1 * key)
         if (crypto_tools.is_string_reproduced(templates, result)):
             break
         key += 1
@@ -33,8 +43,7 @@ def crush_caesar(data):
         return crush_caesar_try(data, lang, langs[lang])
 
 
-@check_time
-def brute_force(data, algo):
+def brute_force_processing(data, algo):
     algoes = {
         "caesar": crush_caesar
     }
@@ -42,3 +51,15 @@ def brute_force(data, algo):
     if algo not in algoes:
         raise ValueError("Incorrect algo")
     return algoes[algo](data)
+
+
+@crypto_tools.file_manipulation
+@crypto_tools.check_time
+def brute_force(data):
+    algo = crypto_tools.cterm('input',
+                              'What algo was used: ', 'ans')
+    return brute_force_processing(data, algo)
+
+
+brute_force.little_doc = brute_force_little_doc
+brute_force.full_doc = brute_force_full_doc

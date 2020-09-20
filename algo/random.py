@@ -16,6 +16,27 @@ from json.decoder import JSONDecodeError
 """
 
 
+def random_little_doc():
+    return "find arguments/create random sequences"
+
+
+def random_full_doc():
+    return """
+    Input example for generate:
+        {"size": 10, "amount": 2}
+    Input example for calc:
+    [
+        {"a": 21, "c": 1, "f": 0, "m": 100},
+        {"a": 21, "c": 3, "f": 0, "m": 100},
+        {"a": 21, "c": 7, "f": 0, "m": 100},
+        {"a": 21, "c": 9, "f": 0, "m": 100},
+        {"a": 21, "c": 11, "f": 0, "m": 100},
+        {"a": 21, "c": 13, "f": 0, "m": 100},
+        {"a": 21, "c": 17, "f": 0, "m": 100}
+    ]
+    """
+
+
 def bitlen(sequence):
     res = 0
     for val in sequence:
@@ -113,7 +134,7 @@ def calc(modul, constant, coefficient, start_value, bit_len):
     return no_replay_sequence, by_bits_sequence
 
 
-def random(data, action):
+def random_processing(data, action):
     try:
         data = crypto_tools.utf_decoder(data)
         data = loads(data)
@@ -133,3 +154,15 @@ def random(data, action):
     except (KeyError, TypeError, JSONDecodeError):
         raise ValueError("Incorrect input")
     return dumps(data, sort_keys=True, indent=4)
+
+
+@crypto_tools.file_manipulation
+def random(data):
+    action = crypto_tools.cterm('input',
+                                'You want (calc,generate) sequence(s): ',
+                                'ans')
+    return random_processing(data, action)
+
+
+random.little_doc = random_little_doc
+random.full_doc = random_full_doc

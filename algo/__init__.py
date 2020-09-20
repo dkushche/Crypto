@@ -6,3 +6,7 @@ from .hill import hill
 from .hash import hash
 from .xor import xor
 from .rc4 import rc4
+
+
+def __doc__():
+    return f"Cryptography module"
