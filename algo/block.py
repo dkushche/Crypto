@@ -53,8 +53,8 @@ def block_pre_processing(data, key, block_size, rounds):
     if len(key) > (block_size * rounds):
         raise ValueError("Too big key. Max len required: block_size * rounds")
     else:
-        crypto_tools.supl_to_mult(len(key), block_size * rounds, key)
-    crypto_tools.supl_to_mult(len(data), block_size, data)
+        crypto_tools.supl_to_mult(key, block_size * rounds)
+    crypto_tools.supl_to_mult(data, block_size)
     return data, key
 
 

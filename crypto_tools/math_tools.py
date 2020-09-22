@@ -1,7 +1,10 @@
 def EGCD(a, b):
     """
         Extended Euclidean algorithm
-        computes common divisor of integers a and b,
+        computes common divisor of integers a and b.
+        a * x + b * y = gcd(a, b)
+        returns gcd, x, y or gcd, y, x.
+        Sorry, I can't remember
     """
     if a == 0:
         return (b, 0, 1)

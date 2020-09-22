@@ -25,7 +25,7 @@ def hash_processing(data, res_size):
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
     result = bytearray(res_size)
-    crypto_tools.supl_to_mult(len(data), len(result), data)
+    crypto_tools.supl_to_mult(data, len(result))
     dib_iter = 0
 
     while dib_iter < len(data):

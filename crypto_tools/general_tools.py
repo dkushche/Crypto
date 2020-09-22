@@ -7,12 +7,12 @@ from math import ceil
 """
 
 
-def supl_to_mult(first_len, second_len, data):
-    if first_len % second_len:
-        if first_len > second_len:
-            buf = second_len - (first_len % second_len)
+def supl_to_mult(data, mod_len):
+    if len(data) % mod_len:
+        if len(data) > mod_len:
+            buf = mod_len - (len(data) % mod_len)
         else:
-            buf = second_len - first_len
+            buf = mod_len - len(data)
         for i in range(buf):
             data.append(0x00)
 

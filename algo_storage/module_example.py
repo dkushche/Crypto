@@ -17,8 +17,8 @@ def module_processing(data, input_val):
 
 @crypto_tools.file_manipulation
 def module(data):
-    input_val = int(crypto_tools.cterm('input','data', 'ans'))
-    return hash_processing(data, input_val)
+    input_val = int(crypto_tools.cterm('input', 'data', 'ans'))
+    return module_processing(data, input_val)
 
 
 module.little_doc = module_little_doc
