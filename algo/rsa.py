@@ -22,6 +22,8 @@ def rsa_processing(data, p_value, q_value, e_value, m_value, encrypt):
             raise ValueError(f"GCD of E and P * Q == {gcd}")
         d_value = (m_value * closed_euler + 1) // e_value
         block_size = int(math.log2(open_mix))
+        if block_size // 8 < 1:
+            raise ValueError(f"P * Q needs to be bigger 2^8 but it {open_mix}")
         crypto_tools.supl_to_mult(data, block_size)
         key = e_value if encrypt == "encrypt" else d_value
         result = bytearray()
