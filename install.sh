@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 test -e crypto_env
 if [[ "$?" -eq "1" ]]; then

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 rm -rf ./__pycache__
 rm -rf ./algo/__pycache__
