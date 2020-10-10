@@ -1,3 +1,5 @@
+import random
+
 def EGCD(a, b):
     """
         Extended Euclidean algorithm
@@ -32,3 +34,11 @@ def is_prime(num):
         if num % i == 0:
             return False
     return True
+
+def get_coprime(value):
+    coprime = random.randint(2, value - 1)
+    gcd, _, _ = EGCD(value, coprime)
+    while gcd != 1:
+        coprime = random.randint(2, value - 1)
+        gcd, _, _ = EGCD(value, coprime)
+    return coprime

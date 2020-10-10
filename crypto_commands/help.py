@@ -10,7 +10,7 @@ def help_process_input(commands_list):
         command = crypto_tools.cterm('input', quest, 'ans')
         if command == "back":
             break
-        if command in ["help", "exit"]:
+        if command in ["help", "exit", "force_exit"]:
             crypto_tools.cterm('output',
                                "O'rly, It's too easy, I hope it's a joke",
                                'inf')
@@ -52,7 +52,10 @@ def general_help(commands_list):
     crypto_tools.cterm("output",
                        "{:15} ->\t\tshow this message".format("help"), "inf")
     crypto_tools.cterm("output",
-                       "{:15} ->\t\tturn off crypto\n".format("exit"), "inf")
+                       "{:15} ->\t\tturn off crypto".format("exit"), "inf")
+    crypto_tools.cterm("output",
+                       "{:15} ->\t\tturn off crypto with keyboard interrupt\
+                        \n".format("force_exit"), "inf")
     crypto_tools.cterm('output', "*-" * 30 + "\n", "inf")
 
 

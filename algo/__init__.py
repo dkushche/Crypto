@@ -1,4 +1,5 @@
 from .vigenere import vigenere
+from .elgamal import elgamal
 from .random import random
 from .caesar import caesar
 from .block import block
