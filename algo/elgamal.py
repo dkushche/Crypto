@@ -3,13 +3,15 @@ import random
 
 
 def elgamal_little_doc():
-    return "little_doc"
+    return "encrypt/decrypt using elgamal algo"
 
 
 def elgamal_full_doc():
     return """
-    full_doc
+    Make it a bit better encrypt messages not just number. Key hint
+    M needs to be smaller then p.
     """
+
 
 def check_parameters(p_value, g_value, x_value):
     if not crypto_tools.is_prime(p_value):
@@ -21,16 +23,36 @@ def check_parameters(p_value, g_value, x_value):
         raise ValueError(f"With current params X must \
                            be in range [2; {p_value - 1}]")
 
-@crypto_tools.check_time
-def elgamal_processing(data, p_value, g_value, x_value):
+
+def elgamal_encrypt(data, p_value, g_value, x_value):
     check_parameters(p_value, g_value, x_value)
     y_value = pow(g_value, x_value) % p_value
     k_value = crypto_tools.get_coprime(p_value - 1)
-    return data
+    a = pow(g_value, k_value) % p_value
+    b = int(data) % p_value * pow(y_value, k_value) % p_value
+    return f"{a}:{b}"
+
+
+def elgamal_decrypt(a, b, p_value, x_value):
+    return int(b) * pow(int(a), p_value - 1 - x_value) % p_value
+
+
+@crypto_tools.check_time
+def elgamal_processing(data, p_value, g_value=0, x_value, encrypt):
+    if encrypt == "encrypt":
+        if len(data.split(":")) != 1:
+            raise ValueError(f"incorrect data needed number got = {data}")
+        return elgamal_encrypt(data, p_value, g_value, x_value)
+    else:
+        if len(data.split(":")) != 2:
+            raise ValueError(f"need pair a:b for decryption got = {data}")
+        return elgamal_decrypt(*data.split(":"), p_value, x_value)
 
 
 @crypto_tools.file_manipulation
 def elgamal(data):
+    data = crypto_tools.utf_decoder(data)
+
     p_value = int(crypto_tools.cterm('input',
                                      'Enter first(p) number: ', 'ans'))
     g_value = int(crypto_tools.cterm('input',
@@ -42,7 +64,7 @@ def elgamal(data):
     if encrypt != "encrypt" and encrypt != "decrypt":
         raise ValueError(f"Incorrect action {encrypt}")
 
-    return elgamal_processing(data, p_value, g_value, x_value)
+    return elgamal_processing(data, p_value, g_value, x_value, encrypt)
 
 
 elgamal.little_doc = elgamal_little_doc
