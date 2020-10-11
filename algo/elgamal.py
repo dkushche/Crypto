@@ -38,7 +38,7 @@ def elgamal_decrypt(a, b, p_value, x_value):
 
 
 @crypto_tools.check_time
-def elgamal_processing(data, p_value, g_value=0, x_value, encrypt):
+def elgamal_processing(data, p_value, x_value, encrypt, g_value=0):
     if encrypt == "encrypt":
         if len(data.split(":")) != 1:
             raise ValueError(f"incorrect data needed number got = {data}")
@@ -64,7 +64,7 @@ def elgamal(data):
     if encrypt != "encrypt" and encrypt != "decrypt":
         raise ValueError(f"Incorrect action {encrypt}")
 
-    return elgamal_processing(data, p_value, g_value, x_value, encrypt)
+    return elgamal_processing(data, p_value, x_value, encrypt, g_value)
 
 
 elgamal.little_doc = elgamal_little_doc
