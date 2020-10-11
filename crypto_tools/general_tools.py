@@ -1,4 +1,5 @@
 from json import load as get_json
+from bitarray import bitarray
 from math import ceil
 
 """
@@ -29,6 +30,17 @@ def bytes_to_str(bytes_arr):
         res_str += "0" * (8 - len(byte_str))
         res_str += byte_str
     return res_str
+
+
+def to_bitarray(data):
+    result = bitarray()
+    if data.__class__ == str:
+        result.frombytes(data.encode())
+    elif data.__class__ == bytearray or data.__class__ == bytes:
+        result.frombytes(data)
+    else:
+        raise ValueError(f"to_bits: incorrect data type {data.__class__}")
+    return result
 
 
 def utf_decoder(data):
