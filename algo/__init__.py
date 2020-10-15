@@ -1,3 +1,4 @@
+from .elliptic import elliptic
 from .vigenere import vigenere
 from .elgamal import elgamal
 from .random import random
