@@ -42,7 +42,7 @@ def elliptic_decrypt(data, secret_key):
         )
 
         cyphered_part = first_point * secret_key
-        result.append(second_point + -cyphered_part)
+        result.append(second_point - cyphered_part)
     return result
 
 
