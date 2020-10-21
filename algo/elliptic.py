@@ -16,7 +16,10 @@ def elliptic_full_doc():
 def elliptic_encrypt(data, open_key, r_number, G):
     new_data = []
     for i in data:
-        new_data.append(G * ord(i))
+        temp = G * ord(i)
+        if not crypto_tools.elliptic_point.belong_to_curve(temp):
+            print(f"Warning: {G} * {ord(i)} out of curve")
+        new_data.append(temp)
     crypto_tools.cterm("output", f"Encoded data = {new_data}", "inf")
 
     res_data = []

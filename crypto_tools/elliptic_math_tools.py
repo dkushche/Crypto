@@ -36,7 +36,7 @@ class elliptic_point:
 
     def __neg__(self):
         return elliptic_point(
-            -self.x % elliptic_point.elliptic_curve["p"],
+            self.x,
             -self.y % elliptic_point.elliptic_curve["p"]
         )
 
@@ -50,7 +50,7 @@ class elliptic_point:
 
             if self == other:
                 if self.y != 0:
-                    m = (3 * self.x ** 2 + elliptic_point.elliptic_curve["a"]) * \
+                    m = (3 * (self.x ** 2) + elliptic_point.elliptic_curve["a"]) * \
                         inverse_modulo_numb(2 * self.y, elliptic_point.elliptic_curve["p"])
                 else:
                     return elliptic_point(0, 0)
@@ -64,7 +64,7 @@ class elliptic_point:
             m %= elliptic_point.elliptic_curve["p"]
 
             new_x = (m ** 2 - self.x - other.x) % elliptic_point.elliptic_curve["p"]
-            new_y = (m * (self.x - new_x) - self.y) % elliptic_point.elliptic_curve["p"]
+            new_y = (self.y + m * (new_x - self.x)) % elliptic_point.elliptic_curve["p"]
             return elliptic_point(new_x, -new_y % elliptic_point.elliptic_curve["p"])
         else:
             raise ValueError(f"Can't add elliptic_point to other type")
