@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [ "$#" -eq "2" ]; then
+    if [ "$1" = "algo" ] || [ "$1" = "hack" ]; then
+
+        echo "import crypto_tools
+
+
+def $2_little_doc():
+    return \"$2_little_doc\"
+
+
+def $2_full_doc():
+    return \"\"\"
+    $2_full_doc
+    \"\"\"
+
+
+def $2_processing(data, input_val):
+    return data
+
+
+@crypto_tools.file_manipulation
+def $2(data):
+    input_val = int(crypto_tools.cterm('input', 'data for $2: ', 'ans'))
+    return $2_processing(data, input_val)
+
+
+$2.little_doc = $2_little_doc
+$2.full_doc = $2_full_doc
+" > $1/$2.py
+        sed -i "1s/^/from .$2 import $2\n/" $1/__init__.py
+        exit 0
+    fi
+fi
+echo "Usage: create_module algo|hack module_name"
