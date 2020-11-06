@@ -1,3 +1,4 @@
+from .dsa import dsa
 from .elliptic import elliptic
 from .vigenere import vigenere
 from .elgamal import elgamal
