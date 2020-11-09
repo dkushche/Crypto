@@ -53,12 +53,12 @@ def dsa_processing(data, p_value, q_value, x_value, k_value, encrypt):
     check_params(p_value, q_value)
 
     h_value = 2
-    g_value = pow(h_value, (p_value - 1) / q_value)
+    g_value = pow(h_value, int((p_value - 1) / q_value))
     while g_value == 1:
         h_value += 1
         if h_value == p_value - 1:
             raise ValueError(f"Cannot find correct h_value in range(1;{p_value - 1})")
-        g_value = pow(h_value, (p_value - 1) / q_value)
+        g_value = pow(h_value, int((p_value - 1) / q_value))
     open_key = pow(h_value, x_value) % q_value
 
     if encrypt == "sign":
