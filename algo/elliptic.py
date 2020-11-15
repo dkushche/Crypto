@@ -18,7 +18,7 @@ def elliptic_encrypt(data, open_key, r_number, G):
     for i in data:
         temp = G * ord(i)
         if not crypto_tools.elliptic_point.belong_to_curve(temp):
-            print(f"Warning: {G} * {ord(i)} out of curve")
+            crypto_tools.cterm("output", f"Warning: {G} * {ord(i)} out of curve", "inf")
         new_data.append(temp)
     crypto_tools.cterm("output", f"Encoded data = {new_data}", "inf")
 

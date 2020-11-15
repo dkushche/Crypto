@@ -1,4 +1,6 @@
+import math
 import random
+
 
 def EGCD(a, b):
     """
@@ -20,6 +22,13 @@ def inverse_modulo_numb(determ, modulo):
     return pow(determ, modulo - 2, modulo)
 
 
+def is_perfect_square(num):
+    if num <= 0:
+        return False
+    square = int(math.sqrt(num))
+    return square ** 2 == num
+
+
 def is_prime(num):
     if num < 0:
         raise ValueError(f"Can't check is prime negative value {num}")
@@ -31,6 +40,7 @@ def is_prime(num):
         if num % i == 0:
             return False
     return True
+
 
 def get_coprime(value):
     coprime = random.randint(2, value - 1)

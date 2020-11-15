@@ -92,3 +92,4 @@ def rsa(data):
 
 rsa.little_doc = rsa_little_doc
 rsa.full_doc = rsa_full_doc
+rsa.processor = rsa_processing
