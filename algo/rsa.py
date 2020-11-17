@@ -55,6 +55,7 @@ def rsa_processing(data, p_value, q_value, e_value, encrypt):
     result = bitarray()
     for i in range(0, len(data), data_block_size):
         block_val = crypto_tools.get_block_as_int(i, data_block_size, byte_buf, data)
+        crypto_tools.cterm("output", f"Block {int(i / data_block_size)}: {block_val}", "inf")
         res_val = (pow(block_val, key) % open_mix).to_bytes(byte_buf, "big")
 
         block = bitarray()
