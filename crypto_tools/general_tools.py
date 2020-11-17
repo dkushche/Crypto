@@ -32,6 +32,15 @@ def bytes_to_str(bytes_arr):
     return res_str
 
 
+def get_block_as_int(start, src_bit_len, dst_byte_len, src):
+    block = bitarray()
+    block += bitarray('0') * (dst_byte_len * 8 - src_bit_len)
+    block += src[start: start + src_bit_len]
+
+    block_val = int.from_bytes(block, "big")
+    return block_val
+
+
 def to_bitarray(data):
     result = bitarray()
     if data.__class__ == str:
