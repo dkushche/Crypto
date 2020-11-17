@@ -1,3 +1,4 @@
+from bitarray import bitarray
 import crypto_tools
 import algo
 import math
@@ -40,8 +41,31 @@ def rsa_hijack_fermat(data, open_mix, e_value):
 def rsa_hijack_repeat(data, open_mix, e_value):
     crypto_tools.cterm("output", f"Hijacking using repeat cypher method", "inf")
     data_block_size = math.ceil(math.log2(open_mix))
-    
-    return data
+    res_block_size = int(math.log2(open_mix))
+    byte_buf = math.ceil(data_block_size / 8)
+    crypto_tools.supl_to_mult(data, data_block_size)
+
+    result = bitarray()
+    for i in range(0, len(data), data_block_size):
+        block_val = crypto_tools.get_block_as_int(i, data_block_size, byte_buf, data)
+
+        m_value = 1
+        while ((block_val ** e_value ** m_value) % open_mix != block_val % open_mix):
+            m_value += 1
+
+        res_val = ((block_val ** e_value ** (m_value - 1)) % open_mix).to_bytes(byte_buf, "big")
+
+        block = bitarray()
+        block.frombytes(res_val)
+        print(res_val)
+        result += block[-res_block_size:]
+
+
+    if len(result) % 8:
+        result = result[:-(len(result) % 8)]
+    result = bytes(result)
+    return result.decode()
+
 
 def rsa_hijack_chinese(data, open_mix, e_value):
     crypto_tools.cterm("output", f"Hijacking using chinese reminder method", "inf")
