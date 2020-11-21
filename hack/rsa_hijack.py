@@ -19,6 +19,8 @@ def check_params(open_mix, e_value):
     if open_mix % 2 == 0:
         raise ("Open (p * q) must be odd")
 
+
+@crypto_tools.check_time
 def rsa_hijack_fermat(data, open_mix, e_value):
     crypto_tools.cterm("output", f"Hijacking using Fermat method", "inf")
     check_params(open_mix, e_value)
@@ -38,6 +40,8 @@ def rsa_hijack_fermat(data, open_mix, e_value):
 
     return algo.rsa.processor(data, p_value, q_value, e_value, "decrypt")
 
+
+@crypto_tools.check_time
 def rsa_hijack_repeat(data, open_mix, e_value):
     crypto_tools.cterm("output", f"Hijacking using repeat cypher method", "inf")
     data_block_size = math.ceil(math.log2(open_mix))
