@@ -42,6 +42,7 @@ def crush_caesar(data):
     else:
         return crush_caesar_try(data, lang, langs[lang])
 
+
 @crypto_tools.check_time
 def brute_force_processing(data, algo):
     algoes = {

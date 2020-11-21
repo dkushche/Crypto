@@ -18,7 +18,10 @@ def elliptic_encrypt(data, open_key, r_number, G):
     for i in data:
         temp = G * ord(i)
         if not crypto_tools.elliptic_point.belong_to_curve(temp):
-            crypto_tools.cterm("output", f"Warning: {G} * {ord(i)} out of curve", "inf")
+            crypto_tools.cterm(
+                "output",
+                f"Warning: {G} * {ord(i)} out of curve", "inf"
+            )
         new_data.append(temp)
     crypto_tools.cterm("output", f"Encoded data = {new_data}", "inf")
 
@@ -59,25 +62,30 @@ def elliptic_processing(data, elliptic_curve, g_value,
     else:
         return elliptic_decrypt(data, secret_key)
 
-def encode_params(string, needed_size):
+
+def decode_params(string, needed_size):
     result = string.split(":")
     if len(result) != needed_size:
-        raise ValueError(f"Incorrect amount of params {len(result)}(need {needed_size})")
+        raise ValueError(
+            f"Incorrect amount of params {len(result)}(need {needed_size})"
+        )
     for i in range(len(result)):
         result[i] = int(result[i])
     return result
+
 
 @crypto_tools.file_manipulation
 def elliptic(data):
     data = crypto_tools.utf_decoder(data)
 
     elliptic_curve = crypto_tools.cterm('input',
-                                        'Enter curve coefficients(a:b:p): ', 'ans')
-    elliptic_curve = encode_params(elliptic_curve, 3)
+                                        'Enter curve coefficients(a:b:p): ',
+                                        'ans')
+    elliptic_curve = decode_params(elliptic_curve, 3)
 
     g_value = crypto_tools.cterm('input',
                                  'Enter generator point(x:y): ', 'ans')
-    g_value = encode_params(g_value, 2)
+    g_value = decode_params(g_value, 2)
 
     secret_key = int(crypto_tools.cterm('input',
                                         'Enter secret key: ', 'ans'))

@@ -15,18 +15,18 @@ def rsa_full_doc():
 
 
 def get_closed_key(p_value, q_value, e_value):
-    if crypto_tools.is_prime(p_value) and crypto_tools.is_prime(q_value):
-        closed_euler = (p_value - 1) * (q_value - 1)
-        gcd, _, _ = crypto_tools.EGCD(e_value, closed_euler)
-        if gcd != 1:
-                raise ValueError(f"GCD of E and P * Q == {gcd}")
-        m_value = 1
-        d_value = (m_value * closed_euler + 1) / e_value
-        while not d_value.is_integer():
-            m_value += 1
-            d_value = (m_value * closed_euler + 1) / e_value
-    else:
+    if not (crypto_tools.is_prime(p_value) and crypto_tools.is_prime(q_value)):
         raise ValueError("P and Q value need to be prime")
+    closed_euler = (p_value - 1) * (q_value - 1)
+    gcd, _, _ = crypto_tools.EGCD(e_value, closed_euler)
+    if gcd != 1:
+        raise ValueError(f"GCD of E and P * Q == {gcd}")
+    m_value = 1
+    d_value = (m_value * closed_euler + 1) / e_value
+    while not d_value.is_integer():
+        m_value += 1
+        d_value = (m_value * closed_euler + 1) / e_value
+
     return int(d_value)
 
 
@@ -38,6 +38,7 @@ def get_block_sizes(encrypt, encrypt_block_size, decrypt_block_size):
         data_block_size = decrypt_block_size
         res_block_size = encrypt_block_size
     return data_block_size, res_block_size
+
 
 def rsa_processing(data, p_value, q_value, e_value, encrypt):
     open_mix = p_value * q_value
@@ -54,8 +55,13 @@ def rsa_processing(data, p_value, q_value, e_value, encrypt):
 
     result = bitarray()
     for i in range(0, len(data), data_block_size):
-        block_val = crypto_tools.get_block_as_int(i, data_block_size, byte_buf, data)
-        crypto_tools.cterm("output", f"Block {int(i / data_block_size)}: {block_val}", "inf")
+        block_val = crypto_tools.get_block_as_int(
+            i, data_block_size, byte_buf, data
+        )
+        crypto_tools.cterm(
+            "output", f"Block {int(i / data_block_size)}: {block_val}", "inf"
+        )
+
         res_val = (pow(block_val, key) % open_mix).to_bytes(byte_buf, "big")
 
         block = bitarray()
