@@ -69,8 +69,20 @@ def rsa_hijack_repeat(data, open_mix, e_value):
 def rsa_hijack_chinese(data, open_mix, e_value):
     crypto_tools.cterm("output",
                        f"Hijacking using chinese reminder method", "inf")
-    return data
 
+    tx_data = [data]
+    open_mixes = [open_mix]
+
+    for i in range(1, 3):
+        tx_data.append(crypto_tools.to_bitarray(crypto_tools.get_data()))
+        open_mixes.append(
+            int(crypto_tools.cterm('input', f'Enter {i} open(p * q) number: ', 'ans')))
+
+
+    # 11 * 13
+    # 7 * 5
+
+    return data
 
 @crypto_tools.check_time
 def rsa_hijack_nokey(data, open_mix, e_value):

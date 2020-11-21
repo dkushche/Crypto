@@ -33,4 +33,4 @@ $2.full_doc = $2_full_doc
         exit 0
     fi
 fi
-echo "Usage: create_module algo|hack module_name"\n
+echo "Usage: create_module algo|hack module_name"

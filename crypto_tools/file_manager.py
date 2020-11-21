@@ -3,7 +3,7 @@ from .general_tools import utf_decoder
 
 
 def get_param_json_data(fname, param):
-    result = download_json("algo_storage/" + fname)
+    result = download_json("crypto_storage/" + fname)
     if param not in result:
         raise ValueError(f"Incorrect param {param}")
     result = result[param]

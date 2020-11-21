@@ -32,7 +32,7 @@ def crush_caesar(data):
     sentence = "Do you know language($lang/no): "
     lang = crypto_tools.cterm("input", sentence, "ans")
 
-    langs = crypto_tools.download_json("algo_storage/alphabets.json")
+    langs = crypto_tools.download_json("crypto_storage/alphabets.json")
     if lang == "no":
         for lang in langs:
             result = crush_caesar_try(data, lang, langs[lang])

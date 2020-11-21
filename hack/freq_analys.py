@@ -44,7 +44,7 @@ def check_char(chars, lang_chars, lang):
 def freq_analys_processing(data, lang):
     data = crypto_tools.utf_decoder(data)
     laters = form_frequency_dict(data)
-    langs = crypto_tools.download_json("algo_storage/freqchars.json")
+    langs = crypto_tools.download_json("crypto_storage/freqchars.json")
 
     if lang == "no":
         for lang in langs:
