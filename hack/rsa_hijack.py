@@ -24,6 +24,7 @@ def check_params(open_mix, e_value):
 
 @crypto_tools.check_time
 def rsa_hijack_fermat(data, open_mix, e_value):
+    data = crypto_tools.to_bitarray(data)
     crypto_tools.cterm("output", f"Hijacking using Fermat method", "inf")
     check_params(open_mix, e_value)
     k_value = 1
@@ -45,6 +46,7 @@ def rsa_hijack_fermat(data, open_mix, e_value):
 
 @crypto_tools.check_time
 def rsa_hijack_repeat(data, open_mix, e_value):
+    data = crypto_tools.to_bitarray(data)
     crypto_tools.cterm("output",
                        f"Hijacking using repeat cypher method", "inf")
     data_block_size = math.ceil(math.log2(open_mix))
@@ -67,22 +69,35 @@ def rsa_hijack_repeat(data, open_mix, e_value):
 
 @crypto_tools.check_time
 def rsa_hijack_chinese(data, open_mix, e_value):
+    data = int(crypto_tools.utf_decoder(data))
     crypto_tools.cterm("output",
                        f"Hijacking using chinese reminder method", "inf")
 
     tx_data = [data]
     open_mixes = [open_mix]
 
-    for i in range(1, 3):
-        tx_data.append(crypto_tools.to_bitarray(crypto_tools.get_data()))
+    for i in range(2, e_value + 1):
+        tx_data.append(int(crypto_tools.utf_decoder(crypto_tools.get_data())))
         open_mixes.append(
             int(crypto_tools.cterm('input', f'Enter {i} open(p * q) number: ', 'ans')))
 
+    result = 0
+    m_value = 1
+    for i in range(e_value):
+        temp_m = 1
+        m_value *= open_mixes[i]
+        for j in range(1, e_value):
+            temp_m *= open_mixes[(i + j) % e_value]
 
-    # 11 * 13
-    # 7 * 5
+        print(f"{i} temp_m: {temp_m}")
+        inverse_m = crypto_tools.inverse_modulo_numb(temp_m, open_mixes[i])
+        print(f"{i} temp_n: {inverse_m}")
+        result += tx_data[i] * temp_m * inverse_m
+    print(f"M: {m_value}")
+    result = pow(result % m_value, 1 / e_value)
 
-    return data
+    return f"{result}"
+
 
 @crypto_tools.check_time
 def rsa_hijack_nokey(data, open_mix, e_value):
@@ -93,8 +108,6 @@ def rsa_hijack_nokey(data, open_mix, e_value):
 
 @crypto_tools.file_manipulation
 def rsa_hijack(data):
-    data = crypto_tools.to_bitarray(data)
-
     method = crypto_tools.cterm(
         'input',
         'Enter hijack method(fermat|repeat|chinese|nokey): ',

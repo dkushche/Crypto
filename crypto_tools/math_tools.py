@@ -19,7 +19,11 @@ def EGCD(a, b):
 
 
 def inverse_modulo_numb(determ, modulo):
-    return pow(determ, modulo - 2, modulo)
+    g, x, y = EGCD(determ, modulo)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % modulo
 
 
 def is_perfect_square(num):
