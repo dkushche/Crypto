@@ -89,21 +89,27 @@ def rsa_hijack_chinese(data, open_mix, e_value):
         for j in range(1, e_value):
             temp_m *= open_mixes[(i + j) % e_value]
 
-        print(f"{i} temp_m: {temp_m}")
         inverse_m = crypto_tools.inverse_modulo_numb(temp_m, open_mixes[i])
-        print(f"{i} temp_n: {inverse_m}")
         result += tx_data[i] * temp_m * inverse_m
-    print(f"M: {m_value}")
-    result = pow(result % m_value, 1 / e_value)
-
+    result = (result % m_value) ** (1 / float(e_value))
     return f"{result}"
 
 
 @crypto_tools.check_time
 def rsa_hijack_nokey(data, open_mix, e_value):
+    data = int(crypto_tools.utf_decoder(data))
     crypto_tools.cterm("output",
                        f"Hijacking using nokey reading method", "inf")
-    return data
+    second_data = int(crypto_tools.utf_decoder(crypto_tools.get_data()))
+    second_e_value = int(crypto_tools.cterm('input',
+                                            'Enter second open(e) number: ', 'ans'))
+
+    gcd, r, s = crypto_tools.EGCD(e_value, second_e_value)
+    c1_r = pow(data, r) % open_mix
+    c2_s = pow(crypto_tools.inverse_modulo_numb(second_data, open_mix), -s) % open_mix
+
+    result = (c1_r * c2_s) % open_mix
+    return f"{result}"
 
 
 @crypto_tools.file_manipulation
