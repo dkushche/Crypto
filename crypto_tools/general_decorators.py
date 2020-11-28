@@ -25,22 +25,25 @@ def save_data(algo_result):
         sentence = "Saved in storage/" + filename + ".crypt"
         cterm("output", sentence, "inf")
 
-
-def file_manipulation(function):
-    @functools.wraps(function)
-    def wrapper_filesystem(*args, **kwargs):
-        try:
-            data = get_data()
-            if not data:
-                raise ValueError
-            result = function(data, *args, **kwargs)
-            cterm("output", "Result: " + str(result), "inf")
-            save_data(result)
-        except ValueError as err:
-            cterm("output", err, "err")
-            cterm("output", "Error: incorrect parameter type", "err")
-    return wrapper_filesystem
-
+def file_manipulation(read_data=True):
+    def actual_file_manipulation(function):
+        @functools.wraps(function)
+        def wrapper_filesystem(*args, **kwargs):
+            try:
+                if read_data:
+                    data = get_data()
+                    if not data:
+                        raise ValueError
+                    result = function(data, *args, **kwargs)
+                else:
+                    result = function(*args, **kwargs)
+                cterm("output", "Result: " + str(result), "inf")
+                save_data(result)
+            except ValueError as err:
+                cterm("output", err, "err")
+                cterm("output", "Error: incorrect parameter type", "err")
+        return wrapper_filesystem
+    return actual_file_manipulation
 
 def check_time(function):
     @functools.wraps(function)

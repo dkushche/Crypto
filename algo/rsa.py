@@ -75,7 +75,7 @@ def rsa_processing(data, p_value, q_value, e_value, encrypt):
     return result if encrypt == "encrypt" else result.decode()
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def rsa(data):
     data = crypto_tools.to_bitarray(data)
 

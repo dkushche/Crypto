@@ -54,7 +54,7 @@ def brute_force_processing(data, algo):
     return algoes[algo](data)
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def brute_force(data):
     algo = crypto_tools.cterm('input',
                               'What algo was used: ', 'ans')

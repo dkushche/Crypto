@@ -156,7 +156,7 @@ def random_processing(data, action):
     return dumps(data, sort_keys=True, indent=4)
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def random(data):
     action = crypto_tools.cterm('input',
                                 'You want (calc,generate) sequence(s): ',

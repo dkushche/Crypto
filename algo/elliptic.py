@@ -74,7 +74,7 @@ def decode_params(string, needed_size):
     return result
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def elliptic(data):
     data = crypto_tools.utf_decoder(data)
 

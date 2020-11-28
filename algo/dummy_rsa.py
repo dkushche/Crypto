@@ -25,7 +25,7 @@ def dummy_rsa_processing(data, p_value, q_value, e_value):
     return f"{result}"
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def dummy_rsa(data):
     data = int(crypto_tools.utf_decoder(data))
     e_value = int(crypto_tools.cterm('input',

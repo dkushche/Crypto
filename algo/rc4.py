@@ -57,7 +57,7 @@ def rc4_processing(data, byte_key, encrypt):
     return result_str
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def rc4(data):
     key = crypto_tools.cterm('input', 'Enter key(str): ', 'ans')
     encrypt = crypto_tools.cterm('input',

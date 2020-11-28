@@ -49,7 +49,7 @@ def elgamal_processing(data, p_value, x_value, encrypt, g_value=0):
         return elgamal_decrypt(*data.split(":"), p_value, x_value)
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def elgamal(data):
     data = crypto_tools.utf_decoder(data)
 

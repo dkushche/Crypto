@@ -41,7 +41,7 @@ def vigenere_processing(data, key, lang, encrypt):
     return result_str
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def vigenere(data):
     lang = crypto_tools.cterm('input', 'Data language: ', 'ans')
     key = crypto_tools.cterm('input', 'Enter key(str): ', 'ans')

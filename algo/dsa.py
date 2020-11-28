@@ -76,7 +76,7 @@ def dsa_processing(data, p_value, q_value, x_value, k_value, encrypt):
         return dsa_verify(data, p_value, q_value, g_value, open_key)
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def dsa(data):
     data = crypto_tools.utf_decoder(data)
 

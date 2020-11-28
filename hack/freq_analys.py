@@ -54,7 +54,7 @@ def freq_analys_processing(data, lang):
     return laters
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def freq_analys(data):
     lang = crypto_tools.cterm('input', 'Data language($lang/no): ', 'ans')
     return freq_analys_processing(data, lang)

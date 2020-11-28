@@ -27,7 +27,7 @@ def xor_processing(data, key, encrypt):
     return result_str
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def xor(data):
     key = crypto_tools.cterm('input', 'Enter key(str): ', 'ans')
     encrypt = crypto_tools.cterm('input',

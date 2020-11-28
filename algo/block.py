@@ -92,7 +92,7 @@ def block_processing(data, key, block_size, rounds, encrypt):
     return result_str
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def block(data):
     key = crypto_tools.cterm('input', 'Enter key(str): ', 'ans')
     block_size = int(crypto_tools.cterm('input', 'Block size(int): ', 'ans'))

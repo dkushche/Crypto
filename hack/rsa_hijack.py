@@ -112,7 +112,7 @@ def rsa_hijack_nokey(data, open_mix, e_value):
     return f"{result}"
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def rsa_hijack(data):
     method = crypto_tools.cterm(
         'input',

@@ -65,7 +65,7 @@ def hill_processing(data, key, encrypt, hill_dict):
     return result
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def hill(data):
     lang = crypto_tools.cterm('input', 'Data language: ', 'ans')
     key = crypto_tools.cterm('input', 'Enter key: ', 'ans')

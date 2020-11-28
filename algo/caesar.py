@@ -29,7 +29,7 @@ def caesar_processing(data, lang, key):
     return result
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def caesar(data):
     lang = crypto_tools.cterm('input', 'Data language: ', 'ans')
     key = int(crypto_tools.cterm('input', 'Enter key(int): ', 'ans'))

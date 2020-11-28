@@ -39,7 +39,7 @@ def hash_processing(data, res_size):
     return result
 
 
-@crypto_tools.file_manipulation
+@crypto_tools.file_manipulation()
 def hash(data):
     res_size = int(crypto_tools.cterm('input',
                                       'Size of result(in bytes): ', 'ans'))
