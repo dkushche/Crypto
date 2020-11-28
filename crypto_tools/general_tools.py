@@ -41,6 +41,17 @@ def get_block_as_int(start, src_bit_len, dst_byte_len, src):
     return block_val
 
 
+def decode_params(string, needed_size):
+    result = string.split(":")
+    if len(result) != needed_size:
+        raise ValueError(
+            f"Incorrect amount of params {len(result)}(need {needed_size})"
+        )
+    for i in range(len(result)):
+        result[i] = int(result[i])
+    return result
+
+
 def to_bitarray(data):
     result = bitarray()
     if data.__class__ == str:

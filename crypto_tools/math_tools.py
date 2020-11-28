@@ -21,7 +21,7 @@ def EGCD(a, b):
 def inverse_modulo_numb(determ, modulo):
     g, x, y = EGCD(determ, modulo)
     if g != 1:
-        raise Exception('modular inverse does not exist')
+        raise ValueError(f'modular inverse does not exist {determ} {modulo}')
     else:
         return x % modulo
 
