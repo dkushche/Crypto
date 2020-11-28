@@ -1,4 +1,4 @@
-# CRYPTO
+# CRYPTO(obsolete documentation)
 
 Crypto isn't a real project it's just all my cryptology labs in university that I have formed in one project. It contains some logically split directories and files and here I'm going to explain for me in future and for someone who cares how it works and how to add something new inside of this program.
 
