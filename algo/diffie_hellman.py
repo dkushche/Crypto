@@ -29,7 +29,7 @@ def elliptic_diffie_hellman_processing(a_private_key, b_private_key):
     b_full_key = a_partial_key * b_private_key
 
     if a_full_key.x == b_full_key.x:
-        return a_full_key.x
+        return str(a_full_key.x)
     return f"Error: {a_full_key.x} != {b_full_key.x}"
 
 
@@ -47,7 +47,7 @@ def rsa_diffie_hellman_processing(a_public_key, a_private_key,
     b_full_key = a_partial_key ** b_private_key % b_public_key
 
     if a_full_key == b_full_key:
-        return a_full_key
+        return str(a_full_key)
     return f"Error: {a_full_key} != {b_full_key}"
 
 
