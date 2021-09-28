@@ -8,6 +8,7 @@ from .caesar import caesar
 from .block import block
 from .hill import hill
 from .hash import hash
+from .lfsr import lfsr
 from .xor import xor
 from .rc4 import rc4
 from .rsa import rsa
