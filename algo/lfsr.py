@@ -5,7 +5,7 @@ import json
 
 
 def lfsr_little_doc():
-    return "Linear Feedback Shift Register"
+    return "linear feedback shift register"
 
 
 def lfsr_full_doc():
@@ -47,22 +47,8 @@ def lfsr_tick():
         yield random_number
 
 
-def lfsr_processing(data, register_size, exec_xor_pos, start_state):
-    if data.__class__ == str:
-        data = bytearray(data, "utf-8")
-
-    if register_size * 8 < max(exec_xor_pos) or register_size * 8 < max(start_state):
-        raise ValueError(f"{register_size} smaller then significant bit position {max(max(exec_xor_pos), max(start_state))}")
-
-    tick = lfsr_tick()
-
-    next(tick)
-    tick.send(register_size)
-    tick.send(start_state)
-    tick.send(exec_xor_pos)
-
+def lfsr_cypher(data, tick, register_size):
     crypto_tools.supl_to_mult(data, register_size)
-
     result = bytearray()
 
     for byte in data:
@@ -74,8 +60,37 @@ def lfsr_processing(data, register_size, exec_xor_pos, start_state):
     return result
 
 
+def lfsr_generator(tick, output_size):
+    result = bytearray()
+
+    for i in range(output_size):
+        result += next(tick)
+
+    return result
+
+
+def lfsr_processing(data, register_size, exec_xor_pos, start_state, output_size=None):
+    if register_size * 8 < max(exec_xor_pos) or register_size * 8 < max(start_state):
+        raise ValueError(f"{register_size} smaller then significant bit position {max(max(exec_xor_pos), max(start_state))}")
+
+    tick = lfsr_tick()
+
+    next(tick)
+    tick.send(register_size)
+    tick.send(start_state)
+    tick.send(exec_xor_pos)
+
+    if output_size is None:
+        return lfsr_cypher(data, tick, register_size)
+    else:
+        return lfsr_generator(tick, output_size)
+
+
 @crypto_tools.file_manipulation()
 def lfsr(data):
+    if data.__class__ == str:
+        data = bytearray(data, "utf-8")
+
     register_size = int(crypto_tools.cterm('input', 'Enter register_size(uint): ', 'ans'))
     if register_size <= 0:
         raise ValueError("Register size must be bigger then 0")
@@ -88,8 +103,21 @@ def lfsr(data):
     if exec_xor_pos.__class__ != list:
         raise ValueError(f"Incorrect exec_xor_pos class {exec_xor_pos.__class__}")
 
-    return lfsr_processing(data, register_size, exec_xor_pos, start_state)
+    mode = crypto_tools.cterm('input', 'Enter mode(cypher|generator): ', 'ans')
+
+    output_size = None
+    if mode in ["cypher", "generator"]:
+        if mode == "generator":
+            output_size = int(crypto_tools.cterm('input', 'Enter output size: ', 'ans'))
+            if output_size <= 0:
+                raise ValueError(f"Incorrect output buffer size {output_size}")
+    else:
+        raise ValueError(f"Incorrect mode {mode}")
+
+    return lfsr_processing(data, register_size, exec_xor_pos, start_state, output_size)
+
 
 
 lfsr.little_doc = lfsr_little_doc
 lfsr.full_doc = lfsr_full_doc
+lfsr.tick = lfsr_tick
