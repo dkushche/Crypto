@@ -1,6 +1,6 @@
-import crypto_tools
 from bitarray import bitarray
 from math import ceil
+import crypto_tools
 import json
 
 

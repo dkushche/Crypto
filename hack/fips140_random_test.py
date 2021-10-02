@@ -1,3 +1,4 @@
+from bitarray import bitarray
 import crypto_tools
 import sys
 
@@ -9,7 +10,7 @@ def fips140_random_test_little_doc():
 def fips140_random_test_full_doc():
     return """
     fips140_random_test contains 3 tests:
-        * Monobith test
+        * Monobit test
         * Block test
         * Gray test
         * Test series lengths
@@ -18,7 +19,7 @@ def fips140_random_test_full_doc():
 
 def fips140_random_test_all(data):
     report = ""
-    report += fips140_random_test_monobith(data) + "\n"
+    report += fips140_random_test_monobit(data) + "\n"
     report += fips140_random_test_poker(data) + "\n"
     report += fips140_random_test_runs(data) + "\n"
     report += fips140_random_test_sl(data) + "\n"
@@ -32,7 +33,7 @@ def fips140_random_test_monobit(data):
 
     data = data[:2500]
     test_data = bitarray()
-    test_data.from_bytes(data)
+    test_data.frombytes(data)
 
     ones = test_data.count('1')
     zeroes = test_data.count('0')
@@ -43,7 +44,7 @@ def fips140_random_test_monobit(data):
     else:
         status = "failure"
 
-    return f"Test monobith {status}: ones({ones}); zeroes({zeroes});"
+    return f"Test monobit {status}: ones({ones}); zeroes({zeroes});"
 
 
 def fips140_random_test_poker(data):
@@ -52,23 +53,22 @@ def fips140_random_test_poker(data):
 
     data = data[:2500]
     test_data = bitarray()
-    test_data.from_bytes(data)
+    test_data.frombytes(data)
 
     blocks = {}
     for i in range(0, 20000, 4):
-        if blocks.get(str(data[i: i + 4])):
-            blocks[str(data[i: i + 4])[10:-2]] += 1
+        if blocks.get(str(test_data[i: i + 4])[10:-2]):
+            blocks[str(test_data[i: i + 4])[10:-2]] += 1
         else:
-            blocks[str(data[i: i + 4])[10:-2]] = 1
+            blocks[str(test_data[i: i + 4])[10:-2]] = 1
     
     sq_sum = 0
     for i in blocks.values():
-        sq_sum += values ** 2
+        sq_sum += i ** 2
 
     X = (16 / 5000) * sq_sum - 5000
 
     status = None
-
     if 1.03 < X < 57.4:
         status = "success"
     else:
@@ -83,7 +83,7 @@ def fips140_random_test_runs(data):
 
     data = data[:2500]
     test_data = bitarray()
-    test_data.from_bytes(data)
+    test_data.frombytes(data)
 
     series = {}
 
@@ -112,7 +112,7 @@ def fips140_random_test_runs(data):
 
     report = "Test runs:\n"
 
-    for length, amount in ranges:
+    for length, amount in ranges.items():
         status = None
         val = None
 
@@ -137,7 +137,7 @@ def fips140_random_test_conditional(data):
 
     data = data[:2500]
     test_data = bitarray()
-    test_data.from_bytes(data)
+    test_data.frombytes(data)
 
     prev_val = None
     max_series = 0
@@ -174,8 +174,10 @@ def fips140_random_test(data):
 
     try:
         fips140_test = getattr(sys.modules[__name__], "fips140_random_test_" + method)
+
         return fips140_test(data)
-    except AttributeError:
+    except AttributeError as kek:
+        print(kek )
         raise ValueError(f"No such method: {method}")
 
 
