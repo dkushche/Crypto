@@ -1,3 +1,4 @@
+from .lfsr_generator import lfsr_generator
 from .diffie_hellman import diffie_hellman
 from .dummy_rsa import dummy_rsa
 from .elliptic import elliptic

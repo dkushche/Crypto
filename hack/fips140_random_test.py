@@ -4,16 +4,16 @@ import sys
 
 
 def fips140_random_test_little_doc():
-    return "fips140_random_test"
+    return "fips140 random algortihms tester"
 
 
 def fips140_random_test_full_doc():
     return """
-    fips140_random_test contains 3 tests:
+    fips140_random_test contains 4 tests:
         * Monobit test
-        * Block test
-        * Gray test
-        * Test series lengths
+        * Poker test
+        * Test amount of series(Runs)
+        * Test series lengths(Conditional)
     """
 
 
@@ -22,21 +22,19 @@ def fips140_random_test_all(data):
     report += fips140_random_test_monobit(data) + "\n"
     report += fips140_random_test_poker(data) + "\n"
     report += fips140_random_test_runs(data) + "\n"
-    report += fips140_random_test_sl(data) + "\n"
+    report += fips140_random_test_conditional(data) + "\n"
 
     return report
 
 
 def fips140_random_test_monobit(data):
-    if len(data) < 2500:
+    if len(data) < 20000:
         raise ValueError("Data length must be >= 20000")
 
-    data = data[:2500]
-    test_data = bitarray()
-    test_data.frombytes(data)
+    data = data[:20000]
 
-    ones = test_data.count('1')
-    zeroes = test_data.count('0')
+    ones = data.count('1')
+    zeroes = data.count('0')
 
     status = None
     if not 9654 < ones < 10346 or 9654 < zeroes < 10346:
@@ -48,19 +46,17 @@ def fips140_random_test_monobit(data):
 
 
 def fips140_random_test_poker(data):
-    if len(data) < 2500:
+    if len(data) < 20000:
         raise ValueError("Data length must be >= 20000")
 
-    data = data[:2500]
-    test_data = bitarray()
-    test_data.frombytes(data)
+    data = data[:20000]
 
     blocks = {}
     for i in range(0, 20000, 4):
-        if blocks.get(str(test_data[i: i + 4])[10:-2]):
-            blocks[str(test_data[i: i + 4])[10:-2]] += 1
+        if blocks.get(str(data[i: i + 4])[10:-2]):
+            blocks[str(data[i: i + 4])[10:-2]] += 1
         else:
-            blocks[str(test_data[i: i + 4])[10:-2]] = 1
+            blocks[str(data[i: i + 4])[10:-2]] = 1
     
     sq_sum = 0
     for i in blocks.values():
@@ -78,19 +74,17 @@ def fips140_random_test_poker(data):
 
 
 def fips140_random_test_runs(data):
-    if len(data) < 2500:
+    if len(data) < 20000:
         raise ValueError("Data length must be >= 20000")
 
-    data = data[:2500]
-    test_data = bitarray()
-    test_data.frombytes(data)
+    data = data[:20000]
 
     series = {}
 
-    prev_val = None
+    prev_bit = None
     cur_series = 1
     for bit in data:
-        if prev_val == bit:
+        if bit == prev_bit:
             cur_series += 1
         else:
             if cur_series > 6:
@@ -103,7 +97,7 @@ def fips140_random_test_runs(data):
 
             cur_series = 1
 
-        prev_val = bit
+        prev_bit = bit
 
     ranges = {
         "1": (2267, 2733), "2": (1079, 1421), "3": (502, 748),
@@ -121,7 +115,7 @@ def fips140_random_test_runs(data):
         else:
             val = series[f"{length}"]
 
-            if amount[0] < series[f"{length}"] < amount[1]:
+            if amount[0] < val < amount[1]:
                 status = "success"
             else:
                 status = "failure"
@@ -132,12 +126,10 @@ def fips140_random_test_runs(data):
 
 
 def fips140_random_test_conditional(data):
-    if len(data) < 2500:
+    if len(data) < 20000:
         raise ValueError("Data length must be >= 20000")
 
-    data = data[:2500]
-    test_data = bitarray()
-    test_data.frombytes(data)
+    data = data[:20000]
 
     prev_val = None
     max_series = 0
@@ -175,9 +167,13 @@ def fips140_random_test(data):
     try:
         fips140_test = getattr(sys.modules[__name__], "fips140_random_test_" + method)
 
-        return fips140_test(data)
-    except AttributeError as kek:
-        print(kek )
+        data_in_bits = bitarray()
+        data_in_bits.frombytes(data)
+
+        crypto_tools.cterm("output", f"Sequence : {data_in_bits}", "inf")
+
+        return fips140_test(data_in_bits)
+    except AttributeError:
         raise ValueError(f"No such method: {method}")
 
 

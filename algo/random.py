@@ -22,18 +22,18 @@ def random_little_doc():
 
 def random_full_doc():
     return """
-    Input example for generate:
-        {"size": 10, "amount": 2}
-    Input example for calc:
-    [
-        {"a": 21, "c": 1, "f": 0, "m": 100},
-        {"a": 21, "c": 3, "f": 0, "m": 100},
-        {"a": 21, "c": 7, "f": 0, "m": 100},
-        {"a": 21, "c": 9, "f": 0, "m": 100},
-        {"a": 21, "c": 11, "f": 0, "m": 100},
-        {"a": 21, "c": 13, "f": 0, "m": 100},
-        {"a": 21, "c": 17, "f": 0, "m": 100}
-    ]
+    if you want to calc sequences
+
+    [ {"a": 21, "c": 1, "f": 0, "m": 100} ]
+    m -> needed set size
+    c -> constant that we need to add
+    a -> coefficient
+    also we need first value for sequence we call it is f
+
+    The great thing that you may enter any amount of dictionaries with parameters
+
+    if you want to generate this values write
+    { "amount": $number_of_parameters_for_sequences, "size": $size_of_sequence(m) }
     """
 
 
