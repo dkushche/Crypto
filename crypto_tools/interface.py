@@ -3,7 +3,6 @@ from .general_tools import utf_decoder
 from threading import Thread
 from time import sleep
 
-
 def form_result_from_cp(control_package, frame):
     objs_amount = len(control_package["objs_for_anim"]) + \
                   len(control_package["dynamic_values"])
@@ -53,11 +52,11 @@ def destroy_animation(anim_id, control_package):
 
 
 def render_static(file):
-    header = download_text("iface_storage/crypto." + file)
+    header = download_text(file)
     if header:
         cterm("output", utf_decoder(header), "inf")
     else:
-        header = "You may add custom in crypto" + file + " file"
+        header = "**** No header ****"
         cterm("output", header, "inf")
 
 
@@ -67,19 +66,23 @@ def cterm(com_type, message, message_type):
         message - the text
         message_type - type from iface.json
     """
-    begin = cterm.iface["colors"][cterm.iface["pallete"][message_type]]
-    marker = cterm.iface["markers"][message_type]
+    begin = iface_init.iface["colors"][iface_init.iface["pallete"][message_type]]
+    marker = iface_init.iface["markers"][message_type]
     res_line = f"{begin}{marker}{message}"
     if com_type == "input":
-        res_line += cterm.iface["colors"][cterm.iface["pallete"]["def"]]
+        res_line += iface_init.iface["colors"][iface_init.iface["pallete"]["def"]]
         return input(res_line)
     if com_type == "animation":
         print("\r" + res_line, end="")
     else:
         print(res_line)
 
+def iface_init(profile_dir):
+    try:
+        iface_init.iface = download_json(profile_dir + "iface.json")
+        render_static(profile_dir + "crypto.header")
+    except FileNotFoundError:
+        exit()
 
-try:
-    cterm.iface = download_json("iface_storage/iface.json")
-except FileNotFoundError:
-    exit()
+
+iface_init.iface = None # Make in better

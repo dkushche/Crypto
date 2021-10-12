@@ -1,10 +1,9 @@
 import crypto_commands
 import crypto_tools
-import functools
 import readline
 import algo
 import hack
-import os
+import sys
 
 
 def completer(text, state):
@@ -46,7 +45,10 @@ if __name__ == "__main__":
         for module in [algo, hack, crypto_commands]:
             commands_list[module] = dir(module)[9:]
             all_commands += commands_list[module]
-        crypto_tools.render_static('header')
+        if len(sys.argv) == 2:
+            crypto_tools.iface_init(sys.argv[1])
+        else:
+            crypto_tools.iface_init("iface_storage/default_profile/")
         readline.parse_and_bind("tab: complete")
         readline.set_completer(completer)
         readline.set_auto_history(False)
