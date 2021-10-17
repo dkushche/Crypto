@@ -7,6 +7,7 @@ from .elgamal import elgamal
 from .random import random
 from .caesar import caesar
 from .block import block
+from .magma import magma
 from .hill import hill
 from .hash import hash
 from .lfsr import lfsr
