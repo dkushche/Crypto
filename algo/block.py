@@ -12,7 +12,7 @@ def block_full_doc():
     """
 
 
-def secret_crypto_func(val, now_round, key, block_size):
+def secret_crypto_func(val, now_round, block_size, key):
     key_start = now_round * block_size
     key_end = key_start + block_size
     secret_val = xor_processing(val, key[key_start: key_end], "encrypt")
@@ -43,24 +43,10 @@ def block_processing(data, key, block_size, rounds, encrypt):
 
     data, key = block_pre_processing(data, key, block_size, rounds)
 
-    res_data = bytearray()
+    res_data  = crypto_tools.block_cypher(data, block_size, encrypt, rounds,
+                                          True, xor_processing, secret_crypto_func, key)
 
-    for left, right in crypto_tools.block_generator(data, block_size):
-
-        left, right = crypto_tools.feistel_network(left, right, encrypt, rounds,
-                                                   True, xor_processing,
-                                                   secret_crypto_func, key, block_size)
-
-        for byte in left:
-            res_data.append(byte)
-        for byte in right:
-            res_data.append(byte)
-
-    if encrypt == "encrypt":
-        result_str = res_data
-    else:
-        result_str = res_data.decode()
-    return result_str
+    return res_data
 
 
 @crypto_tools.file_manipulation()
@@ -73,7 +59,14 @@ def block(data):
 
     if encrypt != "decrypt" and encrypt != "encrypt":
         raise ValueError("Incorrect type")
-    return block_processing(data, key, block_size, rounds, encrypt)
+    res_data = block_processing(data, key, block_size, rounds, encrypt)
+
+    if encrypt == "encrypt":
+        result_str = res_data
+    else:
+        result_str = res_data.decode()
+
+    return result_str
 
 
 block.little_doc = block_little_doc
