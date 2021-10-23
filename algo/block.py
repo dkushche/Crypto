@@ -45,8 +45,6 @@ def block_pre_processing(data, key, block_size, rounds):
     if key.__class__ == str:
         key = bytearray(key.encode())
 
-    if block_size < 2 or block_size % 2:
-        raise ValueError("Block size must be bigger then 1 and be pair")
     if rounds < 1:
         raise ValueError("You need enter more then 0 rounds")
 
@@ -54,7 +52,7 @@ def block_pre_processing(data, key, block_size, rounds):
         raise ValueError("Too big key. Max len required: block_size * rounds")
     else:
         crypto_tools.supl_to_mult(key, block_size * rounds)
-    crypto_tools.supl_to_mult(data, block_size)
+
     return data, key
 
 
@@ -67,18 +65,12 @@ def block_processing(data, key, block_size, rounds, encrypt):
     """
 
     data, key = block_pre_processing(data, key, block_size, rounds)
+
     res_data = bytearray()
-    for block_id in range(len(data) // block_size):
-        left_start = block_id * block_size
-        left_end = left_start + (block_size // 2)
-        left = data[left_start:left_end:1]
 
-        right_start = left_end
-        right_end = right_start + (block_size // 2)
-        right = data[right_start:right_end:1]
-
+    for left, right in crypto_tools.block_generator(data, block_size):
         left, right = feistel_network(left, right, block_size,
-                                      key, encrypt, rounds)
+                                        key, encrypt, rounds)
 
         for byte in left:
             res_data.append(byte)
