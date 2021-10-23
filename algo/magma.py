@@ -43,8 +43,7 @@ def magma_secret_func(val, now_round, block_size, key):
         first_part_byte = crypto_tools.to_bitarray(first_part_byte.to_bytes(1, 'big'))[4:8]
         sec_part_byte = crypto_tools.to_bitarray(sec_part_byte.to_bytes(1, 'big'))[4:8]
 
-        stage_2.append(first_part_byte)
-        stage_2.append(sec_part_byte)
+        stage_2 += first_part_byte + sec_part_byte
 
     temp = stage_2[0:11]
     stage_3 = stage_2[11:32]
