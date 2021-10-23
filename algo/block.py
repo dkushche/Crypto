@@ -12,31 +12,11 @@ def block_full_doc():
     """
 
 
-def secret_crypto_func(val, key, block_size, now_round):
+def secret_crypto_func(val, now_round, key, block_size):
     key_start = now_round * block_size
     key_end = key_start + block_size
     secret_val = xor_processing(val, key[key_start: key_end], "encrypt")
     return secret_val
-
-
-def set_rounds_range(encrypt, rounds):
-    if encrypt == "encrypt":
-        return 0, rounds, 1
-    else:
-        return rounds - 1, -1, -1
-
-
-def feistel_network(left, right, block_size, key, encrypt, rounds):
-    min_lim, max_lim, step = set_rounds_range(encrypt, rounds)
-    for now_round in range(min_lim, max_lim, step):
-        secret_val = secret_crypto_func(left, key, block_size, now_round)
-        buf = xor_processing(right, secret_val, "encrypt")
-        if (now_round != max_lim - step):
-            right = left
-            left = buf
-        else:
-            right = buf
-    return left, right
 
 
 def block_pre_processing(data, key, block_size, rounds):
@@ -44,9 +24,6 @@ def block_pre_processing(data, key, block_size, rounds):
         data = bytearray(data.encode())
     if key.__class__ == str:
         key = bytearray(key.encode())
-
-    if rounds < 1:
-        raise ValueError("You need enter more then 0 rounds")
 
     if len(key) > (block_size * rounds):
         raise ValueError("Too big key. Max len required: block_size * rounds")
@@ -69,8 +46,10 @@ def block_processing(data, key, block_size, rounds, encrypt):
     res_data = bytearray()
 
     for left, right in crypto_tools.block_generator(data, block_size):
-        left, right = feistel_network(left, right, block_size,
-                                        key, encrypt, rounds)
+
+        left, right = crypto_tools.feistel_network(left, right, encrypt, rounds,
+                                                   True, xor_processing,
+                                                   secret_crypto_func, key, block_size)
 
         for byte in left:
             res_data.append(byte)
