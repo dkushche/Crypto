@@ -25,6 +25,7 @@ def save_data(algo_result):
         sentence = "Saved in storage/" + filename + ".crypt"
         cterm("output", sentence, "inf")
 
+
 def file_manipulation(read_data=True):
     def actual_file_manipulation(function):
         @functools.wraps(function)
@@ -44,6 +45,7 @@ def file_manipulation(read_data=True):
                 cterm("output", "Error: incorrect parameter type", "err")
         return wrapper_filesystem
     return actual_file_manipulation
+
 
 def check_time(function):
     @functools.wraps(function)

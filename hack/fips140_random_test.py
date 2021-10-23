@@ -167,8 +167,7 @@ def fips140_random_test(data):
     try:
         fips140_test = getattr(sys.modules[__name__], "fips140_random_test_" + method)
 
-        data_in_bits = bitarray()
-        data_in_bits.frombytes(data)
+        data_in_bits = crypto_tools.to_bitarray(data)
 
         crypto_tools.cterm("output", f"Sequence : {data_in_bits}", "inf")
 

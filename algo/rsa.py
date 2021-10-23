@@ -64,8 +64,7 @@ def rsa_processing(data, p_value, q_value, e_value, encrypt):
 
         res_val = (pow(block_val, key) % open_mix).to_bytes(byte_buf, "big")
 
-        block = bitarray()
-        block.frombytes(res_val)
+        block = crypto_tools.to_bitarray(res_val)
         result += block[-res_block_size:]
 
     if encrypt == "decrypt":

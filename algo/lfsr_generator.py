@@ -26,8 +26,7 @@ def lfsr_tick():
     start_state = yield
     exec_xor_pos = yield
 
-    register = bitarray()
-    register.frombytes(bytes(register_size))
+    register = crypto_tools.to_bitarray(bytes(register_size))
     for pos in start_state:
         register[pos] = 1
 

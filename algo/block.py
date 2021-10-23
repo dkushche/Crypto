@@ -12,7 +12,7 @@ def block_full_doc():
     """
 
 
-def secret_crypto_func(val, now_round, block_size, key):
+def block_secret_func(val, now_round, block_size, key):
     key_start = now_round * block_size
     key_end = key_start + block_size
     secret_val = xor_processing(val, key[key_start: key_end], "encrypt")
@@ -44,7 +44,7 @@ def block_processing(data, key, block_size, rounds, encrypt):
     data, key = block_pre_processing(data, key, block_size, rounds)
 
     res_data  = crypto_tools.block_cypher(data, block_size, encrypt, rounds,
-                                          True, xor_processing, secret_crypto_func, key)
+                                          True, xor_processing, block_secret_func, key)
 
     return res_data
 
