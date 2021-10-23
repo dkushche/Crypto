@@ -45,8 +45,10 @@ def feistel_network(left, right, encrypt, rounds, left_xor,
             left = buf
         else:
             right = buf
-
-    return left, right
+    if left_xor == False:
+        return right, left
+    else:
+        return left, right
 
 def block_cypher(data, block_size, encrypt, rounds,
                  left_xor, xor_processing, secret_crypto_func, *args):

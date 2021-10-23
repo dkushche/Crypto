@@ -74,7 +74,7 @@ def magma_processing(data, key, encrypt):
     data, key = magma_pre_processing(data, key, key_len)
 
     res_data  = crypto_tools.block_cypher(data, block_size, encrypt, rounds,
-                                          True, xor_processing, magma_secret_func, key)
+                                          False, xor_processing, magma_secret_func, key)
 
     return res_data
 
