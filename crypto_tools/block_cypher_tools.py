@@ -1,4 +1,6 @@
+from bitarray import bitarray
 from .general_tools import supl_to_mult
+from .general_tools import to_bitarray
 
 
 def block_generator(data, block_size):
@@ -17,6 +19,19 @@ def block_generator(data, block_size):
         right = data[right_start:right_end:1]
 
         yield left, right
+
+
+def permutation_by_table(table, data, block_size):
+    supl_to_mult(data, block_size)
+    result = bitarray()
+
+    for idx in range(0, len(data), block_size):
+        block = data[idx:idx + block_size]
+        block_in_bits = to_bitarray(bytes(block))
+        result_block = bitarray([block_in_bits[i - 1] for i in table])
+        result += result_block
+
+    return bytes(result)
 
 
 def set_rounds_range(encrypt, rounds):
