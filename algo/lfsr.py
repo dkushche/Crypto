@@ -1,5 +1,4 @@
 from .lfsr_generator import lfsr_init
-from bitarray import bitarray
 import crypto_tools
 import json
 

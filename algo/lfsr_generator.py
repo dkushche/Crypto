@@ -1,4 +1,3 @@
-import crypto_tools
 from bitarray import bitarray
 import crypto_tools
 import json

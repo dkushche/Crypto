@@ -16,14 +16,14 @@ def $2_full_doc():
     \"\"\"
 
 
-def $2_processing(data, input_val):
+def $2_processing(data, key):
     return data
 
 
 @crypto_tools.file_manipulation()
 def $2(data):
-    input_val = int(crypto_tools.cterm('input', 'data for $2: ', 'ans'))
-    return $2_processing(data, input_val)
+    key = crypto_tools.cterm('input', 'Enter key(str): ', 'ans')
+    return $2_processing(data, key)
 
 
 $2.little_doc = $2_little_doc

@@ -1,4 +1,3 @@
-from bitarray import bitarray
 import crypto_tools
 import sys
 
