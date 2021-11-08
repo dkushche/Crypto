@@ -12,6 +12,7 @@ from .magma import magma
 from .hill import hill
 from .hash import hash
 from .lfsr import lfsr
+from .des import des
 from .xor import xor
 from .rc4 import rc4
 from .rsa import rsa
