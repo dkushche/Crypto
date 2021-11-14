@@ -48,9 +48,6 @@ def lfsr_tick():
 
 
 def lfsr_init(register_size, exec_xor_pos, start_state):
-    if register_size * 8 < max(exec_xor_pos) or register_size * 8 < max(start_state):
-        raise ValueError(f"{register_size} smaller then significant bit position {max(max(exec_xor_pos), max(start_state))}")
-
     tick = lfsr_tick()
 
     next(tick)
@@ -61,7 +58,14 @@ def lfsr_init(register_size, exec_xor_pos, start_state):
     return tick
 
 
+def lfsr_pre_processing(register_size, exec_xor_pos, start_state):
+    if register_size * 8 < max(exec_xor_pos) or register_size * 8 < max(start_state):
+        raise ValueError(f"{register_size} smaller then significant bit position {max(max(exec_xor_pos), max(start_state))}")
+
+
 def lfsr_generator_processing(register_size, exec_xor_pos, start_state, output_size):
+    lfsr_pre_processing(register_size, exec_xor_pos, start_state)
+
     result = bytearray()
 
     tick = lfsr_init(register_size, exec_xor_pos, start_state)
