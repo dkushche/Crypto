@@ -95,13 +95,13 @@ def s_table_permutation(xor_with_key):
 
     after_s = bitarray()
     xor_with_key_bit = crypto_tools.to_bitarray(bytes(xor_with_key))
-    for i in range(len(xor_with_key_bit) // 6):
+    for i in range(0, len(xor_with_key_bit), 6):
         xwk_part = xor_with_key_bit[i:i + 6]
         a = bitarray([xwk_part[0], xwk_part[-1]])
         b = xwk_part[1:5]
 
         res_part = crypto_tools.to_bitarray(
-            (s_table[i][int(a.to01(), 2)][int(b.to01(), 2)]).to_bytes(1, byteorder='big')
+            (s_table[i // 6][int(a.to01(), 2)][int(b.to01(), 2)]).to_bytes(1, byteorder='big')
         )[4:]
 
         after_s += res_part
@@ -157,7 +157,7 @@ def des_secret_func(val, now_round, block_size, extended_key):
     return result
 
 
-def des_pre_processing(data, key):
+def des_pre_processing(key):
     if len(key) > 7:
         raise ValueError(f"Too big key. Max len required: 7")
     else:
@@ -168,7 +168,7 @@ def des_processing(data, key, encrypt):
     block_size = 8
     rounds = 16
 
-    des_pre_processing(data, key)
+    des_pre_processing(key)
     if encrypt == "encrypt":
         start_permutation_table = [
             58, 50, 42, 34, 26, 18, 10, 2, 60, 52, 44, 36, 28, 20, 12, 4,
