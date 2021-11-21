@@ -2,6 +2,7 @@ import platform
 
 from .lfsr_generator import lfsr_generator
 from .diffie_hellman import diffie_hellman
+from .openssl_api import openssl_api
 from .ansi_x9_17 import ansi_x9_17
 from .triple_des import triple_des
 from .dummy_rsa import dummy_rsa

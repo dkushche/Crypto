@@ -3,9 +3,13 @@
 test -e crypto_env
 if [[ "$?" -eq "1" ]]; then
     echo "Start installation process"
+
     python3 -m venv crypto_env
     source crypto_env/bin/activate
     pip install -r requirements.txt
+
+    ln -s `ldd $(which openssl) | grep libssl | awk '{print $3}'` crypto_storage/libssl.so
+
     echo "Installed"
 else
     echo "Already installed"
