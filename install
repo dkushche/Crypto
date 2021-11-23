@@ -8,7 +8,9 @@ if [[ "$?" -eq "1" ]]; then
     source crypto_env/bin/activate
     pip install -r requirements.txt
 
-    ln -s `ldd $(which openssl) | grep libssl | awk '{print $3}'` crypto_storage/libssl.so
+    for package in `ls -d crypto_native/*/`; do
+        make -C $package all clean
+    done
 
     echo "Installed"
 else

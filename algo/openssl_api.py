@@ -1,4 +1,5 @@
 import crypto_tools
+import crypto_native
 import ctypes
 
 
@@ -12,21 +13,14 @@ def openssl_api_full_doc():
     """
 
 
-def openssl_api_processing(data, mode):
-    openssl = ctypes.cdll.LoadLibrary("crypto_storage/libssl.so")
+def openssl_api_preprocessing():
+    aes_128_key_size = 16
+    aes_block_size = 16
 
-    if mode == "CBC":
-        cipher = openssl.EVP_aes_128_cbc
-    else:
-        cipher = openssl.EVP_aes_128_cfb128
 
-    # bio = openssl.BIO_new_file(b'storage/Hello.txt', b'rb')
-    # print(bio)
-
-    # data = ctypes.c_char_p(bytes(6))
-    # res = openssl.BIO_read(bio, data, 5)
-
-    # print(f"Res: {res}; data: {data.value}")
+def openssl_api_processing(data, key, iv, mode):
+    crypto_native.openssl_api_init()
+    print(f"val: {crypto_native.openssl_api_add(2, 3)}")
 
     return data
 
@@ -36,12 +30,19 @@ def openssl_api(data):
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
 
+    key = crypto_tools.cterm('input', 'Enter key(str): ', 'ans')
+    if key.__class__ == str:
+        key = bytearray(key.encode())
+
+    iv = crypto_tools.cterm('input', 'Enter initialization vector(str): ', 'ans')
+    if iv.__class__ == str:
+        iv = bytearray(iv.encode())
+
     mode = crypto_tools.cterm(
         'input',
         'Enter mode(CBC(Cipher Block Chaining)|CFB(Cipher Feedback)): ',
         'ans'
     )
-
     if mode not in ["CBC", "CFB"]:
         raise ValueError(f"Incorrect mode: {mode}")
 
@@ -50,7 +51,7 @@ def openssl_api(data):
     if encrypt not in ["decrypt", "encrypt"]:
         raise ValueError("Incorrect type")
 
-    res_data = openssl_api_processing(data, mode)
+    res_data = openssl_api_processing(data, key, iv, mode)
 
     if encrypt == "encrypt":
         result_str = res_data
