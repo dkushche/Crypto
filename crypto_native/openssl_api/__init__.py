@@ -3,6 +3,13 @@ import os
 
 import crypto_native.native_tools as native_tools
 
+class aes_128_args(ctypes.Structure):
+    _fields_ = [("data", ctypes.POINTER(native_tools.crypto_bytearray)),
+                ("key", ctypes.POINTER(native_tools.crypto_bytearray)),
+                ("iv", ctypes.POINTER(native_tools.crypto_bytearray)),
+                ("mode", ctypes.c_char_p),
+                ("encrypt", ctypes.c_char_p)]
+
 
 OPENSSL_API = None
 
@@ -12,7 +19,7 @@ def openssl_api_init():
     OPENSSL_API = ctypes.cdll.LoadLibrary(f"{os.path.dirname(__file__)}/openssl_api.so")
 
 
-def openssl_api_print_test(data, key, iv, mode):
+def openssl_api_aes_128(data, key, iv, mode, encrypt):
     global OPENSSL_API
 
     data_buf = (ctypes.c_byte * len(data))
@@ -30,19 +37,28 @@ def openssl_api_print_test(data, key, iv, mode):
     mode_buf = (ctypes.c_char * len(mode))
     mode_buf = mode_buf.from_buffer(bytearray(mode, "utf-8"))
 
-    OPENSSL_API.print_test.restype = None
-    OPENSSL_API.print_test.argtypes = [
-        ctypes.POINTER(native_tools.crypto_bytearray),
-        ctypes.POINTER(native_tools.crypto_bytearray),
-        ctypes.POINTER(native_tools.crypto_bytearray),
-        ctypes.c_char_p
-    ]
+    enc_buf = (ctypes.c_char * len(encrypt))
+    enc_buf = mode_buf.from_buffer(bytearray(encrypt, "utf-8"))
 
-    OPENSSL_API.print_test(
-        ctypes.pointer(data_array),
-        ctypes.pointer(key_array),
-        ctypes.pointer(iv_array),
-        mode_buf
+    args = aes_128_args(
+        data=ctypes.pointer(data_array),
+        key=ctypes.pointer(key_array),
+        iv=ctypes.pointer(iv_array),
+        mode=mode_buf,
+        encrypt=enc_buf
     )
 
-    return True
+    out = (ctypes.c_byte * len(data))
+    out_array = native_tools.to_crypto_bytearray(out_array)
+
+    OPENSSL_API.aes_ecryption.restype = ctypes.c_int
+    OPENSSL_API.aes_ecryption.argtypes = [
+        ctypes.POINTER(aes_128_args),
+        ctypes.POINTER(native_tools.crypto_bytearray)
+    ]
+    result = OPENSSL_API.aes_ecryption(
+        ctypes.pointer(args),
+        ctypes.pointer(out_array)
+    )
+
+    return result

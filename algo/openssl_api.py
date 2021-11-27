@@ -13,14 +13,9 @@ def openssl_api_full_doc():
     """
 
 
-def openssl_api_preprocessing():
-    aes_128_key_size = 16
-    aes_block_size = 16
-
-
-def openssl_api_processing(data, key, iv, mode):
+def openssl_api_processing(data, key, iv, mode, encrypt):
     crypto_native.openssl_api_init()
-    crypto_native.openssl_api_print_test(data, key, iv, mode)
+    crypto_native.openssl_api_aes_128(data, key, iv, mode, encrypt)
 
     return data
 
@@ -51,7 +46,7 @@ def openssl_api(data):
     if encrypt not in ["decrypt", "encrypt"]:
         raise ValueError("Incorrect type")
 
-    res_data = openssl_api_processing(data, key, iv, mode)
+    res_data = openssl_api_processing(data, key, iv, mode, encrypt)
 
     if encrypt == "encrypt":
         result_str = res_data
