@@ -20,7 +20,7 @@ def openssl_api_preprocessing():
 
 def openssl_api_processing(data, key, iv, mode):
     crypto_native.openssl_api_init()
-    print(f"val: {crypto_native.openssl_api_add(2, 3)}")
+    crypto_native.openssl_api_print_test(data, key, iv, mode)
 
     return data
 

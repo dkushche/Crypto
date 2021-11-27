@@ -1,5 +1,7 @@
+#include "native_tools.h"
 
-int add(int a, int b)
+void print_test(struct crypto_bytearray *data, struct crypto_bytearray *key,
+                struct crypto_bytearray *iv, char *mode)
 {
-    return a + b;
+    
 }
