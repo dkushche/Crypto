@@ -6,3 +6,4 @@ crypto_tools/__pycache__
 crypto_env
 storage
 pycodestyle
+.vscode

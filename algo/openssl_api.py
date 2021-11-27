@@ -13,11 +13,26 @@ def openssl_api_full_doc():
     """
 
 
-def openssl_api_processing(data, key, iv, mode, encrypt):
-    crypto_native.openssl_api_init()
-    crypto_native.openssl_api_aes_128(data, key, iv, mode, encrypt)
+def openssl_api_pre_processing(key, iv):
+    if len(key) > 16:
+        raise ValueError(f"Too big key. Max len required: 16")
+    else:
+        crypto_tools.supl_to_mult(key, 16)
 
-    return data
+    if len(iv) > 16:
+        raise ValueError(f"Too big initialization vector. Max len required: 16")
+    else:
+        crypto_tools.supl_to_mult(iv, 16)
+
+
+def openssl_api_processing(data, key, iv, mode, encrypt):
+    openssl_api_pre_processing(key, iv)
+
+    crypto_native.openssl_api_init()
+
+    result = crypto_native.openssl_api_aes_128(data, key, iv, mode, encrypt)
+
+    return result
 
 
 @crypto_tools.file_manipulation()
