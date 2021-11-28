@@ -1,4 +1,4 @@
-# CRYPTO
+# CRYPTO[Deprecated]
 Crypto isn't a real project it's just all my cryptology university labs that I have formed into one system.
 
 # Table of contents
