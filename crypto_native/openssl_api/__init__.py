@@ -62,9 +62,9 @@ def openssl_api_aes_128(data, key, iv, mode, encrypt):
     if result == 0:
         return bytearray(out_buf)[:out_array.len]
     elif result == 1:
-        raise ValueError("Crypto_OpenSSL library update cipher error")
+        raise ValueError("Crypto_OpenSSL: library update cipher error")
     elif result == 2:
-        raise ValueError("Crypto_OpenSSL library  final cipher error")
+        raise ValueError("Crypto_OpenSSL: library  final cipher error")
     else:
         raise ValueError("Crypto_OpenSSL: unexpected error")
 
@@ -72,6 +72,12 @@ def openssl_api_aes_128(data, key, iv, mode, encrypt):
 def openssl_api_rsa_generate_keys(key_length, exponent,
                                   pem_key_filename, pub_key_filename):
     global OPENSSL_API
+
+    if not os.path.exists("storage/"):
+        os.mkdir("storage/")
+
+    pem_key_filename = "storage/" + pem_key_filename
+    pub_key_filename = "storage/" + pub_key_filename
 
     pem_key_filename_buf = native_tools.form_crypto_native_buffer(pem_key_filename)
     pub_key_filename_buf = native_tools.form_crypto_native_buffer(pub_key_filename)
@@ -93,3 +99,13 @@ def openssl_api_rsa_generate_keys(key_length, exponent,
 
     if result == 0:
         return "Keys generated in crypto_storage"
+    elif result == 1:
+        raise ValueError("Crypto_OpenSSL: keys pair generation error")
+    elif result == 2:
+        raise ValueError("Crypto_OpenSSL: private key file creation error")
+    elif result == 3:
+        raise ValueError("Crypto_OpenSSL: public key file creation error")
+    elif result == 4:
+        raise ValueError("Crypto_OpenSSL: private key writing error")
+    elif result == 5:
+        raise ValueError("Crypto_OpenSSL: public key writing error")

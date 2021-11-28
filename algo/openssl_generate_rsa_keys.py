@@ -20,7 +20,7 @@ def openssl_generate_rsa_keys_processing(key_length, exponent,
         key_length, exponent, pem_key_filename, pub_key_filename
     )
 
-    return result
+    crypto_tools.cterm("output", result, "inf")
 
 
 def openssl_generate_rsa_keys():

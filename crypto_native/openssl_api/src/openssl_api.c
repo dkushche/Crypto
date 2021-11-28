@@ -1,16 +1,9 @@
 #include <string.h>
-#include <stdlib.h>
 #include <openssl/evp.h>
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
 
 #include "native_tools.h"
-
-typedef enum {
-    OPENSSL_API_SUCCESS,
-    OPENSSL_API_UPDATE_ERROR,
-    OPENSSL_API_FINAL_ERROR
-} OPENSSL_API_RESULT;
 
 struct aes_128_args
 {
@@ -47,7 +40,7 @@ int aes_128(struct aes_128_args *in_args, struct crypto_bytearray *out)
         final = EVP_DecryptFinal_ex;
     }
 
-    OPENSSL_API_RESULT res;
+    int res;
     int temp_len;
 
     init(ctx, cipher, NULL, (unsigned char *)in_args->key->data,
@@ -55,18 +48,18 @@ int aes_128(struct aes_128_args *in_args, struct crypto_bytearray *out)
 
     if (!update(ctx, out->data, &temp_len, in_args->data->data, in_args->data->len))
     {
-        res = OPENSSL_API_UPDATE_ERROR;
+        res = 1;
         goto err;
     }
 
     if (!final(ctx, out->data + temp_len, &out->len))
     {
-        res = OPENSSL_API_FINAL_ERROR;
+        res = 2;
         goto err;
     }
     out->len += temp_len;
 
-    res = OPENSSL_API_SUCCESS;
+    res = 0;
 
 err:
     EVP_CIPHER_CTX_cleanup(ctx);
@@ -79,26 +72,53 @@ int rsa_generate_keys(unsigned long key_length, unsigned long exponent,
 {
     RSA *ctx = RSA_new();
     BIGNUM *bn = BN_new();
+    int res;
 
     BN_set_word(bn, exponent);
 
-    RSA_generate_key_ex(ctx, key_length, bn, NULL);
+    if (!RSA_generate_key_ex(ctx, key_length, bn, NULL))
+    {
+        res = 1;
+        goto err;
+    }
 
-    char *full_pem_key_path = form_storage_path(pem_key_filename);
-    char *full_pub_key_path = form_storage_path(pub_key_filename);
+    FILE *pem = fopen(pem_key_filename, "w");
+    if (pem == NULL)
+    {
+        res = 2;
+        goto err;
+    }
 
-    BIO *pri = BIO_new_file(full_pem_key_path, "wb");
-    BIO *pub = BIO_new_file(full_pub_key_path, "wb");
+    FILE *pub = fopen(pub_key_filename, "w");
+    if (pub == NULL)
+    {
+        res = 3;
+        goto err_pub_create;
+    }
 
-    PEM_write_bio_RSAPrivateKey(pri, ctx, NULL, NULL, 0, NULL, NULL);
-    PEM_write_bio_RSAPublicKey(pub, ctx);
+    if (!PEM_write_RSAPrivateKey(pem, ctx, NULL, NULL, 0, NULL, NULL))
+    {
+        res = 4;
+        goto err_write;
+    }
 
-    free(full_pem_key_path);
-    free(full_pub_key_path);
+    if (!PEM_write_RSAPublicKey(pub, ctx))
+    {
+        res = 5;
+        goto err_write;
+    }
 
+    res = 0;
+
+err_write:
+    fclose(pub);
+
+err_pub_create:
+    fclose(pem);
+
+err:
     BN_free(bn);
-
     RSA_free(ctx);
 
-    return OPENSSL_API_SUCCESS;
+    return res;
 }
