@@ -1,4 +1,5 @@
-#include <stdio.h>
+
+#define CRYPTO_STORAGE_PATH "crypto_storage/"
 
 struct crypto_bytearray
 {
@@ -7,3 +8,4 @@ struct crypto_bytearray
 };
 
 void print_bytearray(struct crypto_bytearray *buf);
+char *form_storage_path(char *filename);

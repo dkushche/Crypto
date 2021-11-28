@@ -1,6 +1,8 @@
 #include <string.h>
+#include <stdlib.h>
 #include <openssl/evp.h>
 #include <openssl/rsa.h>
+#include <openssl/pem.h>
 
 #include "native_tools.h"
 
@@ -70,4 +72,33 @@ err:
     EVP_CIPHER_CTX_cleanup(ctx);
 
     return res;
+}
+
+int rsa_generate_keys(unsigned long key_length, unsigned long exponent,
+                      char *pem_key_filename, char *pub_key_filename)
+{
+    RSA *ctx = RSA_new();
+    BIGNUM *bn = BN_new();
+
+    BN_set_word(bn, exponent);
+
+    RSA_generate_key_ex(ctx, key_length, bn, NULL);
+
+    char *full_pem_key_path = form_storage_path(pem_key_filename);
+    char *full_pub_key_path = form_storage_path(pub_key_filename);
+
+    BIO *pri = BIO_new_file(full_pem_key_path, "wb");
+    BIO *pub = BIO_new_file(full_pub_key_path, "wb");
+
+    PEM_write_bio_RSAPrivateKey(pri, ctx, NULL, NULL, 0, NULL, NULL);
+    PEM_write_bio_RSAPublicKey(pub, ctx);
+
+    free(full_pem_key_path);
+    free(full_pub_key_path);
+
+    BN_free(bn);
+
+    RSA_free(ctx);
+
+    return OPENSSL_API_SUCCESS;
 }

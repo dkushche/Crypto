@@ -11,3 +11,12 @@ def to_crypto_bytearray(ba):
         data=ctypes.cast(ctypes.pointer(ba), ctypes.c_void_p),
         len=len(ba)
     )
+
+def form_crypto_native_buffer(data):
+    result = (ctypes.c_byte * len(data))
+    if data.__class__ == str:
+        result = result.from_buffer(bytearray(data, "utf-8"))
+    else:
+        result = result.from_buffer(bytearray(data))
+
+    return result

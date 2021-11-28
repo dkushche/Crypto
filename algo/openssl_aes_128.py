@@ -1,6 +1,5 @@
 import crypto_tools
 import crypto_native
-import ctypes
 
 
 def openssl_aes_128_little_doc():

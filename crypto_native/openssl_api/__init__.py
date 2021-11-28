@@ -3,6 +3,7 @@ import os
 
 import crypto_native.native_tools as native_tools
 
+
 class aes_128_args(ctypes.Structure):
     _fields_ = [("data", ctypes.POINTER(native_tools.crypto_bytearray)),
                 ("key", ctypes.POINTER(native_tools.crypto_bytearray)),
@@ -22,23 +23,17 @@ def openssl_api_init():
 def openssl_api_aes_128(data, key, iv, mode, encrypt):
     global OPENSSL_API
 
-    data_buf = (ctypes.c_byte * len(data))
-    data_buf = data_buf.from_buffer(bytearray(data))
+    data_buf = native_tools.form_crypto_native_buffer(data)
     data_array = native_tools.to_crypto_bytearray(data_buf)
 
-    key_buf = (ctypes.c_byte * len(key))
-    key_buf = key_buf.from_buffer(bytearray(key))
+    key_buf = native_tools.form_crypto_native_buffer(key)
     key_array = native_tools.to_crypto_bytearray(key_buf)
 
-    iv_buf = (ctypes.c_byte * len(iv))
-    iv_buf = iv_buf.from_buffer(bytearray(iv))
+    iv_buf = native_tools.form_crypto_native_buffer(iv)
     iv_array = native_tools.to_crypto_bytearray(iv_buf)
 
-    mode_buf = (ctypes.c_char * len(mode))
-    mode_buf = mode_buf.from_buffer(bytearray(mode, "utf-8"))
-
-    enc_buf = (ctypes.c_char * len(encrypt))
-    enc_buf = enc_buf.from_buffer(bytearray(encrypt, "utf-8"))
+    mode_buf = native_tools.form_crypto_native_buffer(mode)
+    enc_buf = native_tools.form_crypto_native_buffer(encrypt)
 
     args = aes_128_args(
         data=ctypes.pointer(data_array),
@@ -72,3 +67,29 @@ def openssl_api_aes_128(data, key, iv, mode, encrypt):
         raise ValueError("Crypto_OpenSSL library  final cipher error")
     else:
         raise ValueError("Crypto_OpenSSL: unexpected error")
+
+
+def openssl_api_rsa_generate_keys(key_length, exponent,
+                                  pem_key_filename, pub_key_filename):
+    global OPENSSL_API
+
+    pem_key_filename_buf = native_tools.form_crypto_native_buffer(pem_key_filename)
+    pub_key_filename_buf = native_tools.form_crypto_native_buffer(pub_key_filename)
+
+    OPENSSL_API.aes_128.restype = ctypes.c_int
+    OPENSSL_API.aes_128.argtypes = [
+        ctypes.c_ulong,
+        ctypes.c_ulong,
+        ctypes.c_char_p,
+        ctypes.c_char_p
+    ]
+
+    result = OPENSSL_API.rsa_generate_keys(
+        ctypes.c_ulong(key_length),
+        ctypes.c_ulong(exponent),
+        ctypes.cast(pem_key_filename_buf, ctypes.c_char_p),
+        ctypes.cast(pub_key_filename_buf, ctypes.c_char_p)
+    )
+
+    if result == 0:
+        return "Keys generated in crypto_storage"
