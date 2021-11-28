@@ -136,16 +136,25 @@ int rsa_encrypt(struct crypto_bytearray *data,  struct crypto_bytearray *out,
     }
 
     RSA *ctx = PEM_read_RSAPublicKey(pub, NULL, NULL, NULL);
-    out->len = RSA_public_encrypt(data->len, data->data, out->data, ctx, RSA_NO_PADDING);
-    if (out->len < 0)
+    if (ctx == NULL)
     {
         res = 2;
-        goto err_encrypt;
+        goto err_read_key;
     }
+
+    int res_len = RSA_public_encrypt(
+        data->len, data->data,out->data, ctx, RSA_PKCS1_OAEP_PADDING
+    );
+    if (res_len < 0)
+    {
+        res = 3;
+        goto err_read_key;
+    }
+    out->len = res_len;
 
     res = 0;
 
-err_encrypt:
+err_read_key:
     fclose(pub);
 err:
     return res;
@@ -164,16 +173,25 @@ int rsa_decrypt(struct crypto_bytearray *data, struct crypto_bytearray *out,
     }
 
     RSA *ctx = PEM_read_RSAPrivateKey(pem, NULL, NULL, NULL);
-    out->len = RSA_private_decrypt(data->len, data->data, out->data, ctx, RSA_NO_PADDING);
-    if (out->len < 0)
+    if (ctx == NULL)
     {
         res = 2;
-        goto err_decrypt;
+        goto err_read_key;
     }
+
+    int res_len = RSA_private_decrypt(
+        data->len, data->data, out->data, ctx, RSA_PKCS1_OAEP_PADDING
+    );
+    if (res_len < 0)
+    {
+        res = 3;
+        goto err_read_key;
+    }
+    out->len = res_len;
 
     res = 0;
 
-err_decrypt:
+err_read_key:
     fclose(pem);
 err:
     return res;
