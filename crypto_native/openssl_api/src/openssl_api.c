@@ -1,5 +1,6 @@
 #include <string.h>
 #include <openssl/evp.h>
+#include <openssl/rsa.h>
 
 #include "native_tools.h"
 

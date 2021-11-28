@@ -3,17 +3,17 @@ import crypto_native
 import ctypes
 
 
-def openssl_api_little_doc():
+def openssl_aes_128_little_doc():
     return "short example of encryption and decryption using openssl"
 
 
-def openssl_api_full_doc():
+def openssl_aes_128_full_doc():
     return """
-    openssl_api_full_doc
+    openssl_aes_128_full_doc
     """
 
 
-def openssl_api_pre_processing(key, iv):
+def openssl_aes_128_pre_processing(key, iv):
     if len(key) > 16:
         raise ValueError(f"Too big key. Max len required: 16")
     else:
@@ -25,8 +25,8 @@ def openssl_api_pre_processing(key, iv):
         crypto_tools.supl_to_mult(iv, 16)
 
 
-def openssl_api_processing(data, key, iv, mode, encrypt):
-    openssl_api_pre_processing(key, iv)
+def openssl_aes_128_processing(data, key, iv, mode, encrypt):
+    openssl_aes_128_pre_processing(key, iv)
 
     crypto_native.openssl_api_init()
 
@@ -36,7 +36,7 @@ def openssl_api_processing(data, key, iv, mode, encrypt):
 
 
 @crypto_tools.file_manipulation()
-def openssl_api(data):
+def openssl_aes_128(data):
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
 
@@ -61,7 +61,7 @@ def openssl_api(data):
     if encrypt not in ["decrypt", "encrypt"]:
         raise ValueError("Incorrect type")
 
-    res_data = openssl_api_processing(data, key, iv, mode, encrypt)
+    res_data = openssl_aes_128_processing(data, key, iv, mode, encrypt)
 
     if encrypt == "encrypt":
         result_str = res_data
@@ -71,5 +71,5 @@ def openssl_api(data):
     return result_str
 
 
-openssl_api.little_doc = openssl_api_little_doc
-openssl_api.full_doc = openssl_api_full_doc
+openssl_aes_128.little_doc = openssl_aes_128_little_doc
+openssl_aes_128.full_doc = openssl_aes_128_full_doc
