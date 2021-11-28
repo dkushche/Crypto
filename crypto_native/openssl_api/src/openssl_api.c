@@ -122,3 +122,19 @@ err:
 
     return res;
 }
+
+int rsa_encrypt(struct crypto_bytearray *data,  struct crypto_bytearray *out,
+                char *pub_key_filename)
+{
+    int res;
+
+    return res;
+}
+
+int rsa_decrypt(struct crypto_bytearray *data, struct crypto_bytearray *out,
+                char *pem_key_filename)
+{
+    int res;
+
+    return res;
+}
