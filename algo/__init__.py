@@ -1,6 +1,7 @@
 from .openssl_generate_rsa_keys import openssl_generate_rsa_keys
 from .openssl_aes_128 import openssl_aes_128
 from .lfsr_generator import lfsr_generator
+from .openssl_random import openssl_random
 from .diffie_hellman import diffie_hellman
 from .ms_cryptoapi import ms_cryptoapi
 from .openssl_rsa import openssl_rsa

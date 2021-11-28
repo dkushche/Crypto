@@ -139,3 +139,23 @@ def openssl_api_rsa(data, encrypt, pem_key_filename, pub_key_filename):
         raise ValueError("Crypto_OpenSSL: read key error")
     elif result == 3:
         raise ValueError("Crypto_OpenSSL: math operation error")
+
+def openssl_api_random(size):
+    global OPENSSL_API
+
+    out_buf = native_tools.form_crypto_native_buffer(bytearray(size))
+    out_array = native_tools.to_crypto_bytearray(out_buf)
+
+    OPENSSL_API.random.restype = ctypes.c_int
+    OPENSSL_API.random.argtypes = [
+        ctypes.POINTER(native_tools.crypto_bytearray)
+    ]
+
+    result = OPENSSL_API.random(
+        ctypes.pointer(out_array)
+    )
+
+    if result == 0:
+        return bytearray(out_buf)
+    elif result == 1:
+        raise ValueError("Crypto_OpenSSL: random error")

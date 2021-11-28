@@ -2,6 +2,7 @@
 #include <openssl/evp.h>
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
+#include <openssl/rand.h>
 
 #include "native_tools.h"
 
@@ -195,4 +196,9 @@ err_read_key:
     fclose(pem);
 err:
     return res;
+}
+
+int random(struct crypto_bytearray *out)
+{
+    return !RAND_bytes(out->data, out->len);
 }
