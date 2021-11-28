@@ -128,6 +128,26 @@ int rsa_encrypt(struct crypto_bytearray *data,  struct crypto_bytearray *out,
 {
     int res;
 
+    FILE *pub = fopen(pub_key_filename, "r");
+    if (pub == NULL)
+    {
+        res = 1;
+        goto err;
+    }
+
+    RSA *ctx = PEM_read_RSAPublicKey(pub, NULL, NULL, NULL);
+    out->len = RSA_public_encrypt(data->len, data->data, out->data, ctx, RSA_NO_PADDING);
+    if (out->len < 0)
+    {
+        res = 2;
+        goto err_encrypt;
+    }
+
+    res = 0;
+
+err_encrypt:
+    fclose(pub);
+err:
     return res;
 }
 
@@ -136,5 +156,25 @@ int rsa_decrypt(struct crypto_bytearray *data, struct crypto_bytearray *out,
 {
     int res;
 
+    FILE *pem = fopen(pem_key_filename, "r");
+    if (pem == NULL)
+    {
+        res = 1;
+        goto err;
+    }
+
+    RSA *ctx = PEM_read_RSAPrivateKey(pem, NULL, NULL, NULL);
+    out->len = RSA_private_decrypt(data->len, data->data, out->data, ctx, RSA_NO_PADDING);
+    if (out->len < 0)
+    {
+        res = 2;
+        goto err_decrypt;
+    }
+
+    res = 0;
+
+err_decrypt:
+    fclose(pem);
+err:
     return res;
 }

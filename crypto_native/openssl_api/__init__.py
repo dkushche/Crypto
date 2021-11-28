@@ -107,7 +107,7 @@ def openssl_api_rsa(data, encrypt, pem_key_filename, pub_key_filename):
     data_buf = native_tools.form_crypto_native_buffer(data)
     data_array = native_tools.to_crypto_bytearray(data_buf)
 
-    out_buf = native_tools.form_crypto_native_buffer(bytearray(len(data)))
+    out_buf = native_tools.form_crypto_native_buffer(bytearray(1024))
     out_array = native_tools.to_crypto_bytearray(out_buf)
 
     if encrypt == "encrypt":
@@ -116,10 +116,11 @@ def openssl_api_rsa(data, encrypt, pem_key_filename, pub_key_filename):
         OPENSSL_API.rsa_encrypt.restype = ctypes.c_int
         OPENSSL_API.rsa_encrypt.argtypes = [
             ctypes.POINTER(native_tools.crypto_bytearray),
+            ctypes.POINTER(native_tools.crypto_bytearray),
             ctypes.c_char_p
         ]
 
-        result = OPENSSL_API.rsa_decrypt(
+        result = OPENSSL_API.rsa_encrypt(
             ctypes.pointer(data_array),
             ctypes.pointer(out_array),
             ctypes.cast(pub_key_filename_buf, ctypes.c_char_p)
@@ -129,6 +130,7 @@ def openssl_api_rsa(data, encrypt, pem_key_filename, pub_key_filename):
 
         OPENSSL_API.rsa_decrypt.restype = ctypes.c_int
         OPENSSL_API.rsa_decrypt.argtypes = [
+            ctypes.POINTER(native_tools.crypto_bytearray),
             ctypes.POINTER(native_tools.crypto_bytearray),
             ctypes.c_char_p
         ]
@@ -141,3 +143,7 @@ def openssl_api_rsa(data, encrypt, pem_key_filename, pub_key_filename):
 
     if result == 0:
         return bytearray(out_buf)[:out_array.len]
+    elif result == 1:
+        raise ValueError("Crypto_OpenSSL: read key error")
+    elif result == 2:
+        raise ValueError("Crypto_OpenSSL: math operation error")

@@ -1,4 +1,7 @@
+import os
+
 import crypto_tools
+import crypto_native
 
 
 def openssl_rsa_little_doc():
