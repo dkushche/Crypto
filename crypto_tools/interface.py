@@ -2,6 +2,8 @@ from .file_manager import download_json, download_text
 from .general_tools import utf_decoder
 from threading import Thread
 from time import sleep
+import platform
+
 
 def form_result_from_cp(control_package, frame):
     objs_amount = len(control_package["objs_for_anim"]) + \
@@ -77,9 +79,15 @@ def cterm(com_type, message, message_type):
     else:
         print(res_line)
 
+
 def iface_init(profile_dir):
     try:
         iface_init.iface = download_json(profile_dir + "iface.json")
+
+        if platform.system() == 'Windows':
+            for color in iface_init.iface["colors"]:
+                iface_init.iface["colors"][color] = ""
+
         render_static(profile_dir + "crypto.header")
     except FileNotFoundError:
         exit()

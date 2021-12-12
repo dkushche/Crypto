@@ -1,6 +1,10 @@
 import crypto_commands
 import crypto_tools
-import readline
+import platform
+
+if platform.system() != 'Windows':
+    import readline
+
 import algo
 import hack
 import sys
@@ -49,9 +53,12 @@ if __name__ == "__main__":
             crypto_tools.iface_init(sys.argv[1])
         else:
             crypto_tools.iface_init("iface_storage/default_profile/")
-        readline.parse_and_bind("tab: complete")
-        readline.set_completer(completer)
-        readline.set_auto_history(False)
+
+        if platform.system() != 'Windows':
+            readline.parse_and_bind("tab: complete")
+            readline.set_completer(completer)
+            readline.set_auto_history(False)
+
         main_loop()
     except KeyboardInterrupt:
         crypto_tools.cterm('output', 'force_exit', 'inf')
