@@ -3,6 +3,7 @@ from .openssl_aes_128 import openssl_aes_128
 from .lfsr_generator import lfsr_generator
 from .openssl_random import openssl_random
 from .diffie_hellman import diffie_hellman
+from .generate_ca import generate_ca
 from .openssl_rsa import openssl_rsa
 from .ansi_x9_17 import ansi_x9_17
 from .triple_des import triple_des
