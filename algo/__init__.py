@@ -5,6 +5,7 @@ from .openssl_random import openssl_random
 from .diffie_hellman import diffie_hellman
 from .generate_ca import generate_ca
 from .openssl_rsa import openssl_rsa
+from .issue_cert import issue_cert
 from .ansi_x9_17 import ansi_x9_17
 from .triple_des import triple_des
 from .dummy_rsa import dummy_rsa

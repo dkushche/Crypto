@@ -18,7 +18,7 @@ def generate_ca_full_doc():
 def generate_ca_processing(ca_info):
     key = OpenSSL.crypto.PKey()
     key.generate_key(OpenSSL.crypto.TYPE_RSA, 2048)
-    
+
     if os.path.exists("crypto_ca"):
         shutil.rmtree("crypto_ca")
     os.mkdir("crypto_ca")
