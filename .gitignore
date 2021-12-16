@@ -4,6 +4,7 @@ hack/__pycache__
 crypto_commands/__pycache__
 crypto_tools/__pycache__
 crypto_env
+crypto_ca
 storage
 pycodestyle
 .vscode
