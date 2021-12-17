@@ -23,7 +23,7 @@ def generate_ca_processing(ca_info):
         shutil.rmtree("crypto_ca")
     os.mkdir("crypto_ca")
 
-    cert = crypto_tools.generate_cert(ca_info, ca_info, key, key)
+    cert = crypto_tools.generate_cert(ca_info, key, key)
 
     with open("crypto_ca/crypto_cert.pem", "wt") as f:
         f.write(OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert).decode("utf-8"))
@@ -39,7 +39,7 @@ def generate_ca_processing(ca_info):
     with open('crypto_ca/crypto_pkcs12_cert.pfx', 'wb') as pfxfile:
         pfxfile.write(p12data)
 
-    return "Created Successfully!"
+    crypto_tools.cterm("output", "Created Successfully!", "inf")
 
 
 def generate_ca():

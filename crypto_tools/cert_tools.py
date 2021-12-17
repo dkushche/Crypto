@@ -11,7 +11,7 @@ import OpenSSL
 #     "serialNumber":
 #     "validityEndInSeconds":
 # }
-def generate_cert(cert_info, issuer_info, pub_key, signing_key):
+def generate_cert(cert_info, pub_key, signing_key, issuer_subject=None):
     cert = OpenSSL.crypto.X509()
 
     cert_subject = cert.get_subject()
@@ -23,23 +23,15 @@ def generate_cert(cert_info, issuer_info, pub_key, signing_key):
     cert_subject.CN = cert_info["commonName"]
     cert_subject.emailAddress = cert_info["emailAddress"]
 
-    issuer = OpenSSL.crypto.X509()
-
-    issuer_subject = issuer.get_subject()
-    issuer_subject.C = issuer_info["countryName"]
-    issuer_subject.ST = issuer_info["stateOrProvinceName"]
-    issuer_subject.L = issuer_info["localityName"]
-    issuer_subject.O = issuer_info["organizationName"]
-    issuer_subject.OU = issuer_info["organizationUnitName"]
-    issuer_subject.CN = issuer_info["commonName"]
-    issuer_subject.emailAddress = issuer_info["emailAddress"]
+    if issuer_subject is not None:
+        cert.set_issuer(issuer_subject)
+    else:
+        cert.set_issuer(cert_subject)
 
     cert.set_serial_number(cert_info["serialNumber"])
 
     cert.gmtime_adj_notBefore(0)
     cert.gmtime_adj_notAfter(cert_info["validityEndInSeconds"])
-
-    cert.set_issuer(issuer_subject)
 
     cert.set_pubkey(pub_key)
     cert.sign(signing_key, 'sha512')
