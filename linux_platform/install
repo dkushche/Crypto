@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo "Start installation process"
+
+python3 -m venv crypto_env
+source crypto_env/bin/activate
+pip install -r linux_platform/requirements.txt
+
+for package in `ls -d crypto_native/*/`; do
+    make -C $package all clean
+done
+
+echo "Installed"
