@@ -1,6 +1,7 @@
 import time
-import crypto_tools
 from math import ceil
+
+import crypto_tools
 from .xor import xor_processing
 from .triple_des import triple_des_processing
 

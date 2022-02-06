@@ -1,0 +1,4 @@
+[MASTER]
+disable=
+    W0622, # redefined-builtin
+    C0116, # missing-function-docstring

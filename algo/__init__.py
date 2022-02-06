@@ -1,3 +1,5 @@
+import platform
+
 from .openssl_generate_rsa_keys import openssl_generate_rsa_keys
 from .openssl_aes_128 import openssl_aes_128
 from .lfsr_generator import lfsr_generator
@@ -25,10 +27,8 @@ from .rc4 import rc4
 from .rsa import rsa
 from .dsa import dsa
 
-import platform
-
 if platform.system() == 'Windows':
     from .cryptoapi_aes import cryptoapi_aes
 
 def __doc__():
-    return f"Cryptography module"
+    return "Cryptography module"
