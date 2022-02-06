@@ -5,4 +5,4 @@ from .fips140_random_test import fips140_random_test
 
 
 def __doc__():
-    return f"Cryptoanalysis module"
+    return f"Cryptoanalysis module:"

@@ -1,3 +1,20 @@
+""" DSA
+
+The DSA algorithm works in the framework of public-key cryptosystems
+and is based on the algebraic properties of modular exponentiation,
+together with the discrete logarithm problem,
+which is considered to be computationally intractable.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 
 
@@ -72,8 +89,8 @@ def dsa_processing(data, p_value, q_value, x_value, k_value, encrypt):
 
     if encrypt == "sign":
         return dsa_sign(data, p_value, q_value, x_value, k_value, g_value)
-    else:
-        return dsa_verify(data, p_value, q_value, g_value, open_key)
+
+    return dsa_verify(data, p_value, q_value, g_value, open_key)
 
 
 @crypto_tools.file_manipulation()
@@ -92,7 +109,7 @@ def dsa(data):
     encrypt = crypto_tools.cterm('input',
                                  'You want sign or verify: ', 'ans')
 
-    if encrypt != "sign" and encrypt != "verify":
+    if encrypt not in ("sign", "verify"):
         raise ValueError(f"Incorrect action {encrypt}")
 
     return dsa_processing(data, p_value, q_value, x_value, k_value, encrypt)

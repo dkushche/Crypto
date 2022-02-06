@@ -1,3 +1,17 @@
+""" Dummy RSA
+
+Super dummy rsa algorithm for making cryptographic operations on a single number
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 
 
@@ -40,4 +54,3 @@ def dummy_rsa(data):
 
 dummy_rsa.little_doc = dummy_rsa_little_doc
 dummy_rsa.full_doc = dummy_rsa_full_doc
-

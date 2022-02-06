@@ -1,3 +1,17 @@
+""" Block algorithm
+
+Basic encryption based on Feistel network
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 from .xor import xor_processing
 
@@ -27,8 +41,8 @@ def block_pre_processing(data, key, block_size, rounds):
 
     if len(key) > (block_size * rounds):
         raise ValueError("Too big key. Max len required: block_size * rounds")
-    else:
-        crypto_tools.supl_to_mult(key, block_size * rounds)
+
+    crypto_tools.supl_to_mult(key, block_size * rounds)
 
     return data, key
 
@@ -57,7 +71,7 @@ def block(data):
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
 
-    if encrypt != "decrypt" and encrypt != "encrypt":
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
     res_data = block_processing(data, key, block_size, rounds, encrypt)
 

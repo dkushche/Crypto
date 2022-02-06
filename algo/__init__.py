@@ -1,3 +1,9 @@
+""" Cryptographics modules
+
+Module imports all public entry points that will be available from CLI
+
+"""
+
 import platform
 
 from .openssl_generate_rsa_keys import openssl_generate_rsa_keys
@@ -31,4 +37,4 @@ if platform.system() == 'Windows':
     from .cryptoapi_aes import cryptoapi_aes
 
 def __doc__():
-    return "Cryptography module"
+    return "Cryptography modules"

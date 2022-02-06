@@ -1,3 +1,19 @@
+""" Caesar algorithm
+
+The simple and easy method of encryption technique.
+It is simple type of substitution cipher. Each letter of plain text
+is replaced by a letter with some fixed number of positions down with alphabet.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 
 
@@ -21,9 +37,9 @@ def caesar_processing(data, lang, key):
     for char in data:
         try:
             index = caesar_dict.index(char)
-        except ValueError:
+        except ValueError as err:
             err_str = "There is no " + char + " character in alphabet"
-            raise ValueError(err_str)
+            raise ValueError(err_str) from err
         index = (index + key) % len(caesar_dict)
         result = result + caesar_dict[index]
     return result

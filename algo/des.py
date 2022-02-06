@@ -1,5 +1,23 @@
-import crypto_tools
+""" DES
+
+Data Encryption Standard is the archetypal block cipher—an algorithm that
+takes a fixed-length string of plaintext bits and transforms it through a
+series of complicated operations into another ciphertext bitstring
+of the same length
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 from bitarray import bitarray
+
+import crypto_tools
 from .xor import xor_processing
 
 
@@ -97,11 +115,13 @@ def s_table_permutation(xor_with_key):
     xor_with_key_bit = crypto_tools.to_bitarray(bytes(xor_with_key))
     for i in range(0, len(xor_with_key_bit), 6):
         xwk_part = xor_with_key_bit[i:i + 6]
-        a = bitarray([xwk_part[0], xwk_part[-1]])
-        b = xwk_part[1:5]
+        val_a = bitarray([xwk_part[0], xwk_part[-1]])
+        val_b = xwk_part[1:5]
 
         res_part = crypto_tools.to_bitarray(
-            (s_table[i // 6][int(a.to01(), 2)][int(b.to01(), 2)]).to_bytes(1, byteorder='big')
+            (
+                s_table[i // 6][int(val_a.to01(), 2)][int(val_b.to01(), 2)]
+            ).to_bytes(1, byteorder='big')
         )[4:]
 
         after_s += res_part
@@ -159,9 +179,9 @@ def des_secret_func(val, now_round, block_size, extended_key):
 
 def des_pre_processing(key):
     if len(key) > 7:
-        raise ValueError(f"Too big key. Max len required: 7")
-    else:
-        crypto_tools.supl_to_mult(key, 7)
+        raise ValueError("Too big key. Max len required: 7")
+
+    crypto_tools.supl_to_mult(key, 7)
 
 
 def des_processing(data, key, encrypt):
@@ -212,7 +232,7 @@ def des(data):
 
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
-    if encrypt != "decrypt" and encrypt != "encrypt":
+    if encrypt not in ("encrypt", "decrypt"):
         raise ValueError("Incorrect type")
 
     res_data = des_processing(data, key, encrypt)

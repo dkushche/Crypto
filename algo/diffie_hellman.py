@@ -1,3 +1,20 @@
+""" Diffie Hellman
+
+Diffie–Hellman key exchange is a method of securely exchanging
+cryptographic keys over a public channel and was one of the first
+public-key protocols as conceived by Ralph Merkle and named after
+Whitfield Diffie and Martin Hellman.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 
 
@@ -20,10 +37,10 @@ def elliptic_diffie_hellman_processing(a_private_key, b_private_key):
     g_value = crypto_tools.cterm('input',
                                  'Enter generator point(x:y): ', 'ans')
     g_value = crypto_tools.decode_params(g_value, 2)
-    G = crypto_tools.elliptic_point(*g_value)
+    big_g = crypto_tools.elliptic_point(*g_value)
 
-    a_partial_key = G * a_private_key
-    b_partial_key = G * b_private_key
+    a_partial_key = big_g * a_private_key
+    b_partial_key = big_g * b_private_key
 
     a_full_key = b_partial_key * a_private_key
     b_full_key = a_partial_key * b_private_key
@@ -36,7 +53,7 @@ def elliptic_diffie_hellman_processing(a_private_key, b_private_key):
 def rsa_diffie_hellman_processing(a_public_key, a_private_key,
                                   b_public_key, b_private_key):
     if not crypto_tools.is_prime(b_public_key):
-        raise ValueError(f"B public key needs to be prime")
+        raise ValueError("B public key needs to be prime")
     if crypto_tools.EGCD(b_public_key, a_public_key)[0] != 1:
         raise ValueError("Public and private keys needs to be co-prime")
 
@@ -72,4 +89,3 @@ def diffie_hellman():
 
 diffie_hellman.little_doc = diffie_hellman_little_doc
 diffie_hellman.full_doc = diffie_hellman_full_doc
-

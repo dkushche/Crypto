@@ -2,3 +2,4 @@
 disable=
     W0622, # redefined-builtin
     C0116, # missing-function-docstring
+    R0913, # too-many-arguments

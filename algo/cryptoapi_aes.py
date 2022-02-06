@@ -1,3 +1,18 @@
+""" CryptoAPI AES
+
+Advanced Encryption Standard encryption using
+Microsoft CryptoAPI native library
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 import crypto_native
 
@@ -14,8 +29,8 @@ def cryptoapi_aes_full_doc():
 def cryptoapi_aes_pre_processing(key, key_length):
     if len(key) > key_length //  8:
         raise ValueError(f"Too big key. Max len required: {key_length //  8}")
-    else:
-        crypto_tools.supl_to_mult(key, key_length //  8)
+
+    crypto_tools.supl_to_mult(key, key_length //  8)
 
 
 def cryptoapi_aes_processing(data, key_length, key,
@@ -60,7 +75,7 @@ def cryptoapi_aes(data):
         mode = crypto_tools.cterm('input', 'Enter mode(CBC|ECB|CFB): ', 'ans')
         if mode not in ["CBC", "ECB", "CFB"]:
             raise ValueError(f"Incorrect mode: {mode}")
-    
+
     encrypt = crypto_tools.cterm('input', 'You want encrypt or decrypt: ', 'ans')
     if encrypt not in ["decrypt", "encrypt"]:
         raise ValueError("Incorrect type")
