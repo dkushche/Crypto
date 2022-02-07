@@ -1,0 +1,29 @@
+name: Main
+
+on: [push]
+
+jobs:
+  linux_platform:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install Crypto
+      run: ./install
+    - name: Analysing the code with PyLint
+      run: |
+        source crypto_env/bin/activate
+        pylint $(git ls-files '*.py')
+  windows_platform:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install Crypto
+      run: python install
