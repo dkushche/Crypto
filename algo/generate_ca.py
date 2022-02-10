@@ -1,8 +1,26 @@
+""" Generate CA
+
+In cryptography, a certificate authority or certification
+authority (CA) is an entity that issues digital certificates.
+A digital certificate certifies the ownership of a public key
+by the named subject of the certificate.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+
 import os
 import shutil
 
-import crypto_tools
 import OpenSSL
+import crypto_tools
 
 
 def generate_ca_little_doc():
@@ -25,11 +43,19 @@ def generate_ca_processing(ca_info):
 
     cert = crypto_tools.generate_cert(ca_info, key, key)
 
-    with open("crypto_ca/crypto_cert.pem", "wt") as f:
-        f.write(OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert).decode("utf-8"))
+    with open("crypto_ca/crypto_cert.pem", "wt") as pem_file:
+        pem_file.write(
+            OpenSSL.crypto.dump_certificate(
+                OpenSSL.crypto.FILETYPE_PEM, cert
+            ).decode("utf-8")
+        )
 
-    with open("crypto_ca/crypto_key.pem", "wt") as f:
-        f.write(OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, key).decode("utf-8"))
+    with open("crypto_ca/crypto_key.pem", "wt") as pem_file:
+        pem_file.write(
+            OpenSSL.crypto.dump_privatekey(
+                OpenSSL.crypto.FILETYPE_PEM, key
+            ).decode("utf-8")
+        )
 
     pkcs12_cert = OpenSSL.crypto.PKCS12()
     pkcs12_cert.set_privatekey(key)
@@ -48,11 +74,19 @@ def generate_ca():
         "commonName": crypto_tools.cterm('input', 'Enter common name(str): ', 'ans'),
         "countryName": crypto_tools.cterm('input', 'Enter country name(str): ', 'ans'),
         "localityName": crypto_tools.cterm('input', 'Enter locality name(str): ', 'ans'),
-        "stateOrProvinceName": crypto_tools.cterm('input', 'Enter state or province name(str): ', 'ans'),
-        "organizationName": crypto_tools.cterm('input', 'Enter organization name(str): ', 'ans'),
-        "organizationUnitName": crypto_tools.cterm('input', 'Enter organization unit name(str): ', 'ans'),
+        "stateOrProvinceName": crypto_tools.cterm(
+            'input', 'Enter state or province name(str): ', 'ans'
+        ),
+        "organizationName": crypto_tools.cterm(
+            'input', 'Enter organization name(str): ', 'ans'
+        ),
+        "organizationUnitName": crypto_tools.cterm(
+            'input', 'Enter organization unit name(str): ', 'ans'
+        ),
         "serialNumber": int(crypto_tools.cterm('input', 'Enter serial number name(int): ', 'ans')),
-        "validityEndInSeconds": int(crypto_tools.cterm('input', 'Enter validity end in seconds(int): ', 'ans')),
+        "validityEndInSeconds": int(crypto_tools.cterm(
+            'input', 'Enter validity end in seconds(int): ', 'ans'
+        )),
     }
 
     return generate_ca_processing(ca_cert_info)

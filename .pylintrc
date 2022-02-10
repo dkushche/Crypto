@@ -3,3 +3,5 @@ disable=
     W0622, # redefined-builtin
     C0116, # missing-function-docstring
     R0913, # too-many-arguments
+    W1514, # unspecified-encoding
+    C0200, # consider-using-enumerate

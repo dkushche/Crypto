@@ -1,5 +1,22 @@
-import crypto_tools
+""" Elliptic
+
+Elliptic-curve cryptography(ECC) is an approach to
+public-key cryptography based on the algebraic
+structure of elliptic curves over finite fields.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+
 import json
+import crypto_tools
 
 
 def elliptic_little_doc():
@@ -13,21 +30,21 @@ def elliptic_full_doc():
     """
 
 
-def elliptic_encrypt(data, open_key, r_number, G):
+def elliptic_encrypt(data, open_key, r_number, big_g):
     new_data = []
     for i in data:
-        temp = G * ord(i)
+        temp = big_g * ord(i)
         if not crypto_tools.elliptic_point.belong_to_curve(temp):
             crypto_tools.cterm(
                 "output",
-                f"Warning: {G} * {ord(i)} out of curve", "inf"
+                f"Warning: {big_g} * {ord(i)} out of curve", "inf"
             )
         new_data.append(temp)
     crypto_tools.cterm("output", f"Encoded data = {new_data}", "inf")
 
     res_data = []
     for point in new_data:
-        first_point = G * r_number
+        first_point = big_g * r_number
         second_point = point + open_key * r_number
         res_data.append(
             [[first_point.x, first_point.y], [second_point.x, second_point.y]]
@@ -55,12 +72,11 @@ def elliptic_decrypt(data, secret_key):
 def elliptic_processing(data, elliptic_curve, g_value,
                         secret_key, r_number, encrypt):
     crypto_tools.elliptic_point.set_curve(*elliptic_curve)
-    G = crypto_tools.elliptic_point(*g_value)
-    open_key = G * secret_key
+    big_g = crypto_tools.elliptic_point(*g_value)
+    open_key = big_g * secret_key
     if encrypt == "encrypt":
-        return elliptic_encrypt(data, open_key, r_number, G)
-    else:
-        return elliptic_decrypt(data, secret_key)
+        return elliptic_encrypt(data, open_key, r_number, big_g)
+    return elliptic_decrypt(data, secret_key)
 
 
 @crypto_tools.file_manipulation()
@@ -84,7 +100,7 @@ def elliptic(data):
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
 
-    if encrypt != "encrypt" and encrypt != "decrypt":
+    if encrypt not in ("encrypt", "decrypt"):
         raise ValueError(f"Incorrect action {encrypt}")
 
     return elliptic_processing(data, elliptic_curve, g_value,

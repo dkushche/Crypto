@@ -1,3 +1,19 @@
+""" Hash
+
+A hash function is any function that can be used
+to map data of arbitrary size to fixed-size values.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+
 import crypto_tools
 
 
@@ -12,7 +28,7 @@ def hash_full_doc():
 
 
 def smart_shift(value, block_size):
-    bits_amount = len("{0:b}".format(value))
+    bits_amount = len(format(value, 'b'))
     adder = 0
     if bits_amount == block_size:
         check_value = 1 << (bits_amount - 1)
