@@ -49,7 +49,9 @@ def issue_cert_processing(cert_info, username):
     cert = crypto_tools.generate_cert(cert_info, key, ca_key, ca_cert.get_subject())
 
     with open(f"storage/certs/{username}/{username}_cert.pem", "wt") as pem:
-        pem.write(OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert).decode("utf-8"))
+        pem.write(OpenSSL.crypto.dump_certificate(
+            OpenSSL.crypto.FILETYPE_PEM, cert).decode("utf-8")
+        )
 
     with open(f"storage/certs/{username}/{username}_key.pem", "wt") as pem:
         pem.write(OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, key).decode("utf-8"))
