@@ -1,5 +1,23 @@
-import crypto_tools
+""" Hill
+
+Hill cipher is a polygraphic substitution cipher based on linear algebra.
+Invented by Lester S. Hill in 1929, it was the first polygraphic cipher
+in which it was practical (though barely) to operate on
+more than three symbols at once.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+
 from math import sqrt, ceil
+import crypto_tools
 
 
 def hill_little_doc():
@@ -20,9 +38,9 @@ def gen_key_mtx(key, hill_dict, size):
         if inx < len(key):
             try:
                 res_mtx[inx // size][inx % size] = hill_dict.index(key[inx])
-            except ValueError:
+            except ValueError as err:
                 err_msg = f"There is no {key[inx]} in alphabet"
-                raise ValueError(err_msg)
+                raise ValueError(err_msg) from err
         else:
             p_inx = inx - 1
             prev = res_mtx[p_inx // size][p_inx % size]
@@ -39,8 +57,8 @@ def gen_data_mtx(data, hill_dict, size):
     while inx < len(data):
         try:
             res_mtx[inx // width][inx % width] = hill_dict.index(data[inx])
-        except ValueError:
-            raise ValueError(f"There is no {data[inx]} in alphabet")
+        except ValueError as err:
+            raise ValueError(f"There is no {data[inx]} in alphabet") from err
         inx += 1
     return res_mtx
 
@@ -74,7 +92,7 @@ def hill(data):
 
     if len(key) < 2:
         raise ValueError("Key must be bigger then 1 char")
-    if encrypt != "encrypt" and encrypt != "decrypt":
+    if encrypt in ("encrypt", "decrypt"):
         raise ValueError("Incorrect action")
     hill_dict = crypto_tools.get_param_json_data("alphabets.json", lang)
     return hill_processing(data, key, encrypt, hill_dict)
