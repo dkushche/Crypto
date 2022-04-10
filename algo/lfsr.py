@@ -1,6 +1,24 @@
+""" LFSR
+
+Linear-Feedback Shift Register(LFSR) is a shift register whose
+input bit is a linear function of its previous state. The most
+commonly used linear function of single bits is exclusive-or (XOR).
+Thus, an LFSR is most often a shift register whose input bit is
+driven by the XOR of some bits of the overall shift register value.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+import json
 from .lfsr_generator import lfsr_init
 import crypto_tools
-import json
 
 
 def lfsr_little_doc():
@@ -38,15 +56,21 @@ def lfsr(data):
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
 
-    register_size = int(crypto_tools.cterm('input', 'Enter register_size(uint): ', 'ans'))
+    register_size = int(
+        crypto_tools.cterm('input', 'Enter register_size(uint): ', 'ans')
+    )
     if register_size <= 0:
         raise ValueError("Register size must be bigger then 0")
 
-    start_state = json.loads(crypto_tools.cterm('input', 'Enter register start state(list): ', 'ans'))
+    start_state = json.loads(
+        crypto_tools.cterm('input', 'Enter register start state(list): ', 'ans')
+    )
     if start_state.__class__ != list:
         raise ValueError(f"Incorrect exec_xor_pos class {start_state.__class__}")
 
-    exec_xor_pos = json.loads(crypto_tools.cterm('input', 'Enter executive polynomial xor bits(list): ', 'ans'))
+    exec_xor_pos = json.loads(
+        crypto_tools.cterm('input', 'Enter executive polynomial xor bits(list): ', 'ans')
+    )
     if exec_xor_pos.__class__ != list:
         raise ValueError(f"Incorrect exec_xor_pos class {exec_xor_pos.__class__}")
 

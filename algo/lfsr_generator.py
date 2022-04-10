@@ -50,7 +50,7 @@ def lfsr_tick():
     while True:
         random_number = bitarray()
 
-        for i in range(8):
+        for _ in range(8):
             updated_bit = 0
             for pos in exec_xor_pos:
                 updated_bit ^= register[pos]
@@ -91,7 +91,7 @@ def lfsr_generator_processing(register_size, exec_xor_pos, start_state, output_s
 
     tick = lfsr_init(register_size, exec_xor_pos, start_state)
 
-    for i in range(output_size):
+    for _ in range(output_size):
         result += next(tick)
 
     return result
