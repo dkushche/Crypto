@@ -232,7 +232,7 @@ def des(data):
 
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
-    if encrypt not in ("encrypt", "decrypt"):
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
 
     res_data = des_processing(data, key, encrypt)

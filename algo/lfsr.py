@@ -1,10 +1,6 @@
 """ LFSR
 
-Linear-Feedback Shift Register(LFSR) is a shift register whose
-input bit is a linear function of its previous state. The most
-commonly used linear function of single bits is exclusive-or (XOR).
-Thus, an LFSR is most often a shift register whose input bit is
-driven by the XOR of some bits of the overall shift register value.
+Encryption with using pseudo random LFSR generator
 
 Parameters
 ----------

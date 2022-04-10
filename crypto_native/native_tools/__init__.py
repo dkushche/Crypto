@@ -1,7 +1,26 @@
+""" Native Tools
+
+Helpful tools while building interlayer to native libs
+(Potentially shit)
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import ctypes
 
-
 class crypto_bytearray(ctypes.Structure):
+    """
+    Crypto bytearray struct helps transfer python bytearray
+    into the c struct
+
+    """
     _fields_ = [("data", ctypes.c_void_p),
                 ("len", ctypes.c_size_t)]
 

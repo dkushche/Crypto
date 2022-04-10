@@ -1,3 +1,9 @@
+""" Crypto Tools
+
+Standard library for building your own crypto modules
+
+"""
+
 import platform
 
 from .general_tools import *

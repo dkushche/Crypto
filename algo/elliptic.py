@@ -100,7 +100,7 @@ def elliptic(data):
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
 
-    if encrypt not in ("encrypt", "decrypt"):
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError(f"Incorrect action {encrypt}")
 
     return elliptic_processing(data, elliptic_curve, g_value,

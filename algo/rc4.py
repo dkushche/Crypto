@@ -1,3 +1,22 @@
+""" RC4
+
+RC4 (Rivest Cipher 4 also known as ARC4 or ARCFOUR meaning Alleged RC4)
+is a stream cipher. While it is remarkable for its simplicity and speed
+in software, multiple vulnerabilities have been discovered in RC4, rendering it insecure.
+It is especially vulnerable when the beginning of the output keystream is not discarded,
+or when nonrandom or related keys are used. Particularly problematic uses of RC4 have
+led to very insecure protocols such as WEP.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 
 
@@ -34,12 +53,12 @@ def rc4_prga(scheduled_key):
 
 
 def rc4_ksa(byte_key):
-    S = [i for i in range(256)]
+    s_arr = list(range(256))
     j = 0
     for i in range(256):
-        j = (j + S[i] + byte_key[i % len(byte_key)]) % 256
-        S[i], S[j] = S[j], S[i]
-    return S
+        j = (j + s_arr[i] + byte_key[i % len(byte_key)]) % 256
+        s_arr[i], s_arr[j] = s_arr[j], s_arr[i]
+    return s_arr
 
 
 def rc4_processing(data, byte_key, encrypt):
@@ -62,7 +81,7 @@ def rc4(data):
     key = crypto_tools.cterm('input', 'Enter key(str): ', 'ans')
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
-    if encrypt != "decrypt" and encrypt != "encrypt":
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
     byte_key = bytearray(key, "utf-8")
     if len(byte_key) > 256:

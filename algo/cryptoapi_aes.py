@@ -77,7 +77,7 @@ def cryptoapi_aes(data):
             raise ValueError(f"Incorrect mode: {mode}")
 
     encrypt = crypto_tools.cterm('input', 'You want encrypt or decrypt: ', 'ans')
-    if encrypt not in ["decrypt", "encrypt"]:
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
 
     res_data = cryptoapi_aes_processing(data, key_length, key,

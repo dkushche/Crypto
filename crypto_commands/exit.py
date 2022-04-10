@@ -1,3 +1,17 @@
+""" Exit
+
+Just exit
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import sys
 
 

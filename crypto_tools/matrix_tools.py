@@ -1,3 +1,9 @@
+""" Matrix Tools
+
+Some general tools for dealing with matrices
+
+"""
+
 from .math_tools import inverse_modulo_numb
 
 
@@ -74,11 +80,11 @@ def det(mtx):
         raise ValueError("Matrix should be square")
     if len(mtx) == 2:
         return mtx[0][0] * mtx[1][1] - mtx[0][1] * mtx[1][0]
-    else:
-        result = 0
-        sign = 1
-        for inx in range(len(mtx)):
-            next_mtx = get_minor_mtx(mtx, 0, inx)
-            result += sign * (mtx[0][inx] * det(next_mtx))
-            sign *= -1
-        return result
+
+    result = 0
+    sign = 1
+    for inx in range(len(mtx)):
+        next_mtx = get_minor_mtx(mtx, 0, inx)
+        result += sign * (mtx[0][inx] * det(next_mtx))
+        sign *= -1
+    return result

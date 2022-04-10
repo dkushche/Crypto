@@ -2,7 +2,14 @@
 disable=
     C0116, # missing-function-docstring
     C0200, # consider-using-enumerate
+    R0801, # similar lines in %n files
+    R0903, # too few public methods
     R0913, # too-many-arguments
     R0914, # too many local variables
+    W0602, # using global for '$name' but no assignment is done
+    W0603, # using the global statement
     W0622, # redefined-builtin
     W1514, # unspecified-encoding
+    C0209, # formatting a regular string which could be a f-string
+    C0103, # class name "$name" doesn't conform to PascalCase naming style
+    E0213, # method should have "self" as first argument

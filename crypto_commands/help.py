@@ -1,3 +1,17 @@
+""" Help
+
+Just help
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import algo
 import hack
 import crypto_tools

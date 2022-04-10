@@ -1,3 +1,17 @@
+""" Random
+
+Generating random sequence with specific length
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 import crypto_native
 

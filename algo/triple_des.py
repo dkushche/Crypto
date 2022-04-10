@@ -1,3 +1,26 @@
+""" Triple DES
+
+In cryptography, Triple DES (3DES or TDES), officially the
+Triple Data Encryption Algorithm (TDEA or Triple DEA), is
+a symmetric-key block cipher, which applies the DES cipher
+algorithm three times to each data block. The Data Encryption Standard's (DES)
+56-bit key is no longer considered adequate in the face of modern cryptanalytic
+techniques and supercomputing power. A CVE released in 2016, CVE-2016-2183
+disclosed a major security vulnerability in DES and 3DES encryption algorithms.
+This CVE, combined with the inadequate key size of DES and 3DES, NIST has
+deprecated DES and 3DES for new applications in 2017, and for all applications by 2023.
+It has been replaced with the more secure, more robust AES.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 from .des import des_processing
 
@@ -15,8 +38,7 @@ def triple_des_full_doc():
 def triple_des_pre_processing(key):
     if len(key) > 7 * 3:
         raise ValueError(f"Too big key. Max len required: {7 * 3}")
-    else:
-        crypto_tools.supl_to_mult(key, 7 * 3)
+    crypto_tools.supl_to_mult(key, 7 * 3)
 
 
 def triple_des_processing(data, key, encrypt):
@@ -47,7 +69,7 @@ def triple_des(data):
 
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
-    if encrypt != "decrypt" and encrypt != "encrypt":
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
 
     res_data = triple_des_processing(data, key, encrypt)
@@ -62,4 +84,3 @@ def triple_des(data):
 
 triple_des.little_doc = triple_des_little_doc
 triple_des.full_doc = triple_des_full_doc
-

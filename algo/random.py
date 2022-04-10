@@ -1,11 +1,9 @@
-import crypto_tools
-from json import loads
-from json import dumps
-from time import sleep
-from json.decoder import JSONDecodeError
+""" Random
 
+Self written random generator
 
-"""
+Parameters
+----------
     m -> needed set size
     c -> constant that we need to add
     a -> coefficient
@@ -13,7 +11,17 @@ from json.decoder import JSONDecodeError
     we call it f
     main_formula
         x[i] = (a * x[i - 1] + c) % m
+
+Returns
+-------
+TODO
+
 """
+
+
+from json import loads, dumps, JSONDecodeError
+from time import sleep
+import crypto_tools
 
 
 def random_little_doc():
@@ -62,16 +70,12 @@ def check_bits(sequence):
     for val in sequence:
         zeroes += "{0:b}".format(val).count("0")
         ones += "{0:b}".format(val).count("1")
-    if ones > 9000 and ones < 11000:
-        return True
-    return False
+    return 9000 < ones < 11000
 
 
 def check_len(sequence, dsize):
     needed_len = 0.7 * dsize
-    if (len(sequence) > needed_len):
-        return True
-    return False
+    return len(sequence) > needed_len
 
 
 def generate(data):
@@ -81,9 +85,9 @@ def generate(data):
     coeff = 2
     while True:
         constant = 0
-        while(constant < 1000):
+        while constant < 1000:
             start_value = 0
-            while(start_value < 1000):
+            while start_value < 1000:
                 nrp_seq, bit_seq = calc(data['size'], constant,
                                         coeff, start_value, 20000)
                 if (check_len(nrp_seq, data['size']) and check_bits(bit_seq)):
@@ -151,8 +155,8 @@ def random_processing(data, action):
             data = generate(data)
         else:
             raise ValueError("Incorrect action")
-    except (KeyError, TypeError, JSONDecodeError):
-        raise ValueError("Incorrect input")
+    except (KeyError, TypeError, JSONDecodeError) as err:
+        raise ValueError("Incorrect input") from err
     return dumps(data, sort_keys=True, indent=4)
 
 

@@ -1,7 +1,21 @@
-import ctypes
-import os
+""" MS Crypto API
 
-import crypto_native.native_tools as native_tools
+Layer between crypto modules and native MS Crypto API
+dynamic library
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+import ctypes
+
+from crypto_native import native_tools
 
 CRYPT_EXPORTABLE = 0x1
 
@@ -28,63 +42,63 @@ def check_result(provider, result, desc):
 
 
 def ms_cryptoapi_standard_aes(data, key, encrypt):
-    MS_CRYPTOAPI = ctypes.windll.advapi32
+    ms_cryptoapi = ctypes.windll.advapi32
 
     ctx_ptr = ctypes.c_void_p()
     hash_ptr = ctypes.c_void_p()
 
-    result = MS_CRYPTOAPI.CryptAcquireContextA(
+    result = ms_cryptoapi.CryptAcquireContextA(
         ctypes.byref(ctx_ptr), 0, 0, PROV_RSA_AES, 0
     )
     check_result("standard", result, "context creation error")
 
-    result = MS_CRYPTOAPI.CryptCreateHash(
+    result = ms_cryptoapi.CryptCreateHash(
         ctx_ptr, CALG_SHA_256, 0, 0, ctypes.byref(hash_ptr)
     )
     check_result("standard", result, "hash initialization error")
 
     key = ctypes.create_string_buffer(bytes(key), len(key))
-    result = MS_CRYPTOAPI.CryptHashData(
+    result = ms_cryptoapi.CryptHashData(
         hash_ptr, key, ctypes.sizeof(key), 0
     )
     check_result("standard", result, "hash data initialization error")
 
     hashed_key_len = ctypes.c_int(32)
     hashed_key = ctypes.create_string_buffer(b'', hashed_key_len.value)
-    result = MS_CRYPTOAPI.CryptGetHashParam(
+    result = ms_cryptoapi.CryptGetHashParam(
         hash_ptr, HP_HASHVAL, hashed_key, ctypes.byref(hashed_key_len), 0
     )
     check_result("standard", result, "set hash parameters error")
 
     algorithms = {128: CALG_AES_128, 192: CALG_AES_192, 256: CALG_AES_256}
     hkey = ctypes.c_void_p()
-    result = MS_CRYPTOAPI.CryptDeriveKey(
+    result = ms_cryptoapi.CryptDeriveKey(
         ctx_ptr, algorithms[len(key) * 8],
         hash_ptr, CRYPT_EXPORTABLE, ctypes.byref(hkey)
     )
     check_result("standard", result, "generating cryptographic session keys error")
 
     key_len = ctypes.c_int(0)
-    result = MS_CRYPTOAPI.CryptExportKey(
+    result = ms_cryptoapi.CryptExportKey(
         hkey, 0, PLAINTEXTKEYBLOB, 0, 0, ctypes.byref(key_len)
     )
     check_result("standard", result, "check key length error")
 
     key_data = ctypes.create_string_buffer(b'', key_len.value)
-    result = MS_CRYPTOAPI.CryptExportKey(
+    result = ms_cryptoapi.CryptExportKey(
         hkey, 0, PLAINTEXTKEYBLOB, 0, key_data, ctypes.byref(key_len)
     )
     check_result("standard", result, "export key error")
 
     if encrypt == "encrypt":
         data_len = ctypes.c_int(len(data))
-        result = MS_CRYPTOAPI.CryptEncrypt(
+        result = ms_cryptoapi.CryptEncrypt(
             hkey, 0, 1, 0, 0, ctypes.byref(data_len), len(data)
         )
         check_result("standard", result, "pre encryption error")
 
         out_data = ctypes.create_string_buffer(bytes(data), data_len.value)
-        result = MS_CRYPTOAPI.CryptEncrypt(
+        result = ms_cryptoapi.CryptEncrypt(
             hkey, 0, 1, 0, out_data,
             ctypes.byref(ctypes.c_int(len(data))), data_len.value
         )
@@ -95,20 +109,20 @@ def ms_cryptoapi_standard_aes(data, key, encrypt):
         data_len = ctypes.c_int(len(data))
         out_data = ctypes.create_string_buffer(bytes(data), len(data))
 
-        result = MS_CRYPTOAPI.CryptDecrypt(
+        result = ms_cryptoapi.CryptDecrypt(
             hkey, 0, 1, 0, out_data, ctypes.byref(data_len)
         )
         check_result("standard", result, "decryption error")
 
         out_data = out_data.raw[:data_len.value]
 
-    result = MS_CRYPTOAPI.CryptDestroyKey(hkey)
+    result = ms_cryptoapi.CryptDestroyKey(hkey)
     check_result("standard", result, "key destruction error")
 
-    result = MS_CRYPTOAPI.CryptDestroyHash(hash_ptr)
+    result = ms_cryptoapi.CryptDestroyHash(hash_ptr)
     check_result("standard", result, "hesh destruction error")
 
-    result = MS_CRYPTOAPI.CryptReleaseContext(ctx_ptr, 0)
+    result = ms_cryptoapi.CryptReleaseContext(ctx_ptr, 0)
     check_result("standard", result, "context destruction error")
 
     return {
@@ -118,9 +132,9 @@ def ms_cryptoapi_standard_aes(data, key, encrypt):
     }
 
 
-def ms_cryptoapi_nextgen_gen_hash(MS_CRYPTOAPI, key):
+def ms_cryptoapi_nextgen_gen_hash(ms_cryptoapi, key):
     hash_ctx = ctypes.c_void_p()
-    result = MS_CRYPTOAPI.BCryptOpenAlgorithmProvider(
+    result = ms_cryptoapi.BCryptOpenAlgorithmProvider(
         ctypes.byref(hash_ctx), ctypes.c_wchar_p('SHA256'), 0, 0
     )
     check_result("nextgen", result, "sha-256 algorithm provider error")
@@ -128,39 +142,39 @@ def ms_cryptoapi_nextgen_gen_hash(MS_CRYPTOAPI, key):
     h_hash = ctypes.c_void_p()
     cb_hash_obj = ctypes.c_uint(326)
     pb_hash_obj = ctypes.create_string_buffer(b'', cb_hash_obj.value)
-    result = MS_CRYPTOAPI.BCryptCreateHash(
+    result = ms_cryptoapi.BCryptCreateHash(
         hash_ctx, ctypes.byref(h_hash), pb_hash_obj, cb_hash_obj, 0, 0, 0x20
     )
     check_result("nextgen", result, "hash algo creation error")
 
     key_buffer = ctypes.create_string_buffer(bytes(key), len(key))
-    result = MS_CRYPTOAPI.BCryptHashData(
+    result = ms_cryptoapi.BCryptHashData(
         h_hash, key_buffer, ctypes.sizeof(key_buffer), 0
     )
     check_result("nextgen", result, "hashing error")
 
     cb_hash = ctypes.c_uint(32)
     pb_hash = ctypes.create_string_buffer(b'', 32)
-    result = MS_CRYPTOAPI.BCryptFinishHash(
+    result = ms_cryptoapi.BCryptFinishHash(
         h_hash, pb_hash, cb_hash, 0
     )
     check_result("nextgen", result, "finish hashing error")
 
-    result = MS_CRYPTOAPI.BCryptDestroyHash(h_hash)
+    result = ms_cryptoapi.BCryptDestroyHash(h_hash)
     check_result("nextgen", result, "hash destruction error")
 
     return hash_ctx, pb_hash
 
 
 def ms_cryptoapi_nextgen_aes(data, key, mode, encrypt):
-    MS_CRYPTOAPI = ctypes.windll.bcrypt
+    ms_cryptoapi = ctypes.windll.bcrypt
 
     hash_ctx, pb_hash = ms_cryptoapi_nextgen_gen_hash(
-        MS_CRYPTOAPI, key
+        ms_cryptoapi, key
     )
 
     aes_ctx = ctypes.c_void_p()
-    result = MS_CRYPTOAPI.BCryptOpenAlgorithmProvider(
+    result = ms_cryptoapi.BCryptOpenAlgorithmProvider(
         ctypes.byref(aes_ctx), ctypes.c_wchar_p('AES'), 0, 0
     )
     check_result("nextgen", result, "aes algorithm provider error")
@@ -170,7 +184,7 @@ def ms_cryptoapi_nextgen_aes(data, key, mode, encrypt):
         'ECB': ctypes.c_wchar_p('ChainingModeECB'),
         'CFB': ctypes.c_wchar_p('ChainingModeCFB')
     }
-    result = MS_CRYPTOAPI.BCryptSetProperty(
+    result = ms_cryptoapi.BCryptSetProperty(
         aes_ctx, ctypes.c_wchar_p('ChainingMode'),
         chaining_modes[mode], ctypes.sizeof(chaining_modes[mode]), 0
     )
@@ -180,55 +194,55 @@ def ms_cryptoapi_nextgen_aes(data, key, mode, encrypt):
 
     h_key = ctypes.c_void_p()
     pb_key_obj = ctypes.create_string_buffer(b'', 654)
-    result = MS_CRYPTOAPI.BCryptGenerateSymmetricKey(
+    result = ms_cryptoapi.BCryptGenerateSymmetricKey(
         aes_ctx, ctypes.byref(h_key), pb_key_obj,
         ctypes.c_uint(654), pb_key, ctypes.sizeof(pb_key), 0
     )
     check_result("nextgen", result, "genereting symmetric key error")
 
-    pbIV = ctypes.create_string_buffer( b'\x00' * 16, 16) if mode != 'ECB' else 0
-    cbIV = ctypes.c_uint(16) if mode != 'ECB' else 0
+    pb_iv = ctypes.create_string_buffer( b'\x00' * 16, 16) if mode != 'ECB' else 0
+    cb_iv = ctypes.c_uint(16) if mode != 'ECB' else 0
 
     cb_out = ctypes.c_uint(0)
     data_buf = ctypes.create_string_buffer(bytes(data), len(data))
 
     if encrypt == "encrypt":
-        result = MS_CRYPTOAPI.BCryptEncrypt(
+        result = ms_cryptoapi.BCryptEncrypt(
             h_key, data_buf, ctypes.sizeof(data_buf),
-            0, pbIV, cbIV, 0, 0,  ctypes.byref(cb_out), BCRYPT_BLOCK_PADDING
+            0, pb_iv, cb_iv, 0, 0,  ctypes.byref(cb_out), BCRYPT_BLOCK_PADDING
         )
         check_result("nextgen", result, "cryptography initialization error")
 
         pb_out = ctypes.create_string_buffer(b'', cb_out.value)
         cb_data = ctypes.c_uint(0)
-        result = MS_CRYPTOAPI.BCryptEncrypt(
+        result = ms_cryptoapi.BCryptEncrypt(
             h_key, data_buf, ctypes.sizeof(data_buf),
-            0, pbIV, cbIV, pb_out, cb_out, ctypes.byref(cb_data), BCRYPT_BLOCK_PADDING
+            0, pb_iv, cb_iv, pb_out, cb_out, ctypes.byref(cb_data), BCRYPT_BLOCK_PADDING
         )
         check_result("nextgen", result, "encryption error")
 
         pb_out = pb_out.raw
     else:
-        result = MS_CRYPTOAPI.BCryptDecrypt(
+        result = ms_cryptoapi.BCryptDecrypt(
             h_key, data_buf, ctypes.sizeof(data_buf),
-            0, pbIV, cbIV, 0, 0, ctypes.byref(cb_out), BCRYPT_BLOCK_PADDING
+            0, pb_iv, cb_iv, 0, 0, ctypes.byref(cb_out), BCRYPT_BLOCK_PADDING
         )
         check_result("nextgen", result, "cryptography initialization error")
 
         pb_out = ctypes.create_string_buffer(b'', cb_out.value)
-        result = MS_CRYPTOAPI.BCryptDecrypt(
+        result = ms_cryptoapi.BCryptDecrypt(
             h_key, data_buf, ctypes.sizeof(data_buf),
-            0, pbIV, cbIV, pb_out, cb_out, ctypes.byref(cb_out), BCRYPT_BLOCK_PADDING
+            0, pb_iv, cb_iv, pb_out, cb_out, ctypes.byref(cb_out), BCRYPT_BLOCK_PADDING
         )
         check_result("nextgen", result, "decryption error")
 
         pb_out = pb_out.raw.rstrip(b'\x00')
 
-    result = MS_CRYPTOAPI.BCryptDestroyKey(h_key)
+    result = ms_cryptoapi.BCryptDestroyKey(h_key)
     check_result("nextgen", result, "key desturction error")
-    result = MS_CRYPTOAPI.BCryptCloseAlgorithmProvider(hash_ctx, 0)
+    result = ms_cryptoapi.BCryptCloseAlgorithmProvider(hash_ctx, 0)
     check_result("nextgen", result, "hash context destruction error")
-    result = MS_CRYPTOAPI.BCryptCloseAlgorithmProvider(aes_ctx, 0)
+    result = ms_cryptoapi.BCryptCloseAlgorithmProvider(aes_ctx, 0)
     check_result("nextgen", result, "aes context destruction error")
 
     return {

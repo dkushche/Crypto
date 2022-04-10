@@ -1,3 +1,17 @@
+""" Generate RSA Keys
+
+Generating RSA keys using OpenSSL native shared dynamic library
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import os
 
 import crypto_tools

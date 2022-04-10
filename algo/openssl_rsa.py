@@ -1,3 +1,17 @@
+""" RSA
+
+RSA cypher using OpenSSL native shared dynamic library
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import os
 
 import crypto_tools
@@ -37,7 +51,7 @@ def openssl_rsa(data):
 
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
-    if encrypt not in ["decrypt", "encrypt"]:
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
 
     res_data = openssl_rsa_processing(data, encrypt, pem_key_filename, pub_key_filename)

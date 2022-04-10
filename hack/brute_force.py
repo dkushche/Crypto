@@ -1,3 +1,17 @@
+""" Brute force
+
+Caesar broot forcing
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import algo
 import crypto_tools
 
@@ -18,9 +32,9 @@ def crush_caesar_try(data, lang, caesar_dictionary):
     result = ""
     templates = crypto_tools.get_param_json_data("words.json", lang)
 
-    while(key != len(caesar_dictionary)):
+    while key != len(caesar_dictionary):
         result = algo.caesar.processor(data, lang, -1 * key)
-        if (crypto_tools.is_string_reproduced(templates, result)):
+        if crypto_tools.is_string_reproduced(templates, result):
             break
         key += 1
     if key == len(caesar_dictionary):
@@ -36,29 +50,28 @@ def crush_caesar(data):
     if lang == "no":
         for lang in langs:
             result = crush_caesar_try(data, lang, langs[lang])
-            if not result == "None":
+            if result != "None":
                 return f"Language: {lang}\n{result}"
         return "None"
-    else:
-        return crush_caesar_try(data, lang, langs[lang])
+    return crush_caesar_try(data, lang, langs[lang])
 
 
 @crypto_tools.check_time
-def brute_force_processing(data, algo):
+def brute_force_processing(data, algorithm):
     algoes = {
         "caesar": crush_caesar
     }
 
-    if algo not in algoes:
+    if algorithm not in algoes:
         raise ValueError("Incorrect algo")
-    return algoes[algo](data)
+    return algoes[algorithm](data)
 
 
 @crypto_tools.file_manipulation()
 def brute_force(data):
-    algo = crypto_tools.cterm('input',
+    algorithm = crypto_tools.cterm('input',
                               'What algo was used: ', 'ans')
-    return brute_force_processing(data, algo)
+    return brute_force_processing(data, algorithm)
 
 
 brute_force.little_doc = brute_force_little_doc

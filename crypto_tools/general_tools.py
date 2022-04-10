@@ -1,12 +1,11 @@
-from json import load as get_json
+""" General Tools
+
+Here we have some general tools
+for crypto algorithms
+
+"""
+
 from bitarray import bitarray
-from math import ceil
-
-"""
-    In this file we have some general tools
-    for crypto algorithms
-"""
-
 
 def supl_to_mult(data, mod_len):
     if len(data) % mod_len:
@@ -14,7 +13,7 @@ def supl_to_mult(data, mod_len):
             buf = mod_len - (len(data) % mod_len)
         else:
             buf = mod_len - len(data)
-        for i in range(buf):
+        for _ in range(buf):
             data.append(0x00)
 
 
@@ -56,7 +55,7 @@ def to_bitarray(data):
     result = bitarray()
     if data.__class__ == str:
         result.frombytes(data.encode())
-    elif data.__class__ == bytearray or data.__class__ == bytes:
+    elif data.__class__ in (bytearray, bytes):
         result.frombytes(data)
     else:
         raise ValueError(f"to_bits: incorrect data type {data.__class__}")
@@ -64,7 +63,7 @@ def to_bitarray(data):
 
 
 def utf_decoder(data):
-    if data.__class__ == bytes or data.__class__ == bytearray:
+    if data.__class__ in (bytearray, bytes):
         data = data.decode("utf-8")
     return data
 

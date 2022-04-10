@@ -1,3 +1,9 @@
+""" Cert tools
+
+Set of tools for dealing with ssl certificates
+
+"""
+
 import OpenSSL
 
 # *_info = {

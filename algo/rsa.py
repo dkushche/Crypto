@@ -1,6 +1,25 @@
+""" RSA
+
+RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem that is widely used
+for secure data transmission. It is also one of the oldest. The acronym "RSA"
+comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who
+publicly described the algorithm in 1977. An equivalent system was developed
+secretly in 1973 at GCHQ (the British signals intelligence agency) by the English
+mathematician Clifford Cocks. That system was declassified in 1997.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+import math
 from bitarray import bitarray
 import crypto_tools
-import math
 
 
 def rsa_little_doc():
@@ -86,7 +105,7 @@ def rsa(data):
                                      'Enter open(e) number: ', 'ans'))
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
-    if encrypt != "encrypt" and encrypt != "decrypt":
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError(f"Incorrect action {encrypt}")
     return rsa_processing(data, p_value, q_value, e_value, encrypt)
 

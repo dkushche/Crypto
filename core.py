@@ -1,13 +1,28 @@
-import crypto_commands
-import crypto_tools
-import platform
+""" Crypto Core
 
-if platform.system() != 'Windows':
-    import readline
+TODO
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+import sys
+import platform
 
 import algo
 import hack
-import sys
+
+import crypto_commands
+import crypto_tools
+
+if platform.system() != 'Windows':
+    import readline
 
 
 def completer(text, state):
@@ -29,9 +44,9 @@ def main_loop():
         try:
             if command_name != "help":
                 completer.in_menu = False
-            for module, commands in commands_list.items():
+            for crypto_module, commands in commands_list.items():
                 if command_name in commands:
-                    command = getattr(module, command_name)
+                    command = getattr(crypto_module, command_name)
                     break
             if command:
                 command()

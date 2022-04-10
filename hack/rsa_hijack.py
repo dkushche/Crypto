@@ -1,7 +1,21 @@
-import crypto_tools
-import algo
+""" RSA Hijack
+
+Different techniques how to break basic RSA
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import math
 import sys
+import crypto_tools
+import algo
 
 
 def rsa_hijack_little_doc():
@@ -16,22 +30,21 @@ def rsa_hijack_full_doc():
 
 def check_params(open_mix, e_value):
     if open_mix <= 0 or e_value <= 0:
-        raise("Open (p * q) and e_value must be > 0")
+        raise Exception("Open (p * q) and e_value must be > 0")
     if open_mix % 2 == 0:
-        raise ("Open (p * q) must be odd")
+        raise Exception("Open (p * q) must be odd")
 
 
 @crypto_tools.check_time
 def rsa_hijack_fermat(data, open_mix, e_value):
     data = crypto_tools.to_bitarray(data)
-    crypto_tools.cterm("output", f"Hijacking using Fermat method", "inf")
+    crypto_tools.cterm("output", "Hijacking using Fermat method", "inf")
     check_params(open_mix, e_value)
-    k_value = 1
 
     a = int(math.sqrt(open_mix))
     b = a ** 2 - open_mix
 
-    while(not crypto_tools.is_perfect_square(b)):
+    while not crypto_tools.is_perfect_square(b):
         a += 1
         b = a ** 2 - open_mix
 
@@ -47,9 +60,8 @@ def rsa_hijack_fermat(data, open_mix, e_value):
 def rsa_hijack_repeat(data, open_mix, e_value):
     data = crypto_tools.to_bitarray(data)
     crypto_tools.cterm("output",
-                       f"Hijacking using repeat cypher method", "inf")
+                       "Hijacking using repeat cypher method", "inf")
     data_block_size = math.ceil(math.log2(open_mix))
-    res_block_size = int(math.log2(open_mix))
     byte_buf = math.ceil(data_block_size / 8)
 
     block_val = crypto_tools.get_block_as_int(
@@ -58,7 +70,7 @@ def rsa_hijack_repeat(data, open_mix, e_value):
 
     m_value = 1
     repeat_block = (block_val ** e_value ** m_value) % open_mix
-    while (repeat_block != block_val % open_mix):
+    while repeat_block != block_val % open_mix:
         m_value += 1
         repeat_block = (block_val ** e_value ** m_value) % open_mix
     res_val = ((block_val ** e_value ** (m_value - 1)) % open_mix)
@@ -70,7 +82,7 @@ def rsa_hijack_repeat(data, open_mix, e_value):
 def rsa_hijack_chinese(data, open_mix, e_value):
     data = int(crypto_tools.utf_decoder(data))
     crypto_tools.cterm("output",
-                       f"Hijacking using chinese reminder method", "inf")
+                       "Hijacking using chinese reminder method", "inf")
 
     tx_data = [data]
     open_mixes = [open_mix]
@@ -98,12 +110,12 @@ def rsa_hijack_chinese(data, open_mix, e_value):
 def rsa_hijack_nokey(data, open_mix, e_value):
     data = int(crypto_tools.utf_decoder(data))
     crypto_tools.cterm("output",
-                       f"Hijacking using nokey reading method", "inf")
+                       "Hijacking using nokey reading method", "inf")
     second_data = int(crypto_tools.utf_decoder(crypto_tools.get_data()))
     second_e_value = int(crypto_tools.cterm('input',
                                             'Enter second open(e) number: ', 'ans'))
 
-    gcd, r, s = crypto_tools.EGCD(e_value, second_e_value)
+    _, r, s = crypto_tools.EGCD(e_value, second_e_value)
     c1_r = pow(data, r) % open_mix
     c2_s = pow(crypto_tools.inverse_modulo_numb(second_data, open_mix), -s) % open_mix
 
@@ -127,8 +139,8 @@ def rsa_hijack(data):
     try:
         hijack = getattr(sys.modules[__name__], "rsa_hijack_" + method)
         return hijack(data, open_mix, e_value)
-    except AttributeError:
-        raise ValueError(f"No such method: {method}")
+    except AttributeError as err:
+        raise ValueError(f"No such method: {method}") from err
 
 
 rsa_hijack.little_doc = rsa_hijack_little_doc

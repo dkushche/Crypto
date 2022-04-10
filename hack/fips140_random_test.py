@@ -1,5 +1,19 @@
-import crypto_tools
+""" FIPS 140
+
+Random squences generators tester
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import sys
+import crypto_tools
 
 
 def fips140_random_test_little_doc():
@@ -56,7 +70,7 @@ def fips140_random_test_poker(data):
             blocks[str(data[i: i + 4])[10:-2]] += 1
         else:
             blocks[str(data[i: i + 4])[10:-2]] = 1
-    
+
     sq_sum = 0
     for i in blocks.values():
         sq_sum += i ** 2
@@ -86,8 +100,7 @@ def fips140_random_test_runs(data):
         if bit == prev_bit:
             cur_series += 1
         else:
-            if cur_series > 6:
-                cur_series = 6
+            cur_series = min(cur_series, 6)
 
             if series.get(f"{cur_series}"):
                 series[f"{cur_series}"] += 1
@@ -171,8 +184,8 @@ def fips140_random_test(data):
         crypto_tools.cterm("output", f"Sequence : {data_in_bits}", "inf")
 
         return fips140_test(data_in_bits)
-    except AttributeError:
-        raise ValueError(f"No such method: {method}")
+    except AttributeError as err:
+        raise ValueError(f"No such method: {method}") from err
 
 
 fips140_random_test.little_doc = fips140_random_test_little_doc

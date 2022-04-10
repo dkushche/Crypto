@@ -1,8 +1,16 @@
+""" General Decorators
+
+Set of decorators which are super useful while creating
+standard crypto module flow
+
+"""
+
+import os
+import time
+import functools
+
 from .file_manager import download_text, save_text
 from .interface import cterm
-import functools
-import time
-import os
 
 
 def get_data():

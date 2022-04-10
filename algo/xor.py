@@ -1,3 +1,25 @@
+""" XOR
+
+The XOR operator is extremely common as a component in more complex ciphers.
+By itself, using a constant repeating key, a simple XOR cipher can trivially
+be broken using frequency analysis. If the content of any message can be guessed
+or otherwise known then the key can be revealed. Its primary merit is that it is
+simple to implement, and that the XOR operation is computationally inexpensive.
+A simple repeating XOR (i.e. using the same key for xor operation on the whole data)
+cipher is therefore sometimes used for hiding information in cases where no particular
+security is required. The XOR cipher is often used in computer malware to make reverse
+engineering more difficult.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 from itertools import cycle
 import crypto_tools
 
@@ -32,7 +54,7 @@ def xor(data):
     key = crypto_tools.cterm('input', 'Enter key(str): ', 'ans')
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
-    if encrypt != "encrypt" and encrypt != "decrypt":
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect action")
     if len(key) == 0:
         raise ValueError("Empty key")

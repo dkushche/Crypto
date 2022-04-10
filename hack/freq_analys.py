@@ -1,4 +1,19 @@
-import algo
+""" Frequency analysis
+
+Encrypted text analyzer. Helps to compare
+frequency characteristics of encrypted and clear textes and
+connect symbols
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import crypto_tools
 
 
@@ -28,10 +43,7 @@ def form_frequency_dict(data):
     for later in laters:
         laters[later] = laters[later] / len(data) * 100
     items = laters.items()
-    laters = {
-        k: v for k, v in sorted(items, key=lambda item: item[1], reverse=True)
-    }
-    return laters
+    return dict(sorted(items, key=lambda item: item[1], reverse=True))
 
 
 def check_char(chars, lang_chars, lang):
@@ -47,8 +59,8 @@ def freq_analys_processing(data, lang):
     langs = crypto_tools.download_json("crypto_storage/freqchars.json")
 
     if lang == "no":
-        for lang in langs:
-            check_char(laters, langs[lang], lang)
+        for cur_lang in langs:
+            check_char(laters, langs[cur_lang], cur_lang)
     else:
         check_char(laters, langs[lang], lang)
     return laters

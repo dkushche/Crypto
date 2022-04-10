@@ -1,3 +1,9 @@
+""" Math Tools
+
+Some general math tools that can help with numbers)
+
+"""
+
 import math
 import random
 
@@ -12,18 +18,18 @@ def EGCD(a, b):
     """
     if a == 0:
         return (b, 0, 1)
-    else:
-        b_div_a, b_mod_a = divmod(b, a)
-        g, x, y = EGCD(b_mod_a, a)
-        return (g, y - b_div_a * x, x)
+
+    b_div_a, b_mod_a = divmod(b, a)
+    g, x, y = EGCD(b_mod_a, a)
+    return (g, y - b_div_a * x, x)
 
 
 def inverse_modulo_numb(determ, modulo):
-    g, x, y = EGCD(determ, modulo)
+    g, x, _ = EGCD(determ, modulo)
     if g != 1:
         return pow(determ, modulo - 2, modulo)
-    else:
-        return x % modulo
+
+    return x % modulo
 
 
 def is_perfect_square(num):

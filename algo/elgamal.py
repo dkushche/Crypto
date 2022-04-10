@@ -76,7 +76,7 @@ def elgamal(data):
                                      'Enter closed(x) number: ', 'ans'))
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
-    if encrypt not in ("encrypt", "decrypt"):
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError(f"Incorrect action {encrypt}")
 
     return elgamal_processing(data, p_value, x_value, encrypt, g_value)

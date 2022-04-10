@@ -1,6 +1,12 @@
+""" Plot Tools
+
+Tools for generating plots with matplotlib
+
+"""
+
+import os
 import matplotlib.pyplot as plt
 from .interface import cterm
-import os
 
 
 def create_subplots(subplot_data):
@@ -32,13 +38,12 @@ def save_plot():
         cterm("output", "Saved in storage/" + filename + ".png", "inf")
 
 
-"""
-    create plot gets parameters like
-    name_plot=dict_with_data, other_name_plot=...
-"""
-
-
 def create_plot(subplot_data):
+    """
+    gets parameters like
+    name_plot=dict_with_data, other_name_plot=...
+
+    """
     create_subplots(subplot_data)
     plt.subplots_adjust(hspace=0.5)
     save_plot()

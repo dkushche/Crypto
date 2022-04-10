@@ -1,5 +1,10 @@
+""" File Manager
+
+Set of tools for dealing with crypto files
+
+"""
+
 from json import load as get_json
-from .general_tools import utf_decoder
 
 
 def get_param_json_data(fname, param):
@@ -11,11 +16,8 @@ def get_param_json_data(fname, param):
 
 
 def download_json(name):
-    try:
-        with open(name) as algo:
-            return get_json(algo)
-    except FileNotFoundError:
-        raise
+    with open(name) as algo:
+        return get_json(algo)
 
 
 def save_text(name, value):

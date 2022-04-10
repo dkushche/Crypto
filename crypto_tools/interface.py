@@ -1,8 +1,16 @@
+""" Interface
+
+Tools for interacting with CLI from module
+
+"""
+
+import sys
+import platform
+from time import sleep
+from threading import Thread
+
 from .file_manager import download_json, download_text
 from .general_tools import utf_decoder
-from threading import Thread
-from time import sleep
-import platform
 
 
 def form_result_from_cp(control_package, frame):
@@ -79,6 +87,8 @@ def cterm(com_type, message, message_type):
     else:
         print(res_line)
 
+    return res_line
+
 
 def iface_init(profile_dir):
     try:
@@ -90,7 +100,7 @@ def iface_init(profile_dir):
 
         render_static(profile_dir + "crypto.header")
     except FileNotFoundError:
-        exit()
+        sys.exit()
 
 
 iface_init.iface = None # Make in better

@@ -92,7 +92,7 @@ def hill(data):
 
     if len(key) < 2:
         raise ValueError("Key must be bigger then 1 char")
-    if encrypt not in ("encrypt", "decrypt"):
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect action")
     hill_dict = crypto_tools.get_param_json_data("alphabets.json", lang)
     return hill_processing(data, key, encrypt, hill_dict)

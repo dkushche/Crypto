@@ -1,15 +1,25 @@
-from .math_tools import is_prime, inverse_modulo_numb
+""" Elliptic Math tools
+
+Set of tools for dealing with ellipcit curves cryptology
+
+"""
+
 import copy
+from .math_tools import is_prime, inverse_modulo_numb
 
 
 class elliptic_point:
-    elliptic_curve = None
+    """
+    point on elliptic curve
+
+    """
+    elliptic_curve = {}
 
     def set_curve(a, b, p):
         if not is_prime(p):
             raise ValueError(f"p = {p} is not prime")
         if p <= 3:
-            raise ValueError(f"p must be bigger then 3")
+            raise ValueError("p must be bigger then 3")
         if (4 * pow(a, 3) + 27 * pow(b, 2)) % p == 0:
             raise ValueError(f"Incorrect curve {a}, {b}, {p}")
 
@@ -45,47 +55,47 @@ class elliptic_point:
         return self.x == other.x and self.y == other.y
 
     def __add__(self, other):
-        if isinstance(other, elliptic_point):
-            if self == elliptic_point(0, 0) or other == elliptic_point(0, 0):
-                return copy.deepcopy(
-                    self if other == elliptic_point(0, 0) else other
-                )
+        if not isinstance(other, elliptic_point):
+            raise ValueError("Can't add elliptic_point to other type")
 
-            if self == other:
-                if self.y != 0:
-                    m = ((3 * (self.x ** 2) +
-                         elliptic_point.elliptic_curve["a"]) *
-                         inverse_modulo_numb(
-                            2 * self.y, elliptic_point.elliptic_curve["p"]))
-                else:
-                    return elliptic_point(0, 0)
-            else:
-                if other.x - self.x != 0:
-                    m = ((other.y - self.y) *
-                         inverse_modulo_numb(
-                            other.x - self.x,
-                            elliptic_point.elliptic_curve["p"]
-                         ))
-                else:
-                    return elliptic_point(0, 0)
-
-            m %= elliptic_point.elliptic_curve["p"]
-
-            new_x = ((m ** 2 - self.x - other.x)
-                     % elliptic_point.elliptic_curve["p"])
-            new_y = ((self.y + m * (new_x - self.x))
-                     % elliptic_point.elliptic_curve["p"])
-            return elliptic_point(
-                new_x, -new_y % elliptic_point.elliptic_curve["p"]
+        if self == elliptic_point(0, 0) or other == elliptic_point(0, 0):
+            return copy.deepcopy(
+                self if other == elliptic_point(0, 0) else other
             )
+
+        if self == other:
+            if self.y != 0:
+                m = ((3 * (self.x ** 2) +
+                        elliptic_point.elliptic_curve["a"]) *
+                        inverse_modulo_numb(
+                        2 * self.y, elliptic_point.elliptic_curve["p"]))
+            else:
+                return elliptic_point(0, 0)
         else:
-            raise ValueError(f"Can't add elliptic_point to other type")
+            if other.x - self.x != 0:
+                m = ((other.y - self.y) *
+                        inverse_modulo_numb(
+                        other.x - self.x,
+                        elliptic_point.elliptic_curve["p"]
+                        ))
+            else:
+                return elliptic_point(0, 0)
+
+        m %= elliptic_point.elliptic_curve["p"]
+
+        new_x = ((m ** 2 - self.x - other.x)
+                    % elliptic_point.elliptic_curve["p"])
+        new_y = ((self.y + m * (new_x - self.x))
+                    % elliptic_point.elliptic_curve["p"])
+        return elliptic_point(
+            new_x, -new_y % elliptic_point.elliptic_curve["p"]
+        )
+
 
     def __sub__(self, other):
         if isinstance(other, elliptic_point):
             return self.__add__(other.__neg__())
-        else:
-            raise ValueError(f"Can't sub elliptic_point to other type")
+        raise ValueError("Can't sub elliptic_point to other type")
 
     def __mul__(self, other):
         if isinstance(other, int):
@@ -97,5 +107,4 @@ class elliptic_point:
                 res = res + temp
                 other -= 1
             return res
-        else:
-            raise ValueError(f"Can't mult elliptic_point not on int")
+        raise ValueError("Can't mult elliptic_point not on int")
