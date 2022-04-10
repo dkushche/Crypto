@@ -1,3 +1,18 @@
+""" Issue cert
+
+Issue ssl certificate. Before using this command
+generate CA firstly.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
 import os
 import shutil
 import OpenSSL
@@ -33,11 +48,11 @@ def issue_cert_processing(cert_info, username):
 
     cert = crypto_tools.generate_cert(cert_info, key, ca_key, ca_cert.get_subject())
 
-    with open(f"storage/certs/{username}/{username}_cert.pem", "wt") as f:
-        f.write(OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert).decode("utf-8"))
+    with open(f"storage/certs/{username}/{username}_cert.pem", "wt") as pem:
+        pem.write(OpenSSL.crypto.dump_certificate(OpenSSL.crypto.FILETYPE_PEM, cert).decode("utf-8"))
 
-    with open(f"storage/certs/{username}/{username}_key.pem", "wt") as f:
-        f.write(OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, key).decode("utf-8"))
+    with open(f"storage/certs/{username}/{username}_key.pem", "wt") as pem:
+        pem.write(OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, key).decode("utf-8"))
 
     pkcs12_cert = OpenSSL.crypto.PKCS12()
     pkcs12_cert.set_privatekey(key)
@@ -56,11 +71,21 @@ def issue_cert():
         "commonName": crypto_tools.cterm('input', 'Enter common name(str): ', 'ans'),
         "countryName": crypto_tools.cterm('input', 'Enter country name(str): ', 'ans'),
         "localityName": crypto_tools.cterm('input', 'Enter locality name(str): ', 'ans'),
-        "stateOrProvinceName": crypto_tools.cterm('input', 'Enter state or province name(str): ', 'ans'),
-        "organizationName": crypto_tools.cterm('input', 'Enter organization name(str): ', 'ans'),
-        "organizationUnitName": crypto_tools.cterm('input', 'Enter organization unit name(str): ', 'ans'),
-        "serialNumber": int(crypto_tools.cterm('input', 'Enter serial number name(int): ', 'ans')),
-        "validityEndInSeconds": int(crypto_tools.cterm('input', 'Enter validity end in seconds(int): ', 'ans')),
+        "stateOrProvinceName": crypto_tools.cterm(
+            'input', 'Enter state or province name(str): ', 'ans'
+        ),
+        "organizationName": crypto_tools.cterm(
+            'input', 'Enter organization name(str): ', 'ans'
+        ),
+        "organizationUnitName": crypto_tools.cterm(
+            'input', 'Enter organization unit name(str): ', 'ans'
+        ),
+        "serialNumber": int(crypto_tools.cterm(
+            'input', 'Enter serial number name(int): ', 'ans'
+        )),
+        "validityEndInSeconds": int(crypto_tools.cterm(
+            'input', 'Enter validity end in seconds(int): ', 'ans'
+        )),
     }
     username = crypto_tools.cterm('input', 'Enter username(str): ', 'ans')
 
