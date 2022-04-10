@@ -16,9 +16,9 @@ TODO
 
 """
 
+import json
 from bitarray import bitarray
 import crypto_tools
-import json
 
 
 def lfsr_generator_little_doc():

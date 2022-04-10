@@ -1,7 +1,8 @@
 [MASTER]
 disable=
-    W0622, # redefined-builtin
     C0116, # missing-function-docstring
-    R0913, # too-many-arguments
-    W1514, # unspecified-encoding
     C0200, # consider-using-enumerate
+    R0913, # too-many-arguments
+    R0914, # too many local variables
+    W0622, # redefined-builtin
+    W1514, # unspecified-encoding

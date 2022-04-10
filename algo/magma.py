@@ -1,6 +1,26 @@
+""" Magma
+
+The GOST block cipher (Magma), defined in the standard GOST 28147-89 (RFC 5830),
+is a Soviet and Russian government standard symmetric key block cipher with a
+block size of 64 bits. The original standard, published in 1989, did not give
+the cipher any name, but the most recent revision of the standard, GOST R
+34.12-2015 (RFC 7801, RFC 8891), specifies that it may be referred to as Magma.
+The GOST hash function is based on this cipher. The new standard also specifies
+a new 128-bit block cipher called Kuznyechik.
+
+Parameters
+----------
+TODO
+
+Returns
+-------
+TODO
+
+"""
+
+from math import ceil
 from bitarray import bitarray
 import crypto_tools
-from math import ceil
 from .xor import xor_processing
 from .lfsr_generator import lfsr_generator_processing
 
@@ -16,12 +36,14 @@ def magma_full_doc():
 
 
 def magma_secret_func(val, now_round, block_size, key):
+    del block_size
+
     sub_key_table = [ 0, 1, 2, 3, 4, 5, 6, 7,
                       0, 1, 2, 3, 4, 5, 6, 7,
                       0, 1, 2, 3, 4, 5, 6, 7,
                       7, 6, 5, 4, 3, 2, 1, 0 ]
 
-    T_table = [
+    t_table = [
         [ 1, 7, 14, 13, 0, 5, 8, 3, 4, 15, 10, 6, 9, 12, 11, 2 ],
         [ 8, 14, 2, 5, 6, 9, 1, 12, 15, 4, 11, 0, 13, 10, 3, 7 ],
         [ 5, 13, 15, 6, 9, 2, 12, 10, 11, 7, 8, 1, 4, 3, 14, 0 ],
@@ -34,13 +56,14 @@ def magma_secret_func(val, now_round, block_size, key):
 
     sub_key = key[sub_key_table[now_round]:sub_key_table[now_round] + 4: 1]
 
-    stage_1 = (int.from_bytes(val, byteorder="big") + int.from_bytes(sub_key, byteorder="big")) % 32
+    stage_1 = (int.from_bytes(val, byteorder="big") +
+                int.from_bytes(sub_key, byteorder="big")) % 32
 
     stage_2 = bitarray()
 
     for part_id in range(4):
-        first_part_byte = T_table[part_id * 2][stage_1 & 0xF0 >> 4]
-        sec_part_byte = T_table[part_id * 2 + 1][stage_1 & 0x0F]
+        first_part_byte = t_table[part_id * 2][stage_1 & 0xF0 >> 4]
+        sec_part_byte = t_table[part_id * 2 + 1][stage_1 & 0x0F]
 
         first_part_byte = crypto_tools.to_bitarray(first_part_byte.to_bytes(1, 'big'))[4:8]
         sec_part_byte = crypto_tools.to_bitarray(sec_part_byte.to_bytes(1, 'big'))[4:8]
@@ -62,8 +85,7 @@ def magma_pre_processing(data, key, key_len):
 
     if len(key) > key_len:
         raise ValueError(f"Too big key. Max len required: {key_len}")
-    else:
-        crypto_tools.supl_to_mult(key, key_len)
+    crypto_tools.supl_to_mult(key, key_len)
 
     return data, key
 
@@ -78,13 +100,14 @@ def magma_processing(data, key, encrypt, mode):
     res_data = None
 
     if mode == "xor":
-        synchro_package = lfsr_generator_processing(2, [3, 5, 6, 7, 9, 14],
-                                                    [2, 4, 5, 7], ceil(len(data) / block_size) * block_size)
+        synchro_package = lfsr_generator_processing(2, [3, 5, 6, 7, 9, 14], [2, 4, 5, 7],
+                                                    ceil(len(data) / block_size) * block_size)
 
         crypto_tools.supl_to_mult(data, block_size)
 
-        synchro_package_stage_1 = crypto_tools.block_cypher(synchro_package, block_size, "encrypt", rounds,
-                                                            False, xor_processing, magma_secret_func, key)
+        synchro_package_stage_1 = crypto_tools.block_cypher(synchro_package, block_size,
+                                                            "encrypt", rounds, False,
+                                                            xor_processing, magma_secret_func, key)
 
         synchro_package_stage_2 = bytearray()
 
@@ -99,12 +122,16 @@ def magma_processing(data, key, encrypt, mode):
             const_1 = 0x1010104
 
             first_part = (int.from_bytes(first_part, byteorder="big") + const_0) % pow(2, 32)
-            second_part = (int.from_bytes(second_part, byteorder="big") + const_1 - 1) % pow(2, 32 - 1) + 1
+            second_part = (int.from_bytes(second_part, byteorder="big") +
+                          const_1 - 1) % pow(2, 32 - 1) + 1
 
-            synchro_package_stage_2 += first_part.to_bytes(4, 'big') + second_part.to_bytes(4, 'big')
+            synchro_package_stage_2 += first_part.to_bytes(4, 'big') +\
+                                       second_part.to_bytes(4, 'big')
 
-        synchro_package_stage_3 = crypto_tools.block_cypher(synchro_package_stage_2, block_size, "encrypt", rounds,
-                                                            False, xor_processing, magma_secret_func, key)
+        synchro_package_stage_3 = crypto_tools.block_cypher(
+            synchro_package_stage_2,block_size, "encrypt", rounds,
+            False, xor_processing, magma_secret_func, key
+        )
 
         res_data = xor_processing(data, synchro_package_stage_3, "encrypt")
     else:
@@ -120,7 +147,7 @@ def magma(data):
     encrypt = crypto_tools.cterm('input',
                                  'You want encrypt or decrypt: ', 'ans')
 
-    if encrypt != "decrypt" and encrypt != "encrypt":
+    if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
 
     mode = crypto_tools.cterm(

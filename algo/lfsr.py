@@ -17,8 +17,8 @@ TODO
 """
 
 import json
-from .lfsr_generator import lfsr_init
 import crypto_tools
+from .lfsr_generator import lfsr_init
 
 
 def lfsr_little_doc():
