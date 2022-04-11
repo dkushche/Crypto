@@ -1,8 +1,12 @@
-from traceback import print_tb
+"""
+Super basic test just example for Anton
+
+"""
+
 import pytest
 
 from algo import caesar
 
 @pytest.mark.standard_set
 def test_caesar_success():
-    assert "МПМ" == caesar.processor("ЛОЛ", "russian", 1)
+    assert caesar.processor("ЛОЛ", "russian", 1) == "МПМ"
