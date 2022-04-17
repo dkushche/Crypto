@@ -13,6 +13,7 @@ TODO
 
 """
 
+import platform
 import crypto_tools
 import crypto_native
 
@@ -35,6 +36,10 @@ def cryptoapi_aes_pre_processing(key, key_length):
 
 def cryptoapi_aes_processing(data, key_length, key,
                             mode, provider, encrypt):
+
+    if platform.system() != "Windows":
+        return f"Unsupported on your platform {platform.system()}"
+
     cryptoapi_aes_pre_processing(key, key_length)
 
     if provider == "standard":
@@ -54,6 +59,9 @@ def cryptoapi_aes_processing(data, key_length, key,
 
 @crypto_tools.file_manipulation()
 def cryptoapi_aes(data):
+    if platform.system() != "Windows":
+        return f"Unsupported on your platform {platform.system()}"
+
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
 

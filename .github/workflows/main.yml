@@ -12,15 +12,11 @@ jobs:
       with:
         python-version: 3.9
     - name: Install Crypto
-      run: ./install
+      run: ./install.py
     - name: Analysing the code with PyLint
-      run: |
-        source crypto_env/bin/activate
-        pylint $(git ls-files '*.py')
+      run: crypto_env/bin/pylint $(git ls-files '*.py')
     - name: Run unit tests
-      run: |
-        source crypto_env/bin/activate
-        pytest -v -m standard_set
+      run: crypto_env/bin/pytest -v -m standard_set
   windows_platform:
     runs-on: windows-latest
     steps:
@@ -30,4 +26,6 @@ jobs:
       with:
         python-version: 3.9
     - name: Install Crypto
-      run: python install
+      run: python install.py
+    - name: Run unit tests
+      run: crypto_env/Scripts/pytest.exe -v -m standard_set
