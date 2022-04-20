@@ -8,3 +8,4 @@ crypto_ca
 storage
 pycodestyle
 .vscode
+.idea
