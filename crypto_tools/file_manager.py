@@ -4,7 +4,7 @@ Set of tools for dealing with crypto files
 
 """
 
-from json import load as get_json
+from json import load
 
 
 def get_param_json_data(fname, param):
@@ -16,8 +16,8 @@ def get_param_json_data(fname, param):
 
 
 def download_json(name):
-    with open(name) as algo:
-        return get_json(algo)
+    with open(name, encoding="utf-8") as algo:
+        return load(algo)
 
 
 def save_text(name, value):
