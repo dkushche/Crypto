@@ -47,7 +47,8 @@ def {sys.argv[2]}_full_doc():
 
 
 def {sys.argv[2]}_processing(data, key):
-    return data
+    key = data
+    return key
 
 
 @crypto_tools.file_manipulation()
@@ -58,6 +59,21 @@ def {sys.argv[2]}(data):
 
 {sys.argv[2]}.little_doc = {sys.argv[2]}_little_doc
 {sys.argv[2]}.full_doc = {sys.argv[2]}_full_doc
+{sys.argv[2]}.processor = {sys.argv[2]}_processing
+""")
+
+        with open(f"tests/{sys.argv[1]}/test_{sys.argv[2]}.py", 'w+') as crypto_module_test:
+            crypto_module_test.write(f"""\"\"\" {sys.argv[2]} tests
+
+\"\"\"
+
+import pytest
+
+from {sys.argv[1]} import {sys.argv[2]}
+
+@pytest.mark.standard_set
+def test_{sys.argv[2]}_success():
+    assert {sys.argv[2]}.processor("abc", "bca") == "abc"
 """)
 
         res = None
