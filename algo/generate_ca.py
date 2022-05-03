@@ -61,11 +61,9 @@ def generate_ca_processing(ca_info):
     pkcs12_cert.set_privatekey(key)
     pkcs12_cert.set_certificate(cert)
 
-    p12data = pkcs12_cert.export("")
+    p12data = pkcs12_cert.export(b"")
     with open('crypto_ca/crypto_pkcs12_cert.pfx', 'wb') as pfxfile:
         pfxfile.write(p12data)
-
-    crypto_tools.cterm("output", "Created Successfully!", "inf")
 
 
 def generate_ca():
@@ -89,8 +87,10 @@ def generate_ca():
         )),
     }
 
-    return generate_ca_processing(ca_cert_info)
+    generate_ca_processing(ca_cert_info)
+    crypto_tools.cterm("output", "Created Successfully!", "inf")
 
 
 generate_ca.little_doc = generate_ca_little_doc
 generate_ca.full_doc = generate_ca_full_doc
+generate_ca.processor = generate_ca_processing

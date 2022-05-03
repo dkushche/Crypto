@@ -60,11 +60,9 @@ def issue_cert_processing(cert_info, username):
     pkcs12_cert.set_privatekey(key)
     pkcs12_cert.set_certificate(cert)
 
-    p12data = pkcs12_cert.export("")
+    p12data = pkcs12_cert.export(b"")
     with open(f"storage/certs/{username}/{username}_pkcs12_cert.pfx", 'wb') as pfxfile:
         pfxfile.write(p12data)
-
-    crypto_tools.cterm("output", "Issued Successfully!", "inf")
 
 
 def issue_cert():
@@ -91,8 +89,10 @@ def issue_cert():
     }
     username = crypto_tools.cterm('input', 'Enter username(str): ', 'ans')
 
-    return issue_cert_processing(cert_info, username)
+    issue_cert_processing(cert_info, username)
+    crypto_tools.cterm("output", "Issued Successfully!", "inf")
 
 
 issue_cert.little_doc = issue_cert_little_doc
 issue_cert.full_doc = issue_cert_full_doc
+issue_cert.processor = issue_cert_processing
