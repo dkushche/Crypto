@@ -83,8 +83,8 @@ def issue_cert():
         "serialNumber": int(crypto_tools.cterm(
             'input', 'Enter serial number name(int): ', 'ans'
         )),
-        "validityEndInSeconds": int(crypto_tools.cterm(
-            'input', 'Enter validity end in seconds(int): ', 'ans'
+        "validityInSeconds": int(crypto_tools.cterm(
+            'input', 'Enter validity in seconds(int): ', 'ans'
         )),
     }
     username = crypto_tools.cterm('input', 'Enter username(str): ', 'ans')

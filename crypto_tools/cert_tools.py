@@ -4,6 +4,7 @@ Set of tools for dealing with ssl certificates
 
 """
 
+import time
 import OpenSSL
 
 # *_info = {
@@ -15,7 +16,7 @@ import OpenSSL
 #     "organizationName":
 #     "organizationUnitName":
 #     "serialNumber":
-#     "validityEndInSeconds":
+#     "validityInSeconds":
 # }
 def generate_cert(cert_info, pub_key, signing_key, issuer_subject=None):
     cert = OpenSSL.crypto.X509()
@@ -37,7 +38,7 @@ def generate_cert(cert_info, pub_key, signing_key, issuer_subject=None):
     cert.set_serial_number(cert_info["serialNumber"])
 
     cert.gmtime_adj_notBefore(0)
-    cert.gmtime_adj_notAfter(cert_info["validityEndInSeconds"])
+    cert.gmtime_adj_notAfter(int(time.time()) + cert_info["validityInSeconds"])
 
     cert.set_pubkey(pub_key)
     cert.sign(signing_key, 'sha512')

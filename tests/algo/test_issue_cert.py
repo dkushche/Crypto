@@ -21,7 +21,7 @@ TEST_USERNAME = "test_user"
 
 @pytest.mark.standard_set
 def test_issue_cert_success():
-    end_time = int(time.time()) + 365 * 24 * 60 * 60
+    end_time = 365 * 24 * 60 * 60
 
     ca_cert_info = {
         "emailAddress": "test_ca@mail.com",
@@ -32,7 +32,7 @@ def test_issue_cert_success():
         "organizationName": "crypto_test",
         "organizationUnitName": "crypto_ca",
         "serialNumber": 1,
-        "validityEndInSeconds": end_time,
+        "validityInSeconds": end_time,
     }
 
     generate_ca.processor(ca_cert_info)
@@ -47,7 +47,7 @@ def test_issue_cert_success():
         "organizationName": "crypto_test",
         "organizationUnitName": "pytest_worker",
         "serialNumber": 2,
-        "validityEndInSeconds": end_time,
+        "validityInSeconds": end_time,
     }
 
     issue_cert.processor(client_cert_info, username)
