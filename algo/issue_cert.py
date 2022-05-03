@@ -41,10 +41,12 @@ def issue_cert_processing(cert_info, username):
         shutil.rmtree(f"storage/certs/{username}")
     os.makedirs(f"storage/certs/{username}")
 
-    with open("crypto_ca/crypto_cert.pem") as ca_cert_file:
-        ca_cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, ca_cert_file.read())
-    with open("crypto_ca/crypto_key.pem") as ca_key_file:
-        ca_key = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM, ca_key_file.read())
+    ca_cert = OpenSSL.crypto.load_certificate(
+        OpenSSL.crypto.FILETYPE_PEM, crypto_tools.download_text("crypto_ca/crypto_cert.pem")
+    )
+    ca_key = OpenSSL.crypto.load_privatekey(
+        OpenSSL.crypto.FILETYPE_PEM, crypto_tools.download_text("crypto_ca/crypto_key.pem")
+    )
 
     cert = crypto_tools.generate_cert(cert_info, key, ca_key, ca_cert.get_subject())
 

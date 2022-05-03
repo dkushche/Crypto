@@ -10,6 +10,7 @@ from .lfsr_generator import lfsr_generator
 from .openssl_random import openssl_random
 from .diffie_hellman import diffie_hellman
 from .cryptoapi_aes import cryptoapi_aes
+from .revoke_cert import revoke_cert
 from .generate_ca import generate_ca
 from .openssl_rsa import openssl_rsa
 from .issue_cert import issue_cert
