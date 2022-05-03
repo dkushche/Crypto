@@ -74,6 +74,45 @@ def test_revoke_cert_success():
         client_cert.get_serial_number()) is not None
 
 
+@pytest.mark.standard_set
+def test_revoke_cert_double():
+    end_time = 365 * 24 * 60 * 60
+
+    ca_cert_info = {
+        "emailAddress": "test_ca@mail.com",
+        "commonName": "test_ca_cert",
+        "countryName": "ua",
+        "localityName": "ua",
+        "stateOrProvinceName": "Kyiv",
+        "organizationName": "crypto_test",
+        "organizationUnitName": "crypto_ca",
+        "serialNumber": 1,
+        "validityInSeconds": end_time,
+    }
+
+    generate_ca.processor(ca_cert_info)
+
+    username = TEST_USERNAME
+    client_cert_info = {
+        "emailAddress": "test_user@mail.com",
+        "commonName": "test_user_cert",
+        "countryName": "ua",
+        "localityName": "ua",
+        "stateOrProvinceName": "Kyiv",
+        "organizationName": "crypto_test",
+        "organizationUnitName": "pytest_worker",
+        "serialNumber": 2,
+        "validityInSeconds": end_time,
+    }
+
+    issue_cert.processor(client_cert_info, username)
+
+    revoke_cert.processor(username, TEST_REVOKE_LIST_NAME)
+    with pytest.raises(ValueError) as revoke_err:
+        revoke_cert.processor(username, TEST_REVOKE_LIST_NAME)
+    assert revoke_err.value.args[0] == "certificate already revoked"
+
+
 @pytest.fixture(autouse=True)
 def revoke_cert_cleaner():
     yield

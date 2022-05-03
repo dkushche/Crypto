@@ -31,20 +31,29 @@ def revoke_cert_full_doc():
 
 
 def revoke_cert_processing(username, list_name):
+    client_cert = crypto.load_certificate(
+        crypto.FILETYPE_PEM,
+        crypto_tools.download_text(f"storage/certs/{username}/{username}_cert.pem")
+    )
+
     if os.path.exists(f"storage/certs/revokes/{list_name}.crl"):
         crl = crypto.load_crl(
             crypto.FILETYPE_PEM,
             crypto_tools.download_text(f"storage/certs/revokes/{list_name}.crl")
         )
+
+        crypto_crl = crl.to_cryptography()
+        is_revoked = crypto_crl.get_revoked_certificate_by_serial_number(
+            client_cert.get_serial_number()
+        )
+
+        if is_revoked:
+            raise ValueError("certificate already revoked")
     else:
         if not os.path.exists("storage/certs/revokes"):
             os.makedirs("storage/certs/revokes")
         crl = crypto.CRL()
 
-    client_cert = crypto.load_certificate(
-        crypto.FILETYPE_PEM,
-        crypto_tools.download_text(f"storage/certs/{username}/{username}_cert.pem")
-    )
     ca_key = crypto.load_privatekey(
         crypto.FILETYPE_PEM, crypto_tools.download_text("crypto_ca/crypto_key.pem")
     )
@@ -71,7 +80,7 @@ def revoke_cert():
     username = crypto_tools.cterm('input', 'Enter username(str): ', 'ans')
     list_name = crypto_tools.cterm('input', 'Enter certname(str): ', 'ans')
 
-    return revoke_cert_processing(username, list_name)
+    revoke_cert_processing(username, list_name)
 
 
 revoke_cert.little_doc = revoke_cert_little_doc
