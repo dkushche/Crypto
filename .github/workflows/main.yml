@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   linux_platform:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
@@ -18,7 +18,7 @@ jobs:
     - name: Run unit tests
       run: crypto_env/bin/pytest -v -m standard_set
   windows_platform:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
