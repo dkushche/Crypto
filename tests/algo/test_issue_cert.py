@@ -4,7 +4,6 @@ Client certs tests
 """
 
 import os
-import time
 import shutil
 
 import pytest

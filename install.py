@@ -14,7 +14,6 @@ TODO
 
 """
 
-import os
 import sys
 import platform
 import subprocess
@@ -26,10 +25,12 @@ subprocess.run(["python", "-m", "venv", "crypto_env" ], check=True)
 if platform.system() == "Linux":
     subprocess.run(["crypto_env/bin/pip3", "install", "-r", "linux_requirements.txt"], check=True)
 
-    _, folders, _ = next(os.walk("crypto_native"))
-    for folder in folders:
-        if folder != "__pycache__" and os.path.exists(f"crypto_native/{folder}/Makefile"):
-            subprocess.run(["make", "-C", f"crypto_native/{folder}", "all", "clean"], check=True)
+    native_libs = [
+        "native_tools",
+        "openssl_api"
+    ]
+    for lib in native_libs:
+        subprocess.run(["make", "-C", f"crypto_native/{lib}", "all", "clean"], check=True)
 
 elif platform.system() == "Windows":
     subprocess.run([
