@@ -49,7 +49,11 @@ def main_loop():
                     command = getattr(crypto_module, command_name)
                     break
             if command:
-                command()
+                try:
+                    command()
+                except ValueError as err:
+                    crypto_tools.cterm("output", err, "err")
+                    crypto_tools.cterm("output", "Error: incorrect parameter type", "err")
             else:
                 crypto_tools.cterm('output', 'Error: incorrect command', 'err')
         except KeyError as err:

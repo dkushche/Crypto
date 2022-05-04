@@ -82,6 +82,8 @@ def revoke_cert():
 
     revoke_cert_processing(username, list_name)
 
+    crypto_tools.cterm("output", "Revoke Successfully!", "inf")
+
 
 revoke_cert.little_doc = revoke_cert_little_doc
 revoke_cert.full_doc = revoke_cert_full_doc

@@ -81,7 +81,7 @@ def generate_ca():
         "organizationUnitName": crypto_tools.cterm(
             'input', 'Enter organization unit name(str): ', 'ans'
         ),
-        "serialNumber": int(crypto_tools.cterm('input', 'Enter serial number name(int): ', 'ans')),
+        "serialNumber": int(crypto_tools.cterm('input', 'Enter serial number(int): ', 'ans')),
         "validityInSeconds": int(crypto_tools.cterm(
             'input', 'Enter validity end in seconds(int): ', 'ans'
         )),

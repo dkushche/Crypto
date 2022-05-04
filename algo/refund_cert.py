@@ -81,7 +81,9 @@ def refund_cert():
     username = crypto_tools.cterm('input', 'Enter username(str): ', 'ans')
     list_name = crypto_tools.cterm('input', 'Enter list name(str): ', 'ans')
 
-    return refund_cert_processing(username, list_name)
+    refund_cert_processing(username, list_name)
+
+    crypto_tools.cterm("output", "Refund Successfully!", "inf")
 
 
 refund_cert.little_doc = refund_cert_little_doc
