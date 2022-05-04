@@ -77,8 +77,8 @@ def revoke_cert_processing(username, list_name):
 
 
 def revoke_cert():
-    username = crypto_tools.cterm('input', 'Enter username(str): ', 'ans')
-    list_name = crypto_tools.cterm('input', 'Enter certname(str): ', 'ans')
+    username = crypto_tools.cterm('input', 'Enter user name(str): ', 'ans')
+    list_name = crypto_tools.cterm('input', 'Enter list name(str): ', 'ans')
 
     revoke_cert_processing(username, list_name)
 
