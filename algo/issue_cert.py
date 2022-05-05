@@ -94,9 +94,15 @@ def issue_cert():
     cert_exts = []
     while crypto_tools.cterm('input', 'Add extension(yes|no): ', 'ans') == "yes":
         cert_exts.append({
-            "type": crypto_tools.cterm('input', 'Enter extension type(str): ', 'ans').encode("utf-8"),
-            "crytical": bool(crypto_tools.cterm('input', 'Enter extension crytical(1 `yes`|0 `no`): ', 'ans')),
-            "value": crypto_tools.cterm('input', 'Enter extension value(str): ', 'ans').encode("utf-8")
+            "type": crypto_tools.cterm(
+                'input', 'Enter extension type(str): ', 'ans'
+            ).encode("utf-8"),
+            "crytical": bool(crypto_tools.cterm(
+                'input', 'Enter extension crytical(1 `yes`|0 `no`): ', 'ans'
+            )),
+            "value": crypto_tools.cterm(
+                'input', 'Enter extension value(str): ', 'ans'
+            ).encode("utf-8")
         })
 
     issue_cert_processing(cert_info, cert_exts, username)
