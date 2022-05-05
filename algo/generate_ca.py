@@ -41,7 +41,7 @@ def generate_ca_processing(ca_info):
         shutil.rmtree("crypto_ca")
     os.mkdir("crypto_ca")
 
-    cert = crypto_tools.generate_cert(ca_info, key, key)
+    cert = crypto_tools.generate_cert(ca_info, None, key, key)
 
     with open("crypto_ca/crypto_cert.pem", "wt") as pem_file:
         pem_file.write(

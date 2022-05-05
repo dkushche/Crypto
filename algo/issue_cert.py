@@ -30,7 +30,7 @@ def issue_cert_full_doc():
     """
 
 
-def issue_cert_processing(cert_info, username):
+def issue_cert_processing(cert_info, cert_exts, username):
     key = OpenSSL.crypto.PKey()
     key.generate_key(OpenSSL.crypto.TYPE_RSA, 2048)
 
@@ -48,7 +48,7 @@ def issue_cert_processing(cert_info, username):
         OpenSSL.crypto.FILETYPE_PEM, crypto_tools.download_text("crypto_ca/crypto_key.pem")
     )
 
-    cert = crypto_tools.generate_cert(cert_info, key, ca_key, ca_cert.get_subject())
+    cert = crypto_tools.generate_cert(cert_info, cert_exts, key, ca_key, ca_cert.get_subject())
 
     with open(f"storage/certs/{username}/{username}_cert.pem", "wt") as pem:
         pem.write(OpenSSL.crypto.dump_certificate(
@@ -91,7 +91,15 @@ def issue_cert():
     }
     username = crypto_tools.cterm('input', 'Enter username(str): ', 'ans')
 
-    issue_cert_processing(cert_info, username)
+    cert_exts = []
+    while crypto_tools.cterm('input', 'Add extension(yes|no): ', 'ans') == "yes":
+        cert_exts.append({
+            "type": crypto_tools.cterm('input', 'Enter extension type(str): ', 'ans').encode("utf-8"),
+            "crytical": bool(crypto_tools.cterm('input', 'Enter extension crytical(1 `yes`|0 `no`): ', 'ans')),
+            "value": crypto_tools.cterm('input', 'Enter extension value(str): ', 'ans').encode("utf-8")
+        })
+
+    issue_cert_processing(cert_info, cert_exts, username)
     crypto_tools.cterm("output", "Issued Successfully!", "inf")
 
 

@@ -50,7 +50,7 @@ def test_revoke_cert_success():
         "validityInSeconds": end_time,
     }
 
-    issue_cert.processor(client_cert_info, username)
+    issue_cert.processor(client_cert_info, None, username)
 
     revoke_cert.processor(username, TEST_REVOKE_LIST_NAME)
 
@@ -105,7 +105,7 @@ def test_revoke_cert_double():
         "validityInSeconds": end_time,
     }
 
-    issue_cert.processor(client_cert_info, username)
+    issue_cert.processor(client_cert_info, None, username)
 
     revoke_cert.processor(username, TEST_REVOKE_LIST_NAME)
     with pytest.raises(ValueError) as revoke_err:

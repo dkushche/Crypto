@@ -42,7 +42,7 @@ def test_refund_cert_success():
         "organizationUnitName": "pytest_worker",
         "serialNumber": 2,
         "validityInSeconds": end_time,
-    }, TEST_USERNAME)
+    }, None, TEST_USERNAME)
 
     revoke_cert.processor(TEST_USERNAME, TEST_REVOKE_LIST_NAME)
 

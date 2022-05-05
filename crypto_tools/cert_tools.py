@@ -18,7 +18,7 @@ import OpenSSL
 #     "serialNumber":
 #     "validityInSeconds":
 # }
-def generate_cert(cert_info, pub_key, signing_key, issuer_subject=None):
+def generate_cert(cert_info, extensions, pub_key, signing_key, issuer_subject=None):
     cert = OpenSSL.crypto.X509()
 
     cert_subject = cert.get_subject()
@@ -39,6 +39,19 @@ def generate_cert(cert_info, pub_key, signing_key, issuer_subject=None):
 
     cert.gmtime_adj_notBefore(0)
     cert.gmtime_adj_notAfter(int(time.time()) + cert_info["validityInSeconds"])
+
+    if extensions is not None:
+        exts = []
+
+        for extension in extensions:
+            ext = OpenSSL.crypto.X509Extension(
+                extension["type"],
+                extension["crytical"],
+                extension["value"]
+            )
+            exts.append(ext)
+
+        cert.add_extensions(exts)
 
     cert.set_pubkey(pub_key)
     cert.sign(signing_key, 'sha512')
