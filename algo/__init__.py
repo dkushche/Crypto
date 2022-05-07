@@ -5,11 +5,11 @@ Module imports all public entry points that will be available from CLI
 """
 
 from .openssl_generate_rsa_keys import openssl_generate_rsa_keys
+from .ms_cryptoapi_aes import ms_cryptoapi_aes
 from .openssl_aes_128 import openssl_aes_128
 from .lfsr_generator import lfsr_generator
 from .openssl_random import openssl_random
 from .diffie_hellman import diffie_hellman
-from .cryptoapi_aes import cryptoapi_aes
 from .refund_cert import refund_cert
 from .revoke_cert import revoke_cert
 from .generate_ca import generate_ca

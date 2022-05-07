@@ -7,12 +7,12 @@ import platform
 
 import pytest
 
-from algo import cryptoapi_aes
+from algo import ms_cryptoapi_aes
 
 
 @pytest.mark.windows_set
-def test_cryptoapi_aes_nextgen():
-    res_data, hashed_key, session_key = cryptoapi_aes.processor(
+def test_ms_cryptoapi_aes_nextgen():
+    res_data, hashed_key, session_key = ms_cryptoapi_aes.processor(
         bytearray("test", "utf-8"), 128, bytearray("test", "utf-8"), "CBC", "nextgen", "encrypt"
     )
 

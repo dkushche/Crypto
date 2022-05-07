@@ -16,30 +16,30 @@ TODO
 import platform
 import crypto_tools
 
-def cryptoapi_aes_little_doc():
-    return "cryptoapi_aes_little_doc"
+def ms_cryptoapi_aes_little_doc():
+    return "ms_cryptoapi_aes_little_doc"
 
 
-def cryptoapi_aes_full_doc():
+def ms_cryptoapi_aes_full_doc():
     return """
-    cryptoapi_aes_full_doc
+    ms_cryptoapi_aes_full_doc
     """
 
 
-def cryptoapi_aes_pre_processing(key, key_length):
+def ms_cryptoapi_aes_pre_processing(key, key_length):
     if len(key) > key_length //  8:
         raise ValueError(f"Too big key. Max len required: {key_length //  8}")
 
     crypto_tools.supl_to_mult(key, key_length //  8)
 
 
-def cryptoapi_aes_processing(data, key_length, key,
+def ms_cryptoapi_aes_processing(data, key_length, key,
                             mode, provider, encrypt):
 
     if platform.system() != "Windows":
         return f"Unsupported on {platform.system()} platform"
 
-    cryptoapi_aes_pre_processing(key, key_length)
+    ms_cryptoapi_aes_pre_processing(key, key_length)
 
     if provider == "standard":
         (res_data, hashed_key, session_key) = crypto_tools.ms_cryptoapi_standard_aes(
@@ -54,7 +54,7 @@ def cryptoapi_aes_processing(data, key_length, key,
 
 
 @crypto_tools.file_manipulation()
-def cryptoapi_aes(data):
+def ms_cryptoapi_aes(data):
     if platform.system() != "Windows":
         return f"Unsupported on {platform.system()} platform"
 
@@ -84,7 +84,7 @@ def cryptoapi_aes(data):
     if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
 
-    (res_data, hashed_key, session_key) = cryptoapi_aes_processing(
+    (res_data, hashed_key, session_key) = ms_cryptoapi_aes_processing(
         data, key_length, key, mode, provider, encrypt)
 
     crypto_tools.cterm("output", f"Hashed key: {hashed_key}", "inf")
@@ -98,6 +98,6 @@ def cryptoapi_aes(data):
     return result_str
 
 
-cryptoapi_aes.little_doc = cryptoapi_aes_little_doc
-cryptoapi_aes.full_doc = cryptoapi_aes_full_doc
-cryptoapi_aes.processor = cryptoapi_aes_processing
+ms_cryptoapi_aes.little_doc = ms_cryptoapi_aes_little_doc
+ms_cryptoapi_aes.full_doc = ms_cryptoapi_aes_full_doc
+ms_cryptoapi_aes.processor = ms_cryptoapi_aes_processing
