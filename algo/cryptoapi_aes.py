@@ -42,18 +42,15 @@ def cryptoapi_aes_processing(data, key_length, key,
     cryptoapi_aes_pre_processing(key, key_length)
 
     if provider == "standard":
-        result = crypto_tools.ms_cryptoapi_standard_aes(
+        (res_data, hashed_key, session_key) = crypto_tools.ms_cryptoapi_standard_aes(
             data, key, encrypt
         )
     else:
-        result = crypto_tools.ms_cryptoapi_nextgen_aes(
+        (res_data, hashed_key, session_key) = crypto_tools.ms_cryptoapi_nextgen_aes(
             data, key, mode, encrypt
         )
 
-    crypto_tools.cterm("output", f"Hashed key: {result['hashed_key']}", "inf")
-    crypto_tools.cterm("output", f"Session key: {result['session_key']}", "inf")
-
-    return result["result"]
+    return (res_data, hashed_key, session_key)
 
 
 @crypto_tools.file_manipulation()
@@ -87,8 +84,11 @@ def cryptoapi_aes(data):
     if encrypt not in ("decrypt", "encrypt"):
         raise ValueError("Incorrect type")
 
-    res_data = cryptoapi_aes_processing(data, key_length, key,
-                                        mode, provider, encrypt)
+    (res_data, hashed_key, session_key) = cryptoapi_aes_processing(
+        data, key_length, key, mode, provider, encrypt)
+
+    crypto_tools.cterm("output", f"Hashed key: {hashed_key}", "inf")
+    crypto_tools.cterm("output", f"Session key: {session_key}", "inf")
 
     if encrypt == "encrypt":
         result_str = res_data

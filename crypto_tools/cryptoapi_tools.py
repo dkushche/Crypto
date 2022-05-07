@@ -120,11 +120,7 @@ def ms_cryptoapi_standard_aes(data, key, encrypt):
     result = ms_cryptoapi.CryptReleaseContext(ctx_ptr, 0)
     check_result("standard", result, "context destruction error")
 
-    return {
-        "hashed_key": hashed_key.raw.hex(),
-        "session_key": key_data.raw[12:].hex(),
-        "result": out_data
-    }
+    return hashed_key.raw.hex(), key_data.raw[12:].hex(), out_data
 
 
 def ms_cryptoapi_nextgen_gen_hash(ms_cryptoapi, key):
@@ -240,8 +236,4 @@ def ms_cryptoapi_nextgen_aes(data, key, mode, encrypt):
     result = ms_cryptoapi.BCryptCloseAlgorithmProvider(aes_ctx, 0)
     check_result("nextgen", result, "aes context destruction error")
 
-    return {
-        "hashed_key": pb_hash.raw.hex(),
-        "session_key": pb_key.raw.hex(),
-        "result": pb_out
-    }
+    return pb_hash.raw.hex(), pb_key.raw.hex(), pb_out
