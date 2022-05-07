@@ -1,8 +1,5 @@
 """ MS Crypto API
 
-Layer between crypto modules and native MS Crypto API
-dynamic library
-
 Parameters
 ----------
 TODO
@@ -14,8 +11,6 @@ TODO
 """
 
 import ctypes
-
-from crypto_native import native_tools
 
 CRYPT_EXPORTABLE = 0x1
 

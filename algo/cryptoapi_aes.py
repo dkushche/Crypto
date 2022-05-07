@@ -15,7 +15,6 @@ TODO
 
 import platform
 import crypto_tools
-import crypto_native
 
 def cryptoapi_aes_little_doc():
     return "cryptoapi_aes_little_doc"
@@ -38,16 +37,16 @@ def cryptoapi_aes_processing(data, key_length, key,
                             mode, provider, encrypt):
 
     if platform.system() != "Windows":
-        return f"Unsupported on your platform {platform.system()}"
+        return f"Unsupported on {platform.system()} platform"
 
     cryptoapi_aes_pre_processing(key, key_length)
 
     if provider == "standard":
-        result = crypto_native.ms_cryptoapi_standard_aes(
+        result = crypto_tools.ms_cryptoapi_standard_aes(
             data, key, encrypt
         )
     else:
-        result = crypto_native.ms_cryptoapi_nextgen_aes(
+        result = crypto_tools.ms_cryptoapi_nextgen_aes(
             data, key, mode, encrypt
         )
 
@@ -60,7 +59,7 @@ def cryptoapi_aes_processing(data, key_length, key,
 @crypto_tools.file_manipulation()
 def cryptoapi_aes(data):
     if platform.system() != "Windows":
-        return f"Unsupported on your platform {platform.system()}"
+        return f"Unsupported on {platform.system()} platform"
 
     if data.__class__ == str:
         data = bytearray(data, "utf-8")
@@ -101,3 +100,4 @@ def cryptoapi_aes(data):
 
 cryptoapi_aes.little_doc = cryptoapi_aes_little_doc
 cryptoapi_aes.full_doc = cryptoapi_aes_full_doc
+cryptoapi_aes.processor = cryptoapi_aes_processing

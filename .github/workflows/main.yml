@@ -28,4 +28,6 @@ jobs:
     - name: Install Crypto
       run: python install.py
     - name: Run unit tests
-      run: crypto_env/Scripts/pytest.exe -v -m standard_set
+      run: |
+        crypto_env/Scripts/pytest.exe -v -m standard_set
+        crypto_env/Scripts/pytest.exe -v -m windows_set
