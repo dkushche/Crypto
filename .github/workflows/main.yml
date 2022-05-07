@@ -18,7 +18,7 @@ jobs:
     - name: Run unit tests
       run: crypto_env/bin/pytest -v -m standard_set
   windows_platform:
-    runs-on: windows-2022
+    runs-on: windows-2019
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
