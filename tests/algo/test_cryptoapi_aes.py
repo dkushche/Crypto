@@ -11,7 +11,22 @@ from algo import cryptoapi_aes
 
 
 @pytest.mark.windows_set
-def test_cryptoapi_aes_success():
-    assert cryptoapi_aes.processor(
+def test_cryptoapi_aes_standard():
+    res_data, hashed_key, session_key = cryptoapi_aes.processor(
+        bytearray("test", "utf-8"), 128, bytearray("test", "utf-8"), "CBC", "standard", "encrypt"
+    )
+
+    assert res_data != f"Unsupported on {platform.system()} platform"
+    assert hashed_key != f"Unsupported on {platform.system()} platform"
+    assert session_key != f"Unsupported on {platform.system()} platform"
+
+
+@pytest.mark.windows_set
+def test_cryptoapi_aes_nextgen():
+    res_data, hashed_key, session_key = cryptoapi_aes.processor(
         bytearray("test", "utf-8"), 128, bytearray("test", "utf-8"), "CBC", "nextgen", "encrypt"
-    ) != f"Unsupported on {platform.system()} platform"
+    )
+
+    assert res_data != f"Unsupported on {platform.system()} platform"
+    assert hashed_key != f"Unsupported on {platform.system()} platform"
+    assert session_key != f"Unsupported on {platform.system()} platform"
