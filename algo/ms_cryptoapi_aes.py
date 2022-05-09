@@ -37,7 +37,7 @@ def ms_cryptoapi_aes_processing(data, key_length, key,
                             mode, provider, encrypt):
 
     if platform.system() != "Windows":
-        return f"Unsupported on {platform.system()} platform"
+        raise Exception(f"Unsupported on {platform.system()} platform")
 
     ms_cryptoapi_aes_pre_processing(key, key_length)
 
@@ -54,9 +54,9 @@ def ms_cryptoapi_aes_processing(data, key_length, key,
 
 
 @crypto_tools.file_manipulation()
-def ms_cryptoapi_aes(data):
+def ms_cryptoapi_aes(data: bytearray):
     if platform.system() != "Windows":
-        return f"Unsupported on {platform.system()} platform"
+        raise Exception(f"Unsupported on {platform.system()} platform")
 
     if data.__class__ == str:
         data = bytearray(data, "utf-8")

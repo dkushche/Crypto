@@ -5,6 +5,8 @@ Module imports all public entry points that will be available from CLI
 """
 
 from .openssl_generate_rsa_keys import openssl_generate_rsa_keys
+from .ms_cryptoapi_verify import ms_cryptoapi_verify
+from .ms_cryptoapi_sign import ms_cryptoapi_sign
 from .ms_cryptoapi_aes import ms_cryptoapi_aes
 from .openssl_aes_128 import openssl_aes_128
 from .lfsr_generator import lfsr_generator

@@ -11,6 +11,12 @@ TODO
 """
 
 import ctypes
+import string
+
+from windows import winproxy
+import windows.crypto as crypto
+import windows.generated_def as gdef
+import windows.crypto.generation as gencrypt
 
 CRYPT_EXPORTABLE = 0x1
 
@@ -27,6 +33,7 @@ CALG_SHA_256 = 0x800C
 
 BCRYPT_BLOCK_PADDING = 0x1
 
+
 def check_result(provider, result, desc):
     if provider == "standard":
         if not result:
@@ -34,6 +41,53 @@ def check_result(provider, result, desc):
     else:
         if result < 0:
             raise ValueError(f"Crypto_MS_CRYPTOAPI: {desc}")
+
+
+def ms_cryptoapi_generate_cert(storage_loc: str, cert_name: str):
+    with crypto.CryptContext(storage_loc, None, gdef.PROV_RSA_FULL, 0, retrycreate=True) as ctx:
+        key = gdef.HCRYPTKEY()
+        keysize_flags = 2048 << 16
+        winproxy.CryptGenKey(
+            ctx, gdef.AT_SIGNATURE,
+            gdef.CRYPT_EXPORTABLE | keysize_flags, key
+        )
+        winproxy.CryptDestroyKey(key)
+
+    certif_name = bytes(f"CN={cert_name}", "utf-8")
+    crypt_algo = gdef.CRYPT_ALGORITHM_IDENTIFIER()
+    crypt_algo.pszObjId = bytes(gdef.szOID_RSA_SHA256RSA, 'ascii')
+
+    KeyProvInfo = gdef.CRYPT_KEY_PROV_INFO()
+    KeyProvInfo.pwszContainerName = storage_loc
+    KeyProvInfo.pwszProvName = None
+    KeyProvInfo.dwProvType = gdef.PROV_RSA_FULL
+    KeyProvInfo.dwFlags = 0
+    KeyProvInfo.cProvParam = 0
+    KeyProvInfo.rgProvParam = None
+    KeyProvInfo.dwKeySpec = gdef.AT_SIGNATURE
+
+    return gencrypt.generate_selfsigned_certificate(
+        certif_name, key_info=KeyProvInfo, signature_algo=crypt_algo
+    )
+
+
+def ms_cryptoapi_get_storage(location: string, create=False):
+    storage = None
+
+    try:
+        res = winproxy.CertOpenStore(
+            gdef.CERT_STORE_PROV_SYSTEM_A, crypto.DEFAULT_ENCODING, None, 
+            gdef.CERT_SYSTEM_STORE_LOCAL_MACHINE , location
+        )
+
+        storage = ctypes.cast(res, crypto.CertificateStore)
+    except Exception as err:
+        if create:
+            storage = crypto.CertificateStore.new_in_memory()
+        else:
+            raise err from err
+
+    return storage
 
 
 def ms_cryptoapi_standard_aes(data, key, encrypt):
