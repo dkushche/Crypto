@@ -13,3 +13,5 @@ disable=
     C0209, # formatting a regular string which could be a f-string
     C0103, # class name "$name" doesn't conform to PascalCase naming style
     E0213, # method should have "self" as first argument
+    E0401, # Unable to import 'windows.crypto' (import-error)
+    W0703, # Catching too general exception Exception (broad-except)

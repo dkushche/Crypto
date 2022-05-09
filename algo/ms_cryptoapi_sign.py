@@ -14,7 +14,7 @@ TODO
 
 import platform
 
-import windows.crypto as crypto
+from windows import crypto
 
 import crypto_tools
 
@@ -29,7 +29,8 @@ def ms_cryptoapi_sign_full_doc():
     """
 
 
-def ms_cryptoapi_sign_processing(data: bytearray, storage_loc: str, create_storage: bool, cert_name: str, serial: str) -> bytes:
+def ms_cryptoapi_sign_processing(data: bytearray, storage_loc: str,
+                                 create_storage: bool, cert_name: str, serial: str) -> bytes:
     if platform.system() != "Windows":
         raise Exception(f"Unsupported on {platform.system()} platform")
 
@@ -52,15 +53,21 @@ def ms_cryptoapi_sign(data: bytearray):
         raise Exception(f"Unsupported on {platform.system()} platform")
 
     storage_loc = crypto_tools.cterm('input', 'Enter storage location(str): ', 'ans')
-    create_storage = bool(crypto_tools.cterm('input', 'Do you want to create storage(1 `yes`|0 `no`):', 'ans'))
+    create_storage = bool(crypto_tools.cterm(
+        'input', 'Do you want to create storage(1 `yes`|0 `no`):', 'ans'
+    ))
     cert_name = crypto_tools.cterm('input', 'Enter certificate name(str): ', 'ans')
-    create_cert = bool(crypto_tools.cterm('input', 'Do you want to create certificate(1 `yes`|0 `no`):', 'ans'))
+    create_cert = bool(crypto_tools.cterm(
+        'input', 'Do you want to create certificate(1 `yes`|0 `no`):', 'ans'
+    ))
 
     serial = None
     if not create_cert:
         serial = crypto_tools.cterm('input', 'Enter certificate serial(str): ', 'ans')
 
-    res, issuer, serial = ms_cryptoapi_sign_processing(data, storage_loc, create_storage, cert_name, serial)
+    res, issuer, serial = ms_cryptoapi_sign_processing(
+        data, storage_loc, create_storage, cert_name, serial
+    )
 
     crypto_tools.cterm("output", f"Certificate issuer: {issuer}", "inf")
     crypto_tools.cterm("output", f"Certificate serial: {serial}", "inf")

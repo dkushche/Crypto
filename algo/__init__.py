@@ -4,9 +4,9 @@ Module imports all public entry points that will be available from CLI
 
 """
 
+import platform
+
 from .openssl_generate_rsa_keys import openssl_generate_rsa_keys
-from .ms_cryptoapi_verify import ms_cryptoapi_verify
-from .ms_cryptoapi_sign import ms_cryptoapi_sign
 from .ms_cryptoapi_aes import ms_cryptoapi_aes
 from .openssl_aes_128 import openssl_aes_128
 from .lfsr_generator import lfsr_generator
@@ -36,6 +36,9 @@ from .rc4 import rc4
 from .rsa import rsa
 from .dsa import dsa
 
+if platform.system() == 'Windows':
+    from .ms_cryptoapi_verify import ms_cryptoapi_verify
+    from .ms_cryptoapi_sign import ms_cryptoapi_sign
 
 def __doc__():
     return "Cryptography modules"

@@ -14,7 +14,8 @@ import ctypes
 import string
 
 from windows import winproxy
-import windows.crypto as crypto
+from windows import crypto
+
 import windows.generated_def as gdef
 import windows.crypto.generation as gencrypt
 
@@ -76,7 +77,7 @@ def ms_cryptoapi_get_storage(location: string, create=False):
 
     try:
         res = winproxy.CertOpenStore(
-            gdef.CERT_STORE_PROV_SYSTEM_A, crypto.DEFAULT_ENCODING, None, 
+            gdef.CERT_STORE_PROV_SYSTEM_A, crypto.DEFAULT_ENCODING, None,
             gdef.CERT_SYSTEM_STORE_LOCAL_MACHINE , location
         )
 

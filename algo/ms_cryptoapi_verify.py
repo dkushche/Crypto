@@ -15,7 +15,7 @@ TODO
 import platform
 import string
 
-import windows.crypto as crypto
+from windows import crypto
 
 import crypto_tools
 
@@ -43,8 +43,8 @@ def ms_cryptoapi_verify_processing(data: bytes, storage_loc: string, issuer: byt
             if cert.issuer == issuer and cert.serial == serial:
                 return crypto.verify_signature(cert, data)
         raise Exception('No such certificate')
-    except:
-        raise Exception('Not verified')
+    except Exception as err:
+        raise Exception('Not verified') from err
 
 
 @crypto_tools.file_manipulation(save=False)

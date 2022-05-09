@@ -2,10 +2,13 @@
 
 """
 
+import platform
 import pytest
 
-from algo import ms_cryptoapi_sign
-from algo import ms_cryptoapi_verify
+if platform.system() == 'Windows':
+    from algo import ms_cryptoapi_sign
+    from algo import ms_cryptoapi_verify
+
 
 @pytest.mark.windows_set
 def test_ms_cryptoapi_verify_success():
