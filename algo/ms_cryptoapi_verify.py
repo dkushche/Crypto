@@ -56,7 +56,7 @@ def ms_cryptoapi_verify(data: bytearray):
     issuer = crypto_tools.cterm('input', 'Enter certificate issuer(str): ', 'ans')
     serial = crypto_tools.cterm('input', 'Enter certificate serial(str): ', 'ans')
 
-    ms_cryptoapi_verify_processing(
+    return ms_cryptoapi_verify_processing(
         data, storage_loc, issuer.encode(), serial
     )
 
