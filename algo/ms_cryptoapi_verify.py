@@ -47,7 +47,7 @@ def ms_cryptoapi_verify_processing(data: bytes, storage_loc: string, issuer: byt
         raise Exception('Not verified')
 
 
-@crypto_tools.file_manipulation(save_data=False)
+@crypto_tools.file_manipulation(save=False)
 def ms_cryptoapi_verify(data: bytearray):
     if platform.system() != "Windows":
         raise Exception(f"Unsupported on {platform.system()} platform")

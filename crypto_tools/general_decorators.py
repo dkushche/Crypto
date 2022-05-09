@@ -34,7 +34,7 @@ def save_data(algo_result):
         cterm("output", sentence, "inf")
 
 
-def file_manipulation(read_data=True, save_data=True):
+def file_manipulation(read_data=True, save=True):
     def actual_file_manipulation(function):
         @functools.wraps(function)
         def wrapper_filesystem(*args, **kwargs):
@@ -48,7 +48,7 @@ def file_manipulation(read_data=True, save_data=True):
             else:
                 result = function(*args, **kwargs)
             cterm("output", "Result: " + str(result), "inf")
-            if save_data:
+            if save:
                 save_data(result)
         return wrapper_filesystem
     return actual_file_manipulation
