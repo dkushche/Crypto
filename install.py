@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 """ Install
 
@@ -20,7 +20,7 @@ import subprocess
 
 print("Start installation process")
 
-subprocess.run(["python", "-m", "venv", "crypto_env" ], check=True)
+subprocess.run([sys.executable, "-m", "venv", "crypto_env" ], check=True)
 
 if platform.system() == "Linux":
     subprocess.run(["crypto_env/bin/pip3", "install", "-r", "linux_requirements.txt"], check=True)
