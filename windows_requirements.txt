@@ -1,5 +1,5 @@
 cffi==1.15.0
-cryptography==36.0.1
+cryptography==39.0.1
 bitarray==1.5.3
 cycler==0.10.0
 kiwisolver==1.1.0

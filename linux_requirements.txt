@@ -1,6 +1,6 @@
 bitarray==1.5.3
 cffi==1.15.0
-cryptography==36.0.1
+cryptography==39.0.1
 cycler==0.10.0
 kiwisolver==1.1.0
 matplotlib==3.1.3
